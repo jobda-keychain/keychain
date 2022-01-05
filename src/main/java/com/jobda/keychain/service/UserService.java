@@ -5,6 +5,8 @@ import com.jobda.keychain.repository.UserRepository;
 import com.jobda.keychain.request.CreateUserRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -22,5 +24,9 @@ public class UserService {
 
     public void test() {
 
+    }
+
+    public List<User> selectUser(){
+        return userRepository.findAll();
     }
 }
