@@ -25,7 +25,7 @@ public class UserController {
         return "Test";
     }
 
-    @PatchMapping("/{userIdx}")
+    @PutMapping("/{userIdx}")
     public void updateUser(@RequestBody UpdateUserRequest request, @PathVariable int userIdx) {
         userService.updateUser(userIdx, request);
     }
