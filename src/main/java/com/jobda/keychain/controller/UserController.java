@@ -1,6 +1,7 @@
 package com.jobda.keychain.controller;
 
 import com.jobda.keychain.request.CreateUserRequest;
+import com.jobda.keychain.request.UpdateUserRequest;
 import com.jobda.keychain.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,11 @@ public class UserController {
     @GetMapping("/test")
     public String getTest() {
         return "Test";
+    }
+
+    @PatchMapping("/{userIdx}")
+    public void updateUser(@RequestBody UpdateUserRequest request, @PathVariable int userIdx) {
+        userService.updateUser(userIdx, request);
     }
 
 }
