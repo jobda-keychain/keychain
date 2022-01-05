@@ -5,9 +5,11 @@ import com.jobda.keychain.repository.UserRepository;
 import com.jobda.keychain.request.CreateUserRequest;
 import com.jobda.keychain.request.UpdateUserRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -16,34 +18,17 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void createUser(CreateUserRequest request) {
-        User user = new User(0, request.getId(), request.getPw(), request.getService(), request.getStage(), request.getDes());
-
+        User user = User.create(request);
         userRepository.save(user);
     }
 
+    @Transactional
     public void updateUser(int userIdx, UpdateUserRequest request) {
         User user = userRepository.findById(userIdx).orElseThrow();
 
-        if(StringUtils.hasLength(request.getId())) {
-            user.setId(request.getId());
-        }
-
-        if(StringUtils.hasLength(request.getPw())) {
-            user.setPw(request.getPw());
-        }
-
-        if(StringUtils.hasLength(request.getDes())) {
-            user.setDes(request.getDes());
-        }
-
-        if(request.getService() != null) {
-            user.setService(request.getService());
-        }
-
-        if(request.getStage() != null) {
-            user.setStage(request.getStage());
-        }
+        User.update(user, request);
 
         userRepository.save(user);
     }
