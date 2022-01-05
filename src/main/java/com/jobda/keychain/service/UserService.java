@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class UserService {
@@ -37,4 +39,10 @@ public class UserService {
 
     }
 
+    public List<User> selectUser(){
+        return userRepository.findAll();
+    }
+    public void deleteUser(Integer idx){
+        userRepository.deleteById(idx);
+    }
 }
