@@ -4,8 +4,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class UpdateUserRequest {
     private String id;
     private String pw;
