@@ -3,6 +3,7 @@ package com.jobda.keychain.controller;
 import com.jobda.keychain.entity.User;
 import com.jobda.keychain.repository.UserRepository;
 import com.jobda.keychain.request.CreateUserRequest;
+import com.jobda.keychain.request.UpdateUserRequest;
 import com.jobda.keychain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,13 @@ public class UserController {
         return "Test";
     }
 
+
+    @PutMapping("/{userIdx}")
+    public void updateUser(@RequestBody UpdateUserRequest request, @PathVariable int userIdx) {
+        userService.updateUser(userIdx, request);
+    }
+
+
     @GetMapping("")
     public List<User> UserList() {
         List<User> list = userService.selectUser();
@@ -40,4 +48,5 @@ public class UserController {
         userService.deleteUser(idx);
         return "success";
     }
+
 }
