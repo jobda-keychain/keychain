@@ -1,7 +1,6 @@
 package com.jobda.keychain.repository;
 
-import com.jobda.keychain.entity.Account;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.jobda.keychain.entity.account.Account;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
