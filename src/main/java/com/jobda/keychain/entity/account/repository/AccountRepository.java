@@ -1,4 +1,4 @@
-package com.jobda.keychain.repository;
+package com.jobda.keychain.entity.account.repository;
 
 import com.jobda.keychain.entity.account.Account;
 import org.springframework.data.repository.CrudRepository;
