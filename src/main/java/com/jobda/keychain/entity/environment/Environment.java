@@ -1,11 +1,11 @@
 package com.jobda.keychain.entity.environment;
 
+import com.jobda.keychain.entity.account_environment.AccountEnvironment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -16,11 +16,14 @@ public class Environment {
     @Column(length = 10)
     private String name;
 
+    @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)
+    private List<AccountEnvironment> accountEnvironments;
+
     private Environment(String name) {
         this.name = name;
     }
-    
-    public Environment create(/*Request 추가*/) {
+
+    public Environment createEnvironment(/*Request 추가*/) {
         return new Environment(null);
     }
 
