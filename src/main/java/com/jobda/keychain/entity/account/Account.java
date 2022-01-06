@@ -1,9 +1,11 @@
 package com.jobda.keychain.entity.account;
 
+import com.jobda.keychain.entity.account_environment.AccountEnvironment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -12,7 +14,7 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(length = 20, nullable = false)
     private String userId;
@@ -27,6 +29,9 @@ public class Account {
     @Column(length = 100, nullable = false)
     private String description;
 
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
+    private List<AccountEnvironment> accountEnvironments;
+
     private Account(String userId, String password, Service service, String description) {
         this.userId = userId;
         this.password = password;
@@ -34,7 +39,7 @@ public class Account {
         this.description = description;
     }
 
-    public static Account create(/*Request 추가 필요*/) {
+    public static Account createAccount(/*Request 추가 필요*/) {
         return new Account(null, null, null, null);
     }
 
