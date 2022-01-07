@@ -1,12 +1,11 @@
 package com.jobda.keychain.entity.account;
 
-import com.jobda.keychain.entity.account_environment.AccountEnvironment;
+import com.jobda.keychain.entity.environment.Environment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,8 +29,9 @@ public class Account {
     @Column(length = 100, nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "account", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private List<AccountEnvironment> accountEnvironments;
+    @ManyToOne
+    @JoinColumn(name = "environment_id", nullable = false)
+    private Environment environment;
 
     private Account(String userId, String password, ServiceType service, String description) {
         this.userId = userId;

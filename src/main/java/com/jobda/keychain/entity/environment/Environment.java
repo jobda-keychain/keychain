@@ -1,6 +1,6 @@
 package com.jobda.keychain.entity.environment;
 
-import com.jobda.keychain.entity.account_environment.AccountEnvironment;
+import com.jobda.keychain.entity.account.Account;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +19,8 @@ public class Environment {
     @Column(length = 10, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "environment", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private List<AccountEnvironment> accountEnvironments;
+    @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)
+    private List<Account> accounts;
 
     private Environment(String name) {
         this.name = name;
