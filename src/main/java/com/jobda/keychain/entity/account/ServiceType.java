@@ -1,5 +1,5 @@
 package com.jobda.keychain.entity.account;
 
-public enum Service {
+public enum ServiceType {
     JOBDA, JOBDA_CMS
 }

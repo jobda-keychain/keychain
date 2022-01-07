@@ -1,14 +1,14 @@
 package com.jobda.keychain.entity.account;
 
-import com.jobda.keychain.entity.account_environment.AccountEnvironment;
+import com.jobda.keychain.entity.environment.Environment;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Account {
 
@@ -24,23 +24,23 @@ public class Account {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 9, nullable = false)
-    private Service service;
+    private ServiceType service;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String description;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
-    private List<AccountEnvironment> accountEnvironments;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "environment_id", nullable = false)
+    private Environment environment;
 
-    private Account(String userId, String password, Service service, String description) {
-        this.userId = userId;
-        this.password = password;
-        this.service = service;
-        this.description = description;
-    }
+    public static Account createAccount(String userId, String password, ServiceType service, String description) {
+        Account account = new Account();
+        account.userId = userId;
+        account.password = password;
+        account.service = service;
+        account.description = description;
 
-    public static Account createAccount(/*Request 추가 필요*/) {
-        return new Account(null, null, null, null);
+        return account;
     }
 
 }
