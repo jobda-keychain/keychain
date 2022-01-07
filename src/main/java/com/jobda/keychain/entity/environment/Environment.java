@@ -1,6 +1,7 @@
 package com.jobda.keychain.entity.environment;
 
 import com.jobda.keychain.entity.account_environment.AccountEnvironment;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,12 +9,14 @@ import javax.persistence.*;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Environment {
 
-    @Id
-    @Column(length = 10)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(length = 10, nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)

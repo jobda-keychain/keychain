@@ -2,13 +2,14 @@ package com.jobda.keychain.entity.account_environment;
 
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.environment.Environment;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class AccountEnvironment {
 
