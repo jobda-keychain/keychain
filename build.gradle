@@ -31,3 +31,7 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+war {
+    enabled = false
+}
