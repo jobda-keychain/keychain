@@ -1,6 +1,11 @@
 # keychain
 * 요구사항
     * https://clickim.notion.site/27e686a1d9b94d5d9424cc8e263a3ef0
+  
+* 노션
+   * 기획: https://fine-ceramic-519.notion.site/29e7e86c338a4c16808fab9846406971 
+   * 일정: https://fine-ceramic-519.notion.site/dc4308b2aaad4814b085e8d6d34867eb
+   * API 명세서: https://fine-ceramic-519.notion.site/API-4260a4ae1fc748fe8ea1b2adb9113e71
 
 ## 기술스택
 * JDK 11
