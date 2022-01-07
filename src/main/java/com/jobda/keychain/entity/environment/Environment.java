@@ -22,12 +22,10 @@ public class Environment {
     @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)
     private List<Account> accounts;
 
-    protected Environment(String name) {
-        this.name = name;
-    }
-
-    public Environment createEnvironment(/*Request 추가*/) {
-        return new Environment(null);
+    public static Environment createEnvironment(String name) {
+        Environment environment = new Environment();
+        environment.name = name;
+        return environment;
     }
 
     //환경 이름 수정 메소드 추가
