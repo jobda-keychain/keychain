@@ -30,7 +30,7 @@ public class Account {
     @Column(length = 100, nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "account", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<AccountEnvironment> accountEnvironments;
 
     private Account(String userId, String password, ServiceType service, String description) {

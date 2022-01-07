@@ -19,7 +19,7 @@ public class Environment {
     @Column(length = 10, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "environment", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<AccountEnvironment> accountEnvironments;
 
     private Environment(String name) {
