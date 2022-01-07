@@ -25,7 +25,7 @@ public class Account {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 9, nullable = false)
-    private Service service;
+    private ServiceType service;
 
     @Column(length = 100, nullable = false)
     private String description;
@@ -33,7 +33,7 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<AccountEnvironment> accountEnvironments;
 
-    private Account(String userId, String password, Service service, String description) {
+    private Account(String userId, String password, ServiceType service, String description) {
         this.userId = userId;
         this.password = password;
         this.service = service;
