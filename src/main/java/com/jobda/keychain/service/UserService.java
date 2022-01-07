@@ -21,7 +21,7 @@ public class UserService {
 
     @Transactional
     public void createUser(CreateUserRequest request) {
-        Account user = Account.createAccount(/*request 넣어야 함*/);
+        Account user = Account.createAccount(null, null, null, null);
         accountRepository.save(user);
     }
 

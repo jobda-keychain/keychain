@@ -33,15 +33,14 @@ public class Account {
     @JoinColumn(name = "environment_id", nullable = false)
     private Environment environment;
 
-    protected Account(String userId, String password, ServiceType service, String description) {
-        this.userId = userId;
-        this.password = password;
-        this.service = service;
-        this.description = description;
-    }
+    public static Account createAccount(String userId, String password, ServiceType service, String description) {
+        Account account = new Account();
+        account.userId = userId;
+        account.password = password;
+        account.service = service;
+        account.description = description;
 
-    public static Account createAccount(/*Request 추가 필요*/) {
-        return new Account(null, null, null, null);
+        return account;
     }
 
 }
