@@ -32,6 +32,6 @@ test {
     useJUnitPlatform()
 }
 
-jar {
+war {
     enabled = false
 }
