@@ -1,24 +1,20 @@
 package com.jobda.keychain.controller;
 
-import com.jobda.keychain.entity.User;
-import com.jobda.keychain.repository.UserRepository;
+import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.request.CreateUserRequest;
 import com.jobda.keychain.request.UpdateUserRequest;
 import com.jobda.keychain.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("user")
 public class UserController {
 
     private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping("")
     public void createUser(@RequestBody CreateUserRequest request) {
@@ -38,9 +34,8 @@ public class UserController {
 
 
     @GetMapping("")
-    public List<User> UserList() {
-        List<User> list = userService.selectUser();
-        return list;
+    public List<Account> UserList() {
+        return userService.selectUser();
     }
 
     @DeleteMapping("/{idx}")
