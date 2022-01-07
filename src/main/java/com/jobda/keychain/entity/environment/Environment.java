@@ -22,7 +22,7 @@ public class Environment {
     @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)
     private List<Account> accounts;
 
-    private Environment(String name) {
+    protected Environment(String name) {
         this.name = name;
     }
 

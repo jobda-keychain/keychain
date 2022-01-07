@@ -33,7 +33,7 @@ public class Account {
     @JoinColumn(name = "environment_id", nullable = false)
     private Environment environment;
 
-    private Account(String userId, String password, ServiceType service, String description) {
+    protected Account(String userId, String password, ServiceType service, String description) {
         this.userId = userId;
         this.password = password;
         this.service = service;
