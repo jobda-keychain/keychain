@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class EnvironmentServiceTest {
 
     @Test
-    void 서비스_찾기() throws Exception {
+    void 서비스_찾기() {
         //given
         AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com/syxxn", "https://github.com/syxxn", "JOBDA");
         Platform platform = Platform.createPlatform(ServiceType.valueOf(request.getPlatform()));
