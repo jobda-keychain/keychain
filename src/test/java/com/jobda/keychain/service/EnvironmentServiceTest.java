@@ -18,7 +18,7 @@ class EnvironmentServiceTest {
     @Test
     void 환경_추가() {
         //given
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com/syxxn", "https://github.com/syxxn", "JOBDA");
+        AddEnvironmentRequest request = AddEnvironmentRequest.createAddEnvironmentRequest("dv-1", "https://github.com/syxxn", "https://github.com/syxxn", "JOBDA");
         Platform platform = Platform.createPlatform(ServiceType.valueOf(request.getPlatform()));
 
         //when
