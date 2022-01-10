@@ -1,6 +1,7 @@
 package com.jobda.keychain.entity.account;
 
 import com.jobda.keychain.entity.environment.Environment;
+import com.jobda.keychain.entity.platform.ServiceType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,6 @@ public class Account {
     @Column(length = 20, nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 9, nullable = false)
-    private ServiceType service;
-
     @Column(length = 100)
     private String description;
 
@@ -37,7 +34,6 @@ public class Account {
         Account account = new Account();
         account.userId = userId;
         account.password = password;
-        account.service = service;
         account.description = description;
 
         return account;
