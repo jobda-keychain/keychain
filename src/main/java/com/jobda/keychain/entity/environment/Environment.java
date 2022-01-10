@@ -21,6 +21,12 @@ public class Environment {
     @Column(length = 10, nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String serverDomain;
+
+    @Column(nullable = false)
+    private String clientDomain;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "platform_id", nullable = false)
     private Platform platform;
@@ -28,13 +34,13 @@ public class Environment {
     @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)
     private List<Account> accounts;
 
-    public static Environment createEnvironment(String name, Platform platform) {
+    public static Environment createEnvironment(String name, String serverDomain, String clientDomain, Platform platform) {
         Environment environment = new Environment();
         environment.name = name;
+        environment.serverDomain = serverDomain;
+        environment.clientDomain = clientDomain;
         environment.platform = platform;
         return environment;
     }
-
-    //환경 이름 수정 메소드 추가
 
 }

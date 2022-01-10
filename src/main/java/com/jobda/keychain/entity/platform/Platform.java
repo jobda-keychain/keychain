@@ -16,17 +16,18 @@ public class Platform {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 9, nullable = false)
-    private String name;
+    private ServiceType name;
 
     @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
     private List<Environment> environments;
 
-    protected Platform(String name) {
+    protected Platform(ServiceType name) {
         this.name = name;
     }
 
-    public static Platform createPlatform(String name) {
+    public static Platform createPlatform(ServiceType name) {
         Platform platform = new Platform();
         platform.name = name;
 
