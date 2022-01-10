@@ -1,9 +1,12 @@
 package com.jobda.keychain.service;
 
+import com.jobda.keychain.dto.request.CreateAccountRequest;
+import com.jobda.keychain.dto.request.UpdateUserRequest;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
-import com.jobda.keychain.request.CreateUserRequest;
-import com.jobda.keychain.request.UpdateUserRequest;
+import com.jobda.keychain.entity.environment.Environment;
+import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
+import com.jobda.keychain.exception.EnvironmentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +21,17 @@ import java.util.List;
 public class UserService {
 
     private final AccountRepository accountRepository;
+    private final EnvironmentRepository environmentRepository;
 
     @Transactional
-    public void createUser(CreateUserRequest request) {
-        Account user = Account.createAccount(null, null, null, null);
-        accountRepository.save(user);
+    public void createUser(CreateAccountRequest request) {
+        Environment environment = environmentRepository.findById(request.getEnvironment()).orElseThrow(() -> {
+            throw EnvironmentNotFoundException.EXCEPTION;
+        });
+
+        Account account = Account.createAccount(request.getUserId(), request.getPassword(), environment, request.getDescription());
+
+        accountRepository.save(account);
     }
 
     @Transactional
