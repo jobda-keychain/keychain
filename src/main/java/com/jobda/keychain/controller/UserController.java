@@ -5,6 +5,7 @@ import com.jobda.keychain.request.CreateUserRequest;
 import com.jobda.keychain.request.UpdateUserRequest;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,10 +39,9 @@ public class UserController {
         return userService.selectUser();
     }
 
-    @DeleteMapping("/{idx}")
-    public String deleteUser(@PathVariable Integer idx) {
-        userService.deleteUser(idx);
-        return "success";
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
     }
-
 }

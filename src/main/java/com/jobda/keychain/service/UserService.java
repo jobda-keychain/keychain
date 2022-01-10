@@ -2,6 +2,8 @@ package com.jobda.keychain.service;
 
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
+import com.jobda.keychain.exception.UserIdNotFoundException;
+import com.jobda.keychain.exception.UserNotFoundException;
 import com.jobda.keychain.request.CreateUserRequest;
 import com.jobda.keychain.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +45,8 @@ public class UserService {
         //return accountRepository.findAll();
         return new ArrayList<>();
     }
-    public void deleteUser(long id){
-        accountRepository.deleteById(id);
-        //계정이 존재하지 않는 경우에도 확인해야 할 듯
+    public void deleteUser(Long id){
+        if(accountRepository.findById(id).isPresent()) accountRepository.deleteById(id);
+        else throw new UserIdNotFoundException();
     }
 }
