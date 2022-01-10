@@ -21,9 +21,7 @@ public class EnvironmentService {
         Platform platform = platformRepository.findByName(ServiceType.valueOf(request.getPlatform()))
                 .orElseThrow(() -> PlatformNotFoundException.EXCEPTION);
 
-        Environment environment = Environment.createEnvironment(
-                request.getName(), request.getServerDomain(), request.getClientDomain(), platform
-        );
+        Environment environment = Environment.createEnvironment(request, platform);
         environmentRepository.save(environment);
     }
 
