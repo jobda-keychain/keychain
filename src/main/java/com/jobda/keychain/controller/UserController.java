@@ -33,8 +33,9 @@ public class UserController {
     }
 
 
-    @GetMapping("")
-    public List<Account> UserList() {
+    @GetMapping
+    public List<Account> UserList(@RequestParam(value = "platform", required = false) String platform, @RequestParam(value = "environment", required = false) List<String> environment) {
+
         return userService.selectUser();
     }
 
