@@ -1,4 +1,4 @@
-package com.jobda.keychain.request;
+package com.jobda.keychain.dto.request;
 
 import lombok.*;
 
