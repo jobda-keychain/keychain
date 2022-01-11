@@ -8,7 +8,6 @@ import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +19,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.transaction.Transactional;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = KeychainApplication.class)
 class EnvironmentControllerTest {
@@ -45,12 +47,6 @@ class EnvironmentControllerTest {
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
         environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
-    }
-
-    @AfterEach
-    void deleteAll() {
-        platformRepository.deleteAll();
-        environmentRepository.deleteAll();
     }
 
     @Test
