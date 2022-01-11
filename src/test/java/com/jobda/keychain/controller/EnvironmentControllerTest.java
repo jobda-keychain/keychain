@@ -1,6 +1,7 @@
 package com.jobda.keychain.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jobda.keychain.KeychainApplication;
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = KeychainApplication.class)
 class EnvironmentControllerTest {
 
     private MockMvc mvc;
