@@ -2,8 +2,8 @@ package com.jobda.keychain.service;
 
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
-import com.jobda.keychain.request.CreateUserRequest;
-import com.jobda.keychain.request.UpdateUserRequest;
+import com.jobda.keychain.dto.request.CreateUserRequest;
+import com.jobda.keychain.dto.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

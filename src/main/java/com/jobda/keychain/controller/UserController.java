@@ -1,8 +1,8 @@
 package com.jobda.keychain.controller;
 
 import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.request.CreateUserRequest;
-import com.jobda.keychain.request.UpdateUserRequest;
+import com.jobda.keychain.dto.request.CreateUserRequest;
+import com.jobda.keychain.dto.request.UpdateUserRequest;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
