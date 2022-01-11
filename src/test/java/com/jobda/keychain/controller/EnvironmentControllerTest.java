@@ -44,10 +44,7 @@ class EnvironmentControllerTest {
                 .webAppContextSetup(context)
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
-        //platformRepository.save(Platform.createPlatform(ServiceType.JOBDA_CMS));
-        environmentRepository.save(Environment.createEnvironment(
-                AddEnvironmentRequest.createAddEnvironmentRequest("dv-2", "https://github.com", "https://github.com", "JOBDA"), platform)
-        );
+        environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
     }
 
     @AfterEach
@@ -58,7 +55,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_200() throws Exception {
-        AddEnvironmentRequest request = AddEnvironmentRequest.createAddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", "JOBDA");
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", ServiceType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -68,7 +65,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_NPE() throws Exception {
-        AddEnvironmentRequest request = AddEnvironmentRequest.createAddEnvironmentRequest("dv-1", "https://github.com", null, "JOBDA");
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", null, ServiceType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -78,7 +75,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_존재하지_않는_플랫폼() throws Exception {
-        AddEnvironmentRequest request = AddEnvironmentRequest.createAddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", "JOBFLEX");
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", null);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,7 +85,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_저장되어_있지_않은_플랫폼() throws Exception {
-        AddEnvironmentRequest request = AddEnvironmentRequest.createAddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", "JOBDA_CMS");
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", ServiceType.JOBDA_CMS);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -98,7 +95,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 중복되는_환경() throws Exception {
-        AddEnvironmentRequest request = AddEnvironmentRequest.createAddEnvironmentRequest("dv-2", "https://github.com", "https://github.com", "JOBDA");
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-2", "https://github.com", "https://github.com", ServiceType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)

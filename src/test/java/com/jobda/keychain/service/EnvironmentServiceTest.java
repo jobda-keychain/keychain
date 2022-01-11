@@ -11,18 +11,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-
 @ExtendWith(MockitoExtension.class)
 class EnvironmentServiceTest {
 
     @Test
     void 환경_추가() {
         //given
-        AddEnvironmentRequest request = AddEnvironmentRequest.createAddEnvironmentRequest("dv-1", "https://github.com/syxxn", "https://github.com/syxxn", "JOBDA");
-        Platform platform = Platform.createPlatform(ServiceType.valueOf(request.getPlatform()));
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com/syxxn", "https://github.com/syxxn", ServiceType.JOBDA_CMS);
+        Platform platform = Platform.createPlatform(request.getPlatform());
 
         //when
-        Environment environment = Environment.createEnvironment(request, platform);
+        Environment environment = Environment.createEnvironment(request.getName(), request.getServerDomain(), request.getClientDomain(), platform);
 
         //then
         assertEquals(platform.getName(), ServiceType.JOBDA);

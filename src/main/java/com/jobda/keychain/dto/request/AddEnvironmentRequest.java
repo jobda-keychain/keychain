@@ -1,14 +1,18 @@
 package com.jobda.keychain.dto.request;
 
+import com.jobda.keychain.entity.platform.ServiceType;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class AddEnvironmentRequest {
 
     @Length(min = 2, max = 10)
@@ -21,17 +25,7 @@ public class AddEnvironmentRequest {
     @NotBlank
     private String clientDomain;
 
-    @NotBlank
-    private String platform;
-
-    public static AddEnvironmentRequest createAddEnvironmentRequest(String name, String serverDomain, String clientDomain, String platform) {
-        AddEnvironmentRequest request = new AddEnvironmentRequest();
-        request.name = name;
-        request.serverDomain = serverDomain;
-        request.clientDomain = clientDomain;
-        request.platform = platform;
-
-        return request;
-    }
+    @NotNull
+    private ServiceType platform;
 
 }
