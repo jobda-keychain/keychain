@@ -1,5 +1,6 @@
 package com.jobda.keychain.entity.environment;
 
+import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.platform.Platform;
 import lombok.AccessLevel;
@@ -34,11 +35,11 @@ public class Environment {
     @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)
     private List<Account> accounts;
 
-    public static Environment createEnvironment(String name, String serverDomain, String clientDomain, Platform platform) {
+    public static Environment createEnvironment(AddEnvironmentRequest request, Platform platform) {
         Environment environment = new Environment();
-        environment.name = name;
-        environment.serverDomain = serverDomain;
-        environment.clientDomain = clientDomain;
+        environment.name = request.getName();
+        environment.serverDomain = request.getServerDomain();
+        environment.clientDomain = request.getClientDomain();
         environment.platform = platform;
         return environment;
     }
