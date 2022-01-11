@@ -1,13 +1,23 @@
 package com.jobda.keychain.entity.environment;
 
-import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.platform.Platform;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.List;
 
 @Getter
@@ -16,7 +26,8 @@ import java.util.List;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id", "platform_id"}))
 public class Environment {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 10, nullable = false)
@@ -35,11 +46,11 @@ public class Environment {
     @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)
     private List<Account> accounts;
 
-    public static Environment createEnvironment(AddEnvironmentRequest request, Platform platform) {
+    public static Environment createEnvironment(String name, String serverDomain, String clientDomain, Platform platform) {
         Environment environment = new Environment();
-        environment.name = request.getName();
-        environment.serverDomain = request.getServerDomain();
-        environment.clientDomain = request.getClientDomain();
+        environment.name = name;
+        environment.serverDomain = serverDomain;
+        environment.clientDomain = clientDomain;
         environment.platform = platform;
         return environment;
     }
