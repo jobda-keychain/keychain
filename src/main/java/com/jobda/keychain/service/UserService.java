@@ -7,6 +7,7 @@ import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.exception.UnableLoginException;
 import com.jobda.keychain.dto.request.CreateUserRequest;
 import com.jobda.keychain.dto.request.UpdateUserRequest;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ public class UserService {
 
         try {
             return authApiClient.login(uri, apiRequest).getAccessToken();
-        } catch (Exception e) {
+        } catch (FeignException e) {
             // todo   예외 처리에 대한 기획 미정
             throw UnableLoginException.EXCEPTION;
         }
