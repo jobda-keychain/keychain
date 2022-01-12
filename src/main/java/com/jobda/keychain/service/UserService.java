@@ -6,15 +6,14 @@ import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
-import com.jobda.keychain.exception.EnvironmentNotFoundException;
+import com.jobda.keychain.exception.AlreadyDataExistsException;
+import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.AuthApiClient;
 import com.jobda.keychain.dto.request.LoginApiRequest;
-import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.exception.UnableLoginException;
-import com.jobda.keychain.dto.request.UpdateUserRequest;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,12 +53,22 @@ public class UserService {
     @Transactional
     public void createUser(CreateAccountRequest request) {
         Environment environment = environmentRepository.findById(request.getEnvironment()).orElseThrow(() -> {
-            throw EnvironmentNotFoundException.EXCEPTION;
+            throw new DataNotFoundException("Environment Not Found");
         });
 
         Account account = Account.createAccount(request.getUserId(), request.getPassword(), environment, request.getDescription());
 
-        accountRepository.save(account);
+        String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
+
+        if(token == null || token.isEmpty() || token.isBlank()) {
+            throw UnableLoginException.EXCEPTION;
+        }
+
+        try {
+            accountRepository.save(account);
+        } catch (DataIntegrityViolationException e) {
+            throw new AlreadyDataExistsException("The account already exists");
+        }
     }
 
     @Transactional
