@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,26 @@ import java.util.List;
 public class UserService {
 
     private final AccountRepository accountRepository;
+    private final AuthApiClient authApiClient;
+
+
+    /**
+    * 외부 로그인 API 호출 메서드
+    * 성공 시 Token 발급, 실패 시 UnableLoginException 발생
+    *
+    * @author: sse
+    **/
+    public String callLoginApi(String id, String password, String serverDomain) {
+        URI uri = URI.create(serverDomain);
+        LoginApiRequest apiRequest = new LoginApiRequest(id, password);
+
+        try {
+            return authApiClient.login(uri, apiRequest).getAccessToken();
+        } catch (FeignException e) {
+            // todo   예외 처리에 대한 기획 미정
+            throw UnableLoginException.EXCEPTION;
+        }
+    }
 
     @Transactional
     public void createUser(CreateUserRequest request) {

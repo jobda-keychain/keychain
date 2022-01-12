@@ -5,7 +5,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Getter
@@ -22,10 +30,6 @@ public class Platform {
 
     @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
     private List<Environment> environments;
-
-    protected Platform(ServiceType name) {
-        this.name = name;
-    }
 
     public static Platform createPlatform(ServiceType name) {
         Platform platform = new Platform();
