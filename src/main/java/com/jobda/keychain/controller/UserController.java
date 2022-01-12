@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("accounts")
+@RequestMapping("/accounts")
 public class UserController {
 
     private final UserService userService;
