@@ -18,16 +18,16 @@ public class Platform {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 9, nullable = false)
-    private ServiceType name;
+    private PlatformType name;
 
     @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
     private List<Environment> environments;
 
-    protected Platform(ServiceType name) {
+    protected Platform(PlatformType name) {
         this.name = name;
     }
 
-    public static Platform createPlatform(ServiceType name) {
+    public static Platform createPlatform(PlatformType name) {
         Platform platform = new Platform();
         platform.name = name;
 

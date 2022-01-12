@@ -1,7 +1,7 @@
 package com.jobda.keychain.entity.platform.repository;
 
 import com.jobda.keychain.entity.platform.Platform;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface PlatformRepository extends CrudRepository<Platform, Long> {
-    Optional<Platform> findByName(ServiceType name);
+    Optional<Platform> findByName(PlatformType name);
 }
