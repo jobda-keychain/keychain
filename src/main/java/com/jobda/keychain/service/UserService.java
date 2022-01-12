@@ -4,11 +4,14 @@ import com.jobda.keychain.AuthApiClient;
 import com.jobda.keychain.dto.request.LoginApiRequest;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
+import com.jobda.keychain.exception.AlreadyDataExistsException;
+import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 import com.jobda.keychain.dto.request.CreateUserRequest;
-import com.jobda.keychain.dto.request.UpdateUserRequest;
+import com.jobda.keychain.dto.request.UpdateAccountRequest;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,13 +53,31 @@ public class UserService {
         accountRepository.save(user);
     }
 
+    /**
+    * 계정 정보 수정
+    * 계정 정보가 없으면 404 Not Found 발생
+    * 로그인 실패 시 UnableLoginException 발생
+    * Account Entity 중복 발생 시 409 Conflict 발생
+    *
+    * @author: sse
+    **/
     @Transactional
-    public void updateUser(long id, UpdateUserRequest request) {
-        Account account = accountRepository.findById(id).orElseThrow();
+    public void updateUser(long id, UpdateAccountRequest request) {
+        Account account = accountRepository.findById(id).orElseThrow(()-> new DataNotFoundException("User not found"));
 
-        //account.update(account, request);
+        account.changeInfo(request.getUserId(), request.getPassword(), request.getDescription());
 
-        accountRepository.save(account);
+        String token = callLoginApi(account.getUserId(), account.getPassword(), account.getEnvironment().getServerDomain());
+
+        if(token == null || token.isEmpty() || token.isBlank()) {
+            throw UnableLoginException.EXCEPTION;
+        }
+
+        try {
+            accountRepository.save(account);
+        } catch (DataIntegrityViolationException e) {
+            throw new AlreadyDataExistsException("The account already exists");
+        }
     }
 
     public void test() {
