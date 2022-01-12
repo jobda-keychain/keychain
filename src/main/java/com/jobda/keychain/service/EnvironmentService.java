@@ -59,6 +59,7 @@ public class EnvironmentService {
 
         environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
         environmentRepository.save(environment);
+    }
       
      /** 
      * platform에 속해있는 environment 목록 전달
