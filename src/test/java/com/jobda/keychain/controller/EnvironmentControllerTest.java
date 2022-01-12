@@ -63,8 +63,6 @@ class EnvironmentControllerTest {
         );
         environment.getAccounts().add(save);
         environmentId_delete_400 = environment.getId();
-        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
-        platform.getEnvironments().add(environment);
     }
 
     @Test
