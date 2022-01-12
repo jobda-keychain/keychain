@@ -4,6 +4,7 @@ name: keychain CI
 # Event Trigger
 # push할 때와 dev에 PR을 날릴 때 action이 돌아가도록 한다.
 on:
+  push:
   pull_request:
     branches: [ dev ]
 
@@ -19,7 +20,7 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
-        
+
     - name: Grant execute permission for gradlew
         run: chmod +x gradlew
     - name: Build with Gradle
