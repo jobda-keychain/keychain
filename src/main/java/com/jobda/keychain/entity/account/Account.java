@@ -30,10 +30,11 @@ public class Account {
     @JoinColumn(name = "environment_id", nullable = false)
     private Environment environment;
 
-    public static Account createAccount(String userId, String password, ServiceType service, String description) {
+    public static Account createAccount(String userId, String password, Environment environment, String description) {
         Account account = new Account();
         account.userId = userId;
         account.password = password;
+        account.environment = environment;
         account.description = description;
 
         return account;
