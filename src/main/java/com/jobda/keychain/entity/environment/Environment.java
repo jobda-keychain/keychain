@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id", "platform_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "platform_id"}))
 public class Environment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
