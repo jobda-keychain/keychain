@@ -10,7 +10,6 @@ import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +61,6 @@ class EnvironmentControllerTest {
                 Account.createAccount("asdf", "asdf", environment, "")
         );
         environment.getAccounts().add(save);
-
     }
 
     @Test
