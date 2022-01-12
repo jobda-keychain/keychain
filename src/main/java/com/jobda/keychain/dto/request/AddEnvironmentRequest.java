@@ -19,9 +19,11 @@ public class AddEnvironmentRequest {
     @NotBlank
     private String name;
 
+    @Length(min = 2, max = 255)
     @NotBlank
     private String serverDomain;
 
+    @Length(min = 2, max = 255)
     @NotBlank
     private String clientDomain;
 
