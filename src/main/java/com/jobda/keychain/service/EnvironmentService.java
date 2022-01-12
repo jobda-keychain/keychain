@@ -1,7 +1,6 @@
 package com.jobda.keychain.service;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
-import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class EnvironmentService {
 
-    private final AccountRepository accountRepository;
     private final PlatformRepository platformRepository;
     private final EnvironmentRepository environmentRepository;
 
@@ -47,7 +45,7 @@ public class EnvironmentService {
                     throw new DataNotFoundException("Environment is not found");
                 });
 
-        if (!accountRepository.findAllByEnvironment(environment).isEmpty()) {
+        if (environment.getAccounts().size() != 0) {
             throw new BadRequestException("Still have accounts in this environment");
         }
 
