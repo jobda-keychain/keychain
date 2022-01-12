@@ -2,7 +2,7 @@ package com.jobda.keychain.controller;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
-import com.jobda.keychain.entity.platform.PlatformType;
+import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.service.EnvironmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class EnvironmentController {
     }
 
     @GetMapping("/search")
-    public EnvironmentsResponse getEnvironmentsOfService(@RequestParam PlatformType platform) {
+    public EnvironmentsResponse getEnvironmentsOfService(@RequestParam ServiceType platform) {
         return environmentService.getEnvironmentsOfService(platform);
     }
 

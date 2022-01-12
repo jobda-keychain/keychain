@@ -1,5 +1,5 @@
 package com.jobda.keychain.entity.platform;
 
-public enum PlatformType {
+public enum ServiceType {
     JOBDA, JOBDA_CMS
 }

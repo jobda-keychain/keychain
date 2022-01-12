@@ -1,7 +1,7 @@
 package com.jobda.keychain.entity.account;
 
 import com.jobda.keychain.entity.environment.Environment;
-import com.jobda.keychain.entity.platform.PlatformType;
+import com.jobda.keychain.entity.platform.ServiceType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +30,7 @@ public class Account {
     @JoinColumn(name = "environment_id", nullable = false)
     private Environment environment;
 
-    public static Account createAccount(String userId, String password, PlatformType service, String description) {
+    public static Account createAccount(String userId, String password, ServiceType service, String description) {
         Account account = new Account();
         account.userId = userId;
         account.password = password;

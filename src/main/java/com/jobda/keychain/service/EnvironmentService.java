@@ -5,7 +5,7 @@ import com.jobda.keychain.dto.response.EnvironmentsResponse;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
-import com.jobda.keychain.entity.platform.PlatformType;
+import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.DataNotFoundException;
@@ -43,7 +43,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
-    public EnvironmentsResponse getEnvironmentsOfService(PlatformType platformType) {
+    public EnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
         Platform platform = getPlatform(platformType);
 
         return new EnvironmentsResponse(environmentRepository.findAllByPlatform(platform).stream()
@@ -52,7 +52,7 @@ public class EnvironmentService {
         );
     }
 
-    private Platform getPlatform(PlatformType platformType) {
+    private Platform getPlatform(ServiceType platformType) {
         return platformRepository.findByName(platformType)
                 .orElseThrow(() -> {
                     throw new DataNotFoundException("Platform not found");
