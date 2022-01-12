@@ -1,7 +1,7 @@
 package com.jobda.keychain.service;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
-import com.jobda.keychain.dto.response.EnvironmentsResponse;
+import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
@@ -43,11 +43,11 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
-    public EnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
+    public PlatformEnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
         Platform platform = getPlatform(platformType);
 
-        return new EnvironmentsResponse(platform.getEnvironments().stream()
-                .map(e -> new EnvironmentsResponse.EnvironmentDto(e.getId(), e.getName()))
+        return new PlatformEnvironmentsResponse(platform.getEnvironments().stream()
+                .map(e -> new PlatformEnvironmentsResponse.EnvironmentDto(e.getId(), e.getName()))
                 .collect(Collectors.toList())
         );
     }

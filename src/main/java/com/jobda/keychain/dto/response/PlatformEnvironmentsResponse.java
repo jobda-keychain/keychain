@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class EnvironmentsResponse {
+public class PlatformEnvironmentsResponse {
 
     private final List<EnvironmentDto> data;
 
