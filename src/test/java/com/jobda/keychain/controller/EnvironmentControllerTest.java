@@ -101,13 +101,19 @@ class EnvironmentControllerTest {
     @Test
     void 서비스에_대한_환경_목록() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBDA")
-        ).andExpect(status().isOk()).andDo(print());
+        ).andExpect(status().isOk());
     }
 
     @Test
     void 서비스에_대한_환경_목록_400() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBFLEX")
-        ).andExpect(status().isBadRequest()).andDo(print());
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록_404() throws Exception {
+        mvc.perform(get("/environments/search?platform=JOBDA_CMS")
+        ).andExpect(status().isNotFound());
     }
 
 }
