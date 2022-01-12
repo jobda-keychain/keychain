@@ -7,10 +7,18 @@ import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.exception.EnvironmentNotFoundException;
+import com.jobda.keychain.AuthApiClient;
+import com.jobda.keychain.dto.request.LoginApiRequest;
+import com.jobda.keychain.entity.account.Account;
+import com.jobda.keychain.entity.account.repository.AccountRepository;
+import com.jobda.keychain.exception.UnableLoginException;
+import com.jobda.keychain.dto.request.UpdateUserRequest;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +30,26 @@ public class UserService {
 
     private final AccountRepository accountRepository;
     private final EnvironmentRepository environmentRepository;
+    private final AuthApiClient authApiClient;
+
+
+    /**
+    * 외부 로그인 API 호출 메서드
+    * 성공 시 Token 발급, 실패 시 UnableLoginException 발생
+    *
+    * @author: sse
+    **/
+    public String callLoginApi(String id, String password, String serverDomain) {
+        URI uri = URI.create(serverDomain);
+        LoginApiRequest apiRequest = new LoginApiRequest(id, password);
+
+        try {
+            return authApiClient.login(uri, apiRequest).getAccessToken();
+        } catch (FeignException e) {
+            // todo   예외 처리에 대한 기획 미정
+            throw UnableLoginException.EXCEPTION;
+        }
+    }
 
     @Transactional
     public void createUser(CreateAccountRequest request) {
