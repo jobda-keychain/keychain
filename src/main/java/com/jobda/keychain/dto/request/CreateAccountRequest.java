@@ -22,5 +22,6 @@ public class CreateAccountRequest {
     @Max(100)
     private String description;
 
-    private Long environment;
+    @NotNull
+    private Long environmentId;
 }
