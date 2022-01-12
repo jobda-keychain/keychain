@@ -19,7 +19,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
@@ -44,6 +46,8 @@ class EnvironmentControllerTest {
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
         environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
+        environmentRepository.save(Environment.createEnvironment("dv-5", "https://github.com", "https://github.com", platform));
+        environmentRepository.save(Environment.createEnvironment("dv-6", "https://github.com", "https://github.com", platform));
     }
 
     @Test
@@ -94,6 +98,13 @@ class EnvironmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
         ).andExpect(status().isConflict());
+    }
+
+    @Test
+    void 환경_목록() throws Exception {
+        mvc.perform(get("/environments?size=2&page=0"))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }
