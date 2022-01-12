@@ -1,10 +1,14 @@
 package com.jobda.keychain.controller;
 
 import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.request.CreateUserRequest;
-import com.jobda.keychain.request.UpdateUserRequest;
+import com.jobda.keychain.dto.request.CreateUserRequest;
+import com.jobda.keychain.dto.request.UpdateUserRequest;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,9 +38,13 @@ public class UserController {
 
 
     @GetMapping
-    public List<Account> UserList(@RequestParam(value = "platform", required = false) String platform, @RequestParam(value = "environment", required = false) List<String> environment) {
+    public Page<Account> UserList(@RequestParam(value = "size") int size,
+                                  @RequestParam(value = "page") int page,
+                                  @RequestParam(value = "platform", required = false) String platform,
+                                  @RequestParam(value = "environment", required = false) List<String> environment) {
 
-        return userService.selectUser();
+        Pageable pageable = PageRequest.of(page, size);
+        return userService.selectUser(pageable);
     }
 
     @DeleteMapping("/{idx}")
