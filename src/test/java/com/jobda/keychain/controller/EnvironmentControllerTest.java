@@ -44,8 +44,8 @@ class EnvironmentControllerTest {
     @Autowired
     private AccountRepository accountRepository;
 
-    Environment environment;
-    long environmentId;
+    long environmentId_delete_200;
+    long environmentId_delete_400;
 
     @BeforeEach
     void setUp() {
@@ -54,13 +54,14 @@ class EnvironmentControllerTest {
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
 
-        environmentId = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform)).getId();
-        environment = environmentRepository.save(Environment.createEnvironment("dv-3", "https://github.com", "https://github.com", platform));
+        environmentId_delete_200 = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform)).getId();
+        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-3", "https://github.com", "https://github.com", platform));
 
         Account save = accountRepository.save(
                 Account.createAccount("asdf", "asdf", environment, "")
         );
         environment.getAccounts().add(save);
+        environmentId_delete_400 = environment.getId();
     }
 
     @Test
@@ -115,13 +116,13 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_삭제() throws Exception {
-        mvc.perform(delete("/environments/" + environmentId)
+        mvc.perform(delete("/environments/" + environmentId_delete_200)
         ).andDo(print()).andExpect(status().isNoContent());
     }
 
     @Test
     void 환경_삭제_400() throws Exception {
-        mvc.perform(delete("/environments/" + environment.getId())
+        mvc.perform(delete("/environments/" + environmentId_delete_400)
         ).andDo(print()).andExpect(status().isBadRequest());
     }
 
