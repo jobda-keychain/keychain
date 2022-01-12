@@ -1,7 +1,6 @@
 package com.jobda.keychain.entity.account;
 
 import com.jobda.keychain.entity.environment.Environment;
-import com.jobda.keychain.entity.platform.ServiceType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,7 +33,7 @@ public class Environment {
     private Platform platform;
 
     @OneToMany(mappedBy = "environment", cascade = CascadeType.REMOVE)
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<>();
 
     public static Environment createEnvironment(String name, String serverDomain, String clientDomain, Platform platform) {
         Environment environment = new Environment();
