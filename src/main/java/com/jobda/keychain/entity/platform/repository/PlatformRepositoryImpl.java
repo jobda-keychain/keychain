@@ -1,6 +1,5 @@
 package com.jobda.keychain.entity.platform.repository;
 
-import com.jobda.keychain.entity.account.KeychainRepositorySupport;
 import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class PlatformRepositoryImpl extends KeychainRepositorySupport implements PlatformRepositoryExtension {
+public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements PlatformRepositoryExtension {
 
     private final JPAQueryFactory queryFactory;
 
@@ -22,7 +21,6 @@ public class PlatformRepositoryImpl extends KeychainRepositorySupport implements
     @Override
     public List<Platform> selectUser(ServiceType serviceType, List<Long> ids) {
 //        queryFactory.select()
-
         return null;
     }
 }
