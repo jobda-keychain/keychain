@@ -17,6 +17,6 @@ public class UpdateAccountRequest {
     @Length(min = 2, max = 20)
     private String password;
 
-    @Max(100)
+    @Length(max = 100)
     private String description;
 }
