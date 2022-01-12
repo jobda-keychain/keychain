@@ -4,6 +4,8 @@ import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.service.EnvironmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,12 @@ public class EnvironmentController {
     @PostMapping
     public void addEnvironment(@RequestBody @Valid AddEnvironmentRequest request) {
         environmentService.addEnvironment(request);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteEnvironment(@PathVariable long id) {
+        environmentService.deleteEnvironment(id);
     }
 
 }
