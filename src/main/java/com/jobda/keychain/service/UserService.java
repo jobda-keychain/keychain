@@ -52,7 +52,7 @@ public class UserService {
 
     @Transactional
     public void createUser(CreateAccountRequest request) {
-        Environment environment = environmentRepository.findById(request.getEnvironment()).orElseThrow(() -> {
+        Environment environment = environmentRepository.findById(request.getEnvironmentId()).orElseThrow(() -> {
             throw new DataNotFoundException("Environment Not Found");
         });
 
