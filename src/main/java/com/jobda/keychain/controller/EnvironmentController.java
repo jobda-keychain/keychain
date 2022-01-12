@@ -1,5 +1,6 @@
 package com.jobda.keychain.controller;
 
+import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.service.EnvironmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,8 @@ public class EnvironmentController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void addEnvironment() {
+    public void addEnvironment(@RequestBody @Valid AddEnvironmentRequest request) {
+        environmentService.addEnvironment(request);
     }
 
 }
