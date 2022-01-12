@@ -45,7 +45,8 @@ class EnvironmentControllerTest {
                 .webAppContextSetup(context)
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
-        environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
+        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
+        platform.getEnvironments().add(environment);
     }
 
     @Test
@@ -101,7 +102,7 @@ class EnvironmentControllerTest {
     @Test
     void 서비스에_대한_환경_목록() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBDA")
-        ).andExpect(status().isOk());
+        ).andExpect(status().isOk()).andDo(print());
     }
 
     @Test
