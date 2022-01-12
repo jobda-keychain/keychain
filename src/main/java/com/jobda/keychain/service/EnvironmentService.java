@@ -19,10 +19,12 @@ public class EnvironmentService {
 
     public void addEnvironment(AddEnvironmentRequest request) {
         Platform platform = platformRepository.findByName(request.getPlatform())
-                .orElseThrow(() -> DataNotFoundException.EXCEPTION);
+                .orElseThrow(() -> {
+                    throw new DataNotFoundException("Platform not found");
+                });
 
         if (environmentRepository.existsByPlatformAndName(platform, request.getName())) {
-            throw AlreadyDataExistsException.EXCEPTION;
+            throw new AlreadyDataExistsException("Same name exists on the platform");
         }
 
         Environment environment = Environment.createEnvironment(request.getName(), request.getServerDomain(), request.getClientDomain(), platform);

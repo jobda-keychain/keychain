@@ -1,11 +1,12 @@
 package com.jobda.keychain.exception;
 
 import com.jobda.keychain.exception.handler.KeyChainException;
+import org.springframework.http.HttpStatus;
 
 public class DataNotFoundException extends KeyChainException {
-    public static final DataNotFoundException EXCEPTION = new DataNotFoundException();
+    private static final int status = HttpStatus.NOT_FOUND.value();
 
-    protected DataNotFoundException() {
-        super(404, "Data is not found");
+    public DataNotFoundException(String message) {
+        super(status, message);
     }
 }
