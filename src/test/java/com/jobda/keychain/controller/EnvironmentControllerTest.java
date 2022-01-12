@@ -10,6 +10,7 @@ import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,11 @@ class EnvironmentControllerTest {
         environmentId = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform)).getId();
         environment = environmentRepository.save(Environment.createEnvironment("dv-3", "https://github.com", "https://github.com", platform));
 
-        accountRepository.save(
-                Account.createAccount("asdf", "asdf", environment,"")
+        Account save = accountRepository.save(
+                Account.createAccount("asdf", "asdf", environment, "")
         );
+        environment.getAccounts().add(save);
+
     }
 
     @Test
