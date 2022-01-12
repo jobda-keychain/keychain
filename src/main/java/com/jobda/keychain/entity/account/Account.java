@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "environment_id"}))
 public class Account {
 
     @Id
