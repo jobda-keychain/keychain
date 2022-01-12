@@ -3,6 +3,7 @@ package com.jobda.keychain.controller;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.dto.request.CreateUserRequest;
 import com.jobda.keychain.dto.request.UpdateUserRequest;
+import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
     }
 }

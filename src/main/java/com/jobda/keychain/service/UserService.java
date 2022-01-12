@@ -1,11 +1,15 @@
 package com.jobda.keychain.service;
 
+import com.jobda.keychain.AuthApiClient;
+import com.jobda.keychain.dto.request.CreateUserRequest;
+import com.jobda.keychain.dto.request.LoginApiRequest;
+import com.jobda.keychain.dto.request.UpdateUserRequest;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
+import com.jobda.keychain.exception.DataNotFoundException;
+import com.jobda.keychain.exception.UnableLoginException;
 import com.jobda.keychain.exception.UserIdNotFoundException;
-import com.jobda.keychain.exception.UserNotFoundException;
-import com.jobda.keychain.request.CreateUserRequest;
-import com.jobda.keychain.request.UpdateUserRequest;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,8 +70,11 @@ public class UserService {
         //return accountRepository.findAll();
         return new ArrayList<>();
     }
-    public void deleteUser(Long id){
-        if(accountRepository.findById(id).isPresent()) accountRepository.deleteById(id);
-        else throw new UserIdNotFoundException();
+
+    public void deleteUser(long id){
+        accountRepository.findById(id).orElseThrow(() -> {
+            throw new DataNotFoundException("userId Not Found");
+        });
+        accountRepository.deleteById(id);
     }
 }
