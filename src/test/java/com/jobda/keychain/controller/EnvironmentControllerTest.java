@@ -19,7 +19,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
@@ -94,6 +96,18 @@ class EnvironmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
         ).andExpect(status().isConflict());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록() throws Exception {
+        mvc.perform(get("/environments/search?platform=JOBDA")
+        ).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록_400() throws Exception {
+        mvc.perform(get("/environments/search?platform=JOBFLEX")
+        ).andExpect(status().isBadRequest()).andDo(print());
     }
 
 }
