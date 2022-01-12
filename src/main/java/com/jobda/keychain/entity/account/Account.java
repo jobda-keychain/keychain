@@ -10,14 +10,14 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "environment_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "environment_id"}))
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 20, nullable = false)
+    @Column(name = "user_id", length = 20, nullable = false)
     private String userId;
 
     @Column(length = 20, nullable = false)

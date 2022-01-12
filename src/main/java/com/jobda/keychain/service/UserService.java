@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -60,15 +61,11 @@ public class UserService {
 
         String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
 
-        if(token == null || token.isEmpty() || token.isBlank()) {
+        if(token == null || token.isBlank()) {
             throw UnableLoginException.EXCEPTION;
         }
 
-        try {
-            accountRepository.save(account);
-        } catch (DataIntegrityViolationException e) {
-            throw new AlreadyDataExistsException("The account already exists");
-        }
+        accountRepository.save(account);
     }
 
     @Transactional

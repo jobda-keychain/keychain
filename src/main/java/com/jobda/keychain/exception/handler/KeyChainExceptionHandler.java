@@ -1,5 +1,6 @@
 package com.jobda.keychain.exception.handler;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,6 +25,11 @@ public class KeyChainExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     protected ResponseEntity<ErrorResponse> handleNullPointerException() {
         return new ResponseEntity<>(new ErrorResponse(400, "Null pointer exception"), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    protected ResponseEntity<ErrorResponse> handleConflictException() {
+        return new ResponseEntity<>(new ErrorResponse(409, "Data is already exists"), HttpStatus.CONFLICT);
     }
 
 }

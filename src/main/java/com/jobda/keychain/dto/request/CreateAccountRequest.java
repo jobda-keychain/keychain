@@ -4,22 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
 public class CreateAccountRequest {
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 20)
     private String userId;
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 20)
     private String password;
 
-    @Max(100)
+    @Length(max = 100)
     private String description;
 
     @NotNull
