@@ -2,8 +2,10 @@ package com.jobda.keychain.service;
 
 import com.jobda.keychain.AuthApiClient;
 import com.jobda.keychain.dto.request.LoginApiRequest;
+import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
+import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
@@ -55,6 +57,7 @@ public class UserService {
 
     /**
     * 계정 정보 수정
+    * 성공하면 수정된 정보 반환
     * 계정 정보가 없으면 404 Not Found 발생
     * 로그인 실패 시 UnableLoginException 발생
     * Account Entity 중복 발생 시 409 Conflict 발생
@@ -62,12 +65,14 @@ public class UserService {
     * @author: sse
     **/
     @Transactional
-    public void updateUser(long id, UpdateAccountRequest request) {
+    public UpdateAccountResponse updateUser(long id, UpdateAccountRequest request) {
         Account account = accountRepository.findById(id).orElseThrow(()-> new DataNotFoundException("User not found"));
 
         account.changeInfo(request.getUserId(), request.getPassword(), request.getDescription());
 
-        String token = callLoginApi(account.getUserId(), account.getPassword(), account.getEnvironment().getServerDomain());
+        Environment environment = account.getEnvironment();
+
+        String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
 
         if(token == null || token.isEmpty() || token.isBlank()) {
             throw UnableLoginException.EXCEPTION;
@@ -78,6 +83,8 @@ public class UserService {
         } catch (DataIntegrityViolationException e) {
             throw new AlreadyDataExistsException("The account already exists");
         }
+
+        return new UpdateAccountResponse(account.getId(), account.getUserId(), account.getPassword(), environment.getPlatform().getName().name(), environment.getName(), account.getDescription());
     }
 
     public void test() {

@@ -1,5 +1,6 @@
 package com.jobda.keychain.controller;
 
+import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.dto.request.CreateUserRequest;
 import com.jobda.keychain.dto.request.UpdateAccountRequest;
@@ -29,10 +30,10 @@ public class UserController {
     }
 
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{id}")
-    public void updateUser(@RequestBody @Valid UpdateAccountRequest request, @PathVariable long id) {
-        userService.updateUser(id, request);
+    public UpdateAccountResponse updateUser(@RequestBody @Valid UpdateAccountRequest request, @PathVariable long id) {
+        return userService.updateUser(id, request);
     }
 
 
