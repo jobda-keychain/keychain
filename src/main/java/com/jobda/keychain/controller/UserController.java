@@ -18,7 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("")
+    @PostMapping()
     @ResponseStatus(code = HttpStatus.CREATED)
     public void createUser(@RequestBody @Valid CreateAccountRequest request) {
         userService.createUser(request);
