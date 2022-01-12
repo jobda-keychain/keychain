@@ -46,7 +46,7 @@ public class EnvironmentService {
     public EnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
         Platform platform = getPlatform(platformType);
 
-        return new EnvironmentsResponse(environmentRepository.findAllByPlatform(platform).stream()
+        return new EnvironmentsResponse(platform.getEnvironments().stream()
                 .map(e -> new EnvironmentsResponse.EnvironmentDto(e.getId(), e.getName()))
                 .collect(Collectors.toList())
         );

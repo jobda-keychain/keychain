@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,11 +22,7 @@ public class Platform {
     private ServiceType name;
 
     @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
-    private List<Environment> environments;
-
-    protected Platform(ServiceType name) {
-        this.name = name;
-    }
+    private List<Environment> environments = new ArrayList<>();
 
     public static Platform createPlatform(ServiceType name) {
         Platform platform = new Platform();
