@@ -2,6 +2,8 @@ package com.jobda.keychain.controller;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
+import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
+import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.service.EnvironmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,10 +30,15 @@ public class EnvironmentController {
     public void addEnvironment(@RequestBody @Valid AddEnvironmentRequest request) {
         environmentService.addEnvironment(request);
     }
-
+  
     @GetMapping
     public EnvironmentsResponse getEnvironments(Pageable page) {
         return environmentService.getEnvironments(page);
+    }
+  
+    @GetMapping("/search")
+    public PlatformEnvironmentsResponse getEnvironmentsOfService(@RequestParam ServiceType platform) {
+        return environmentService.getEnvironmentsOfService(platform);
     }
 
 }

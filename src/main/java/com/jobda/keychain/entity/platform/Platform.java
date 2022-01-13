@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +30,7 @@ public class Platform {
     private ServiceType name;
 
     @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
-    private List<Environment> environments;
+    private List<Environment> environments = new ArrayList<>();
 
     public static Platform createPlatform(ServiceType name) {
         Platform platform = new Platform();
