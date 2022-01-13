@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class EnvironmentService {
@@ -23,6 +24,7 @@ public class EnvironmentService {
     private final PlatformRepository platformRepository;
     private final EnvironmentRepository environmentRepository;
 
+    @Transactional(rollbackFor = Exception.class)
     public void addEnvironment(AddEnvironmentRequest request) {
         Platform platform = platformRepository.findByName(request.getPlatform())
                 .orElseThrow(() -> {
@@ -37,7 +39,6 @@ public class EnvironmentService {
         environmentRepository.save(environment);
     }
 
-    @Transactional(readOnly = true)
     public EnvironmentsResponse getEnvironments(Pageable page) {
         Page<Environment> environmentPage = environmentRepository.findAllBy(page);
 
