@@ -57,6 +57,10 @@ public class EnvironmentService {
             throw new BadRequestException("Still have accounts in this environment");
         }
 
+        if (environmentRepository.existsByPlatformAndName(environment.getPlatform(), request.getName())) {
+            throw new AlreadyDataExistsException("Same name exists on the platform");
+        }
+
         environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
         environmentRepository.save(environment);
     }
