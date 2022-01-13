@@ -3,7 +3,7 @@ package com.jobda.keychain.controller;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.dto.request.CreateAccountRequest;
-import com.jobda.keychain.dto.request.UpdateUserRequest;
+import com.jobda.keychain.dto.request.UpdateAccountRequest;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
