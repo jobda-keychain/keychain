@@ -12,8 +12,6 @@ import com.jobda.keychain.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 @Service
 public class EnvironmentService {
@@ -39,16 +37,14 @@ public class EnvironmentService {
     }
 
     /**
-     * platform에 속해있는 environment 목록 전달
+     * platform(null인 경우)에는 환경 목록 전달
+     * platform(null이 아닌 경우)에 속해있는 environment 목록 전달
      *
      * @author: syxxn
      **/
     public PlatformEnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
-        Platform platform = getPlatform(platformType);
-
-        return new PlatformEnvironmentsResponse(platform.getEnvironments().stream()
-                .map(e -> new PlatformEnvironmentsResponse.EnvironmentDto(e.getId(), e.getName()))
-                .collect(Collectors.toList())
+        return new PlatformEnvironmentsResponse(
+                environmentRepository.findAllByPlatformEnvironments(platformType)
         );
     }
 

@@ -46,6 +46,8 @@ class EnvironmentControllerTest {
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
         Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
+        environmentRepository.save(Environment.createEnvironment("dv-10", "https://github.com", "https://github.com", platform));
+        environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platformRepository.save(Platform.createPlatform(ServiceType.JOBDA_CMS))));
         platform.getEnvironments().add(environment);
     }
 
@@ -80,16 +82,6 @@ class EnvironmentControllerTest {
     }
 
     @Test
-    void 환경_추가_저장되어_있지_않은_플랫폼() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", ServiceType.JOBDA_CMS);
-
-        mvc.perform(post("/environments")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isNotFound());
-    }
-
-    @Test
     void 중복되는_환경() throws Exception {
         AddEnvironmentRequest request = new AddEnvironmentRequest("dv-2", "https://github.com", "https://github.com", ServiceType.JOBDA);
 
@@ -97,6 +89,12 @@ class EnvironmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
         ).andExpect(status().isConflict());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록_서비스필터X() throws Exception {
+        mvc.perform(get("/environments/search")
+        ).andExpect(status().isOk()).andDo(print());
     }
 
     @Test
@@ -109,12 +107,6 @@ class EnvironmentControllerTest {
     void 서비스에_대한_환경_목록_400() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBFLEX")
         ).andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void 서비스에_대한_환경_목록_404() throws Exception {
-        mvc.perform(get("/environments/search?platform=JOBDA_CMS")
-        ).andExpect(status().isNotFound());
     }
 
 }
