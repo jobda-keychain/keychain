@@ -3,17 +3,17 @@ package com.jobda.keychain.dto.request;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @AllArgsConstructor
 public class UpdateAccountRequest {
-    @NotNull
+
+    @NotBlank
     @Length(min = 2, max = 20)
     private String userId;
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 20)
     private String password;
 
