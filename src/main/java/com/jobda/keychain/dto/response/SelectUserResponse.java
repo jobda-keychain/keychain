@@ -21,7 +21,6 @@ public class SelectUserResponse {
     public static class SelectUserDto{
         private Long id;
         private String userId;
-        private String password;
         private ServiceType platform;
         private String environment;
         private String description;

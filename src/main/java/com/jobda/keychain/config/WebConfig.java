@@ -15,10 +15,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("*")
                 .allowedHeaders("*");
-
-        // 페이지 처리, 1부터 시작
-        PageableHandlerMethodArgumentResolver pageableArgumentResolver = new PageableHandlerMethodArgumentResolver(new SortHandlerMethodArgumentResolver());
-        pageableArgumentResolver.setOneIndexedParameters(true);
-
     }
 }
