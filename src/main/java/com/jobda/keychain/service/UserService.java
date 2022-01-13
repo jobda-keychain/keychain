@@ -53,71 +53,12 @@ public class UserService {
     }
 
     /* 계정 리스트 */
-    // 전체 탭
-    public Page<Account> selectUser(Pageable pageable) {
-        //response dto를 만들어서 반환하는 것이 좋을 것 같음.
-        return accountRepository.findAll(pageable);
-    }
-
-    // 플랫폼 필터링
-    public Page<Account> selectUser(Pageable pageable, ServiceType platform) {
-//        List<Platform> platforms = platformRepository.findByName(platform);
-//        ArrayList<Account> accounts = new ArrayList<>();
-//        for (Platform p : platforms) {
-//            for (Environment e : p.getEnvironments()) {
-//                List<Account> joinAccounts = accountRepository.findByEnvironment(e).orElseThrow();
-//                accounts.addAll(joinAccounts);
-//            }
-//        }
-        List<SelectUserResponse.SelectUserDto> platformList = platformRepository.selectUser(platform, null);
-        List<Account> platformLists = platformRepository.selectUserA(platform, null);
-        System.out.println("i.getId()" + "  "  + "i.getUserId()" + "  " + "i.getPlatform()" + "  " + "i.getEnvironment()" );
-        for(var i : platformList){
-            System.out.println(i.getId() + "  "  + i.getUserId() + "  " + i.getPlatform() + "  " + i.getEnvironment() );
-//            System.out.println(i.getId() + "  " + i.getName());
-        }
-//        for(var i : platformLists){
-//            System.out.println(i.getId() + "  "  + i.getUserId());
-////            System.out.println(i.getId() + "  " + i.getName());
-//        }
-        /*
-        platform = jobda
-        platforms에 jobda인 레코드 저장
-        platforms 에 environments 리스트 저장되어 있음
-        그 envionments에 하나하나를 for문으로 돌려
-        그걸 포함하고 있는 Account를 저장하고
-        그걸 다시 accounts에 저장함.
-         */
-        //new PageImpl<Account>(accounts, pageable, accounts.size())
-        return null;
-    }
-
-    // 플랫폼, 환경 필터링
-    public Page<Account> selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
-//        List<SelectUserResponse.SelectUserDto> platformList = platformRepository.selectUser(platform, ids);
-
+    public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
         List<Platform> platforms = platformRepository.findByName(platform);
         ArrayList<Environment> environments = new ArrayList<>();
 
-        /*
-        List<Environment> Environments = environmentRepository.findByIdin(ids);
-        Map<Long, Environment> collect =
-                environments.stream()
-                        .collect(Collectors.toMap(Environment::getId, Function.identity()));
-
-        for (Platform p : platforms) {
-            for (Long i : ids) {
-                List<Environment> joinEnvironment = environmentRepository.findByPlatformAndId(p, i).orElseThrow();
-                environments.addAll(joinEnvironment);
-            }
-        }
-        */
-        ArrayList<Account> accounts = new ArrayList<>();
-        for (Environment e : environments) {
-            List<Account> joinAccounts = accountRepository.findByEnvironment(e).orElseThrow();
-            accounts.addAll(joinAccounts);
-        }
-        return new PageImpl<Account>(accounts, pageable, accounts.size());
+        Page<SelectUserResponse.SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
+        return new SelectUserResponse(selectUser.toList(), selectUser.getTotalPages());
     }
 
     public void deleteUser(long id) {

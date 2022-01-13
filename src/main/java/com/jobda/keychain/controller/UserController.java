@@ -1,5 +1,6 @@
 package com.jobda.keychain.controller;
 
+import com.jobda.keychain.dto.response.SelectUserResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.dto.request.CreateUserRequest;
 import com.jobda.keychain.dto.request.UpdateUserRequest;
@@ -39,13 +40,13 @@ public class UserController {
 
 
     @GetMapping
-    public Page<Account> UserList(@RequestParam(value = "size") int size,
-                                  @RequestParam(value = "page") int page,
-                                  @RequestParam(value = "platform", required = false) ServiceType platform,
-                                  @RequestParam(value = "environment", required = false) List<Long> ids) {
+    public SelectUserResponse selectUser(@RequestParam(value = "size") int size,
+                                         @RequestParam(value = "page") int page,
+                                         @RequestParam(value = "platform", required = false) ServiceType platform,
+                                         @RequestParam(value = "environment", required = false) List<Long> ids) {
 
         Pageable pageable = PageRequest.of(page, size);
-        return userService.selectUser(pageable,  platform);
+        return userService.selectUser(pageable, platform, ids);
     }
 
     @DeleteMapping("/{idx}")

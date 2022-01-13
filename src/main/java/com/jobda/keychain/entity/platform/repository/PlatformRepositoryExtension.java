@@ -4,12 +4,13 @@ import com.jobda.keychain.dto.response.SelectUserResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.platform.ServiceType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface PlatformRepositoryExtension {
 
-    List<SelectUserResponse.SelectUserDto> selectUser(ServiceType platform, List<Long> ids);
-    List<Account> selectUserA(ServiceType platform, List<Long> ids);
+    Page<SelectUserResponse.SelectUserDto> selectUser(Pageable pageable, ServiceType platform, List<Long> ids);
 
 }
