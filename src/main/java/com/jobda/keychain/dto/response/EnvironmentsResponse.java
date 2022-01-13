@@ -4,6 +4,7 @@ import com.jobda.keychain.entity.platform.ServiceType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -17,19 +18,19 @@ public class EnvironmentsResponse {
     private final long totalPages;
 
     @Getter
-    @Builder
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class EnvironmentDto {
 
-        private final long id;
+        private long id;
 
-        private final String name;
+        private String name;
 
-        private final String serverDomain;
+        private String serverDomain;
 
-        private final String clientDomain;
+        private String clientDomain;
 
-        private final ServiceType platform;
+        private ServiceType platform;
 
     }
 
