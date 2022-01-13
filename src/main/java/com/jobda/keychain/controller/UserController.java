@@ -1,12 +1,14 @@
 package com.jobda.keychain.controller;
 
 import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.dto.request.CreateUserRequest;
+import com.jobda.keychain.dto.request.CreateAccountRequest;
 import com.jobda.keychain.dto.request.UpdateUserRequest;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -16,8 +18,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("")
-    public void createUser(@RequestBody CreateUserRequest request) {
+    @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public void createUser(@RequestBody @Valid CreateAccountRequest request) {
         userService.createUser(request);
     }
 
