@@ -40,17 +40,12 @@ class EnvironmentControllerTest {
     @Autowired
     private EnvironmentRepository environmentRepository;
 
-    @Autowired
-    private EntityManager entityManager;
-
     @BeforeEach
     void setUp() {
-        entityManager.clear();
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
-        environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
         environmentRepository.save(Environment.createEnvironment("dv-5", "https://github.com", "https://github.com", platform));
         environmentRepository.save(Environment.createEnvironment("dv-6", "https://github.com", "https://github.com", platform));
         Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
