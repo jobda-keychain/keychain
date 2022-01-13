@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
@@ -36,6 +37,7 @@ public class EnvironmentService {
         environmentRepository.save(environment);
     }
 
+    @Transactional(readOnly = true)
     public EnvironmentsResponse getEnvironments(Pageable page) {
         Page<Environment> environmentPage = environmentRepository.findAllBy(page);
 
