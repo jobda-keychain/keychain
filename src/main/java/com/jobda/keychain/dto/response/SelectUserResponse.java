@@ -26,7 +26,7 @@ public class SelectUserResponse {
         private String environment;
         private String description;
 
-       private SelectUserDto(){
+       public SelectUserDto(){
 
         }
     }

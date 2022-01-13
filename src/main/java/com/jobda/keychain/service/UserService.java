@@ -54,10 +54,12 @@ public class UserService {
 
     /* 계정 리스트 */
     public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
-        List<Platform> platforms = platformRepository.findByName(platform);
-        ArrayList<Environment> environments = new ArrayList<>();
-
         Page<SelectUserResponse.SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
+
+        List<SelectUserResponse.SelectUserDto> s = platformRepository.selectUserE(pageable, platform, ids);
+        for(var i : s){
+            System.out.println(i.getId() + " " + i.getEnvironment());
+        }
         return new SelectUserResponse(selectUser.toList(), selectUser.getTotalPages());
     }
 

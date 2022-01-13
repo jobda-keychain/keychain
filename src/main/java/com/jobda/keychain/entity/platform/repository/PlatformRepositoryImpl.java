@@ -5,6 +5,7 @@ import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,9 +17,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Objects;
 
+import static com.jobda.keychain.entity.account.QAccount.account;
 import static com.jobda.keychain.entity.environment.QEnvironment.environment;
 import static com.jobda.keychain.entity.platform.QPlatform.platform;
-import static com.jobda.keychain.entity.account.QAccount.account;
+
 @Repository
 public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements PlatformRepositoryExtension {
 
@@ -31,7 +33,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
 
     @Override
     public Page<SelectUserResponse.SelectUserDto> selectUser(Pageable pageable, ServiceType serviceType, List<Long> ids) {
-        JPQLQuery<SelectUserResponse.SelectUserDto> query = querydsl().applyPagination(pageable,
+        JPAQuery<SelectUserResponse.SelectUserDto> query =
                 queryFactory.select(
                                 Projections.fields(SelectUserResponse.SelectUserDto.class,
                                         account.id,
@@ -42,13 +44,40 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
                         )
                         .from(platform)
                         .leftJoin(platform.environments, environment)
-                        .on(platform.name.eq(serviceType))
-                        .leftJoin(environment.accounts, account));
-        List<SelectUserResponse.SelectUserDto> list = query.fetch();
-        long totalCount = query.fetchCount();
-        return new PageImpl<>(list, pageable, totalCount);
+                        .leftJoin(environment.accounts, account)
 
+
+
+//                        .where(platform.name.eq(serviceType))
+//                        .where(environment.id.in(ids))
+                ;
+
+        JPQLQuery<SelectUserResponse.SelectUserDto> selectUserDtoJPQLQuery =
+                querydsl().applyPagination(pageable, query);
+
+        List<SelectUserResponse.SelectUserDto> list = selectUserDtoJPQLQuery.fetch();
+        return new PageImpl<>(list, pageable, list.size());
     }
+
+    @Override
+    public List<SelectUserResponse.SelectUserDto> selectUserE(Pageable pageable, ServiceType serviceType, List<Long> ids) {
+        return
+                queryFactory.select(
+                                Projections.fields(SelectUserResponse.SelectUserDto.class,
+                                        account.id,
+                                        account.userId,
+                                        account.environment.platform.name.as("platform"),
+                                        account.environment.name.as("environment"),
+                                        account.description)
+                        )
+                        .from(platform)
+                        .leftJoin(platform.environments, environment)
+                        .where(platform.name.eq(serviceType))
+                        .leftJoin(environment.accounts, account)
+                        .where(environment.id.in(ids))
+                        .fetch();
+    }
+
     private Querydsl querydsl() {
         return Objects.requireNonNull(getQuerydsl());
     }
