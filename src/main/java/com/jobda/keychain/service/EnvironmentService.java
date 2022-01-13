@@ -12,6 +12,7 @@ import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
@@ -46,6 +47,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
+    @Transactional
     public void deleteEnvironment(long id) {
         Environment environment = environmentRepository.findById(id)
                 .orElseThrow(() -> {
