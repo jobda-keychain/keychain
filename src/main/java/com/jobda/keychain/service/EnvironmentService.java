@@ -2,9 +2,11 @@ package com.jobda.keychain.service;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
+import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
+import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.DataNotFoundException;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class EnvironmentService {
@@ -23,11 +27,14 @@ public class EnvironmentService {
     private final PlatformRepository platformRepository;
     private final EnvironmentRepository environmentRepository;
 
+    /**
+     * platform에 동일한 환경 이름이 존재한다면 409
+     * environment에 platform이 속해있다.
+     *
+     * @author: syxxn
+     **/
     public void addEnvironment(AddEnvironmentRequest request) {
-        Platform platform = platformRepository.findByName(request.getPlatform())
-                .orElseThrow(() -> {
-                    throw new DataNotFoundException("Platform not found");
-                });
+        Platform platform = getPlatform(request.getPlatform());
 
         if (environmentRepository.existsByPlatformAndName(platform, request.getName())) {
             throw new AlreadyDataExistsException("Same name exists on the platform");
@@ -36,7 +43,7 @@ public class EnvironmentService {
         Environment environment = Environment.createEnvironment(request.getName(), request.getServerDomain(), request.getClientDomain(), platform);
         environmentRepository.save(environment);
     }
-
+  
     @Transactional(readOnly = true)
     public EnvironmentsResponse getEnvironments(Pageable page) {
         Page<Environment> environmentPage = environmentRepository.findAllBy(page);
@@ -54,6 +61,27 @@ public class EnvironmentService {
                 )
                 .totalPages(environmentPage.getTotalPages())
                 .build();
+    }
+  
+    /**
+     * platform에 속해있는 environment 목록 전달
+     *
+     * @author: syxxn
+     **/
+    public PlatformEnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
+        Platform platform = getPlatform(platformType);
+
+        return new PlatformEnvironmentsResponse(platform.getEnvironments().stream()
+                .map(e -> new PlatformEnvironmentsResponse.EnvironmentDto(e.getId(), e.getName()))
+                .collect(Collectors.toList())
+        );
+    }
+
+    private Platform getPlatform(ServiceType platformType) {
+        return platformRepository.findByName(platformType)
+                .orElseThrow(() -> {
+                    throw new DataNotFoundException("Platform not found");
+                });
     }
 
 }

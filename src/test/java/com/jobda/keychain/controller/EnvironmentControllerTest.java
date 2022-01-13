@@ -48,6 +48,8 @@ class EnvironmentControllerTest {
         environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
         environmentRepository.save(Environment.createEnvironment("dv-5", "https://github.com", "https://github.com", platform));
         environmentRepository.save(Environment.createEnvironment("dv-6", "https://github.com", "https://github.com", platform));
+        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
+        platform.getEnvironments().add(environment);
     }
 
     @Test
@@ -105,6 +107,24 @@ class EnvironmentControllerTest {
         mvc.perform(get("/environments?size=2&page=0"))
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
+    
+    @Test
+    void 서비스에_대한_환경_목록() throws Exception {
+        mvc.perform(get("/environments/search?platform=JOBDA")
+        ).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록_400() throws Exception {
+        mvc.perform(get("/environments/search?platform=JOBFLEX")
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록_404() throws Exception {
+        mvc.perform(get("/environments/search?platform=JOBDA_CMS")
+        ).andExpect(status().isNotFound());
     }
 
 }
