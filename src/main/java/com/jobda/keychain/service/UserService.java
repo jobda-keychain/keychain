@@ -1,5 +1,6 @@
 package com.jobda.keychain.service;
 
+import com.jobda.keychain.dto.response.SelectUserResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
@@ -60,14 +61,25 @@ public class UserService {
 
     // 플랫폼 필터링
     public Page<Account> selectUser(Pageable pageable, ServiceType platform) {
-        List<Platform> platforms = platformRepository.findByName(platform);
-        ArrayList<Account> accounts = new ArrayList<>();
-        for (Platform p : platforms) {
-            for (Environment e : p.getEnvironments()) {
-                List<Account> joinAccounts = accountRepository.findByEnvironment(e).orElseThrow();
-                accounts.addAll(joinAccounts);
-            }
+//        List<Platform> platforms = platformRepository.findByName(platform);
+//        ArrayList<Account> accounts = new ArrayList<>();
+//        for (Platform p : platforms) {
+//            for (Environment e : p.getEnvironments()) {
+//                List<Account> joinAccounts = accountRepository.findByEnvironment(e).orElseThrow();
+//                accounts.addAll(joinAccounts);
+//            }
+//        }
+        List<SelectUserResponse.SelectUserDto> platformList = platformRepository.selectUser(platform, null);
+        List<Account> platformLists = platformRepository.selectUserA(platform, null);
+        System.out.println("i.getId()" + "  "  + "i.getUserId()" + "  " + "i.getPlatform()" + "  " + "i.getEnvironment()" );
+        for(var i : platformList){
+            System.out.println(i.getId() + "  "  + i.getUserId() + "  " + i.getPlatform() + "  " + i.getEnvironment() );
+//            System.out.println(i.getId() + "  " + i.getName());
         }
+//        for(var i : platformLists){
+//            System.out.println(i.getId() + "  "  + i.getUserId());
+////            System.out.println(i.getId() + "  " + i.getName());
+//        }
         /*
         platform = jobda
         platforms에 jobda인 레코드 저장
@@ -76,12 +88,13 @@ public class UserService {
         그걸 포함하고 있는 Account를 저장하고
         그걸 다시 accounts에 저장함.
          */
-        return new PageImpl<Account>(accounts, pageable, accounts.size());
+        //new PageImpl<Account>(accounts, pageable, accounts.size())
+        return null;
     }
 
     // 플랫폼, 환경 필터링
     public Page<Account> selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
-        List<Platform> platformList = platformRepository.selectUser(platform, ids);
+//        List<SelectUserResponse.SelectUserDto> platformList = platformRepository.selectUser(platform, ids);
 
         List<Platform> platforms = platformRepository.findByName(platform);
         ArrayList<Environment> environments = new ArrayList<>();

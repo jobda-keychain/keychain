@@ -3,6 +3,7 @@ package com.jobda.keychain.controller;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.dto.request.CreateUserRequest;
 import com.jobda.keychain.dto.request.UpdateUserRequest;
+import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,11 +41,11 @@ public class UserController {
     @GetMapping
     public Page<Account> UserList(@RequestParam(value = "size") int size,
                                   @RequestParam(value = "page") int page,
-                                  @RequestParam(value = "platform", required = false) String platform,
-                                  @RequestParam(value = "environment", required = false) List<String> environment) {
+                                  @RequestParam(value = "platform", required = false) ServiceType platform,
+                                  @RequestParam(value = "environment", required = false) List<Long> ids) {
 
         Pageable pageable = PageRequest.of(page, size);
-        return userService.selectUser(pageable);
+        return userService.selectUser(pageable,  platform);
     }
 
     @DeleteMapping("/{idx}")
