@@ -1,6 +1,6 @@
 package com.jobda.keychain.entity.environment.repository;
 
-import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
+import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse.EnvironmentsDto;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.querydsl.core.types.Projections;
@@ -25,9 +25,9 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public List<PlatformEnvironmentsResponse.EnvironmentNameDto> findAllByPlatformEnvironments(ServiceType platformType) {
+    public List<EnvironmentsDto> findAllByPlatformEnvironments(ServiceType platformType) {
         return queryFactory.select(
-                        Projections.fields(PlatformEnvironmentsResponse.EnvironmentNameDto.class,
+                        Projections.fields(EnvironmentsDto.class,
                                 environment.id,
                                 environment.name,
                                 environment.platform.name.as("platform")

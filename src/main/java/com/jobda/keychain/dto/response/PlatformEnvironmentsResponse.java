@@ -11,12 +11,12 @@ import java.util.List;
 @AllArgsConstructor
 public class PlatformEnvironmentsResponse {
 
-    private final List<EnvironmentNameDto> data;
+    private final List<EnvironmentsDto> data;
 
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class EnvironmentNameDto {
+    public static class EnvironmentsDto {
 
         private Long id;
 
