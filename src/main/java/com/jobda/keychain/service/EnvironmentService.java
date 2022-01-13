@@ -45,19 +45,10 @@ public class EnvironmentService {
     }
 
     public EnvironmentsResponse getEnvironments(Pageable page) {
-        Page<Environment> environmentPage = environmentRepository.findAllBy(page);
+        Page<EnvironmentsResponse.EnvironmentDto> environmentPage = environmentRepository.findAllByPlatformEnvironment(page);
 
         return EnvironmentsResponse.builder()
-                .data(environmentPage
-                        .map(e -> EnvironmentsResponse.EnvironmentDto.builder()
-                                .id(e.getId())
-                                .name(e.getName())
-                                .serverDomain(e.getServerDomain())
-                                .clientDomain(e.getClientDomain())
-                                .platform(e.getPlatform().getName())
-                                .build())
-                        .stream().collect(Collectors.toList())
-                )
+                .data(environmentPage.toList())
                 .totalPages(environmentPage.getTotalPages())
                 .build();
     }
