@@ -13,9 +13,11 @@ import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class EnvironmentService {
@@ -29,6 +31,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
+    @Transactional(rollbackFor = Exception.class)
     public void addEnvironment(AddEnvironmentRequest request) {
         Platform platform = getPlatform(request.getPlatform());
 
@@ -47,6 +50,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
+    @Transactional(rollbackFor = Exception.class)
     public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
         Environment environment = environmentRepository.findById(id)
                 .orElseThrow(() -> {
