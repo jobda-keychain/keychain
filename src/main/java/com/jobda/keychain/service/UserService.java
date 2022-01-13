@@ -9,8 +9,10 @@ import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
-import com.jobda.keychain.dto.request.CreateUserRequest;
 import com.jobda.keychain.dto.request.UpdateAccountRequest;
+import com.jobda.keychain.dto.request.CreateAccountRequest;
+import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
+
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,6 +30,7 @@ import java.util.List;
 public class UserService {
 
     private final AccountRepository accountRepository;
+    private final EnvironmentRepository environmentRepository;
     private final AuthApiClient authApiClient;
 
 
@@ -50,9 +53,20 @@ public class UserService {
     }
 
     @Transactional
-    public void createUser(CreateUserRequest request) {
-        Account user = Account.createAccount(null, null, null, null);
-        accountRepository.save(user);
+    public void createUser(CreateAccountRequest request) {
+        Environment environment = environmentRepository.findById(request.getEnvironmentId()).orElseThrow(() -> {
+            throw new DataNotFoundException("Environment Not Found");
+        });
+
+        Account account = Account.createAccount(request.getUserId(), request.getPassword(), environment, request.getDescription());
+
+        String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
+
+        if(token == null || token.isBlank()) {
+            throw UnableLoginException.EXCEPTION;
+        }
+
+        accountRepository.save(account);
     }
 
     /**
