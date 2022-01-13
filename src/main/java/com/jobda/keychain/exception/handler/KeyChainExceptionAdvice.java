@@ -6,11 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.xml.bind.ValidationException;
 
 @RestControllerAdvice
-public class KeyChainExceptionHandler {
+public class KeyChainExceptionAdvice {
 
     @ExceptionHandler(KeyChainException.class)
     protected ResponseEntity<ErrorResponse> handleKeyChainException(final KeyChainException e) {
@@ -19,12 +20,17 @@ public class KeyChainExceptionHandler {
 
     @ExceptionHandler({ValidationException.class, MethodArgumentNotValidException.class})
     protected ResponseEntity<ErrorResponse> handleValidationException() {
-        return new ResponseEntity<>(new ErrorResponse(400, "Validation exception"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Validation exception"), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NullPointerException.class)
     protected ResponseEntity<ErrorResponse> handleNullPointerException() {
-        return new ResponseEntity<>(new ErrorResponse(400, "Null pointer exception"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Null pointer exception"), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException() {
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Method argument type is mismatch"), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
