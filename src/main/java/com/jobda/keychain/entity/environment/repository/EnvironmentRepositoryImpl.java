@@ -7,14 +7,12 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 import static com.jobda.keychain.entity.environment.QEnvironment.environment;
 import static com.jobda.keychain.entity.platform.QPlatform.platform;
 
-@Repository
 public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport implements EnvironmentRepositoryExtension {
 
     private final JPAQueryFactory queryFactory;
