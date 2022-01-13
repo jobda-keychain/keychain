@@ -40,4 +40,10 @@ public class Account {
         return account;
     }
 
+    public void changeInfo(String userId, String password, String description) {
+        this.userId = userId;
+        this.password = password;
+        this.description = description;
+    }
+
 }

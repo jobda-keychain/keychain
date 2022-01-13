@@ -1,8 +1,9 @@
 package com.jobda.keychain.controller;
 
+import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.dto.request.CreateAccountRequest;
-import com.jobda.keychain.dto.request.UpdateUserRequest;
+import com.jobda.keychain.dto.request.UpdateAccountRequest;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,10 @@ public class UserController {
     }
 
 
-    @PutMapping("/{userIdx}")
-    public void updateUser(@RequestBody UpdateUserRequest request, @PathVariable int userIdx) {
-        userService.updateUser(userIdx, request);
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{id}")
+    public UpdateAccountResponse updateUser(@RequestBody @Valid UpdateAccountRequest request, @PathVariable long id) {
+        return userService.updateUser(id, request);
     }
 
 

@@ -1,17 +1,21 @@
 package com.jobda.keychain.service;
 
-import com.jobda.keychain.dto.request.CreateAccountRequest;
-import com.jobda.keychain.dto.request.UpdateUserRequest;
+import com.jobda.keychain.AuthApiClient;
+import com.jobda.keychain.dto.request.LoginApiRequest;
+import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
-import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
+import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.DataNotFoundException;
-import com.jobda.keychain.AuthApiClient;
-import com.jobda.keychain.dto.request.LoginApiRequest;
 import com.jobda.keychain.exception.UnableLoginException;
+import com.jobda.keychain.dto.request.UpdateAccountRequest;
+import com.jobda.keychain.dto.request.CreateAccountRequest;
+import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
+
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,13 +69,32 @@ public class UserService {
         accountRepository.save(account);
     }
 
+    /**
+    * 계정 정보 수정
+    * 성공하면 수정된 정보 반환
+    * 계정 정보가 없으면 404 Not Found 발생
+    * 로그인 실패 시 UnableLoginException 발생
+    * Account Entity 중복 발생 시 409 Conflict 발생
+    *
+    * @author: sse
+    **/
     @Transactional
-    public void updateUser(long id, UpdateUserRequest request) {
-        Account account = accountRepository.findById(id).orElseThrow();
+    public UpdateAccountResponse updateUser(long id, UpdateAccountRequest request) {
+        Account account = accountRepository.findById(id).orElseThrow(()-> new DataNotFoundException("User not found"));
 
-        //account.update(account, request);
+        account.changeInfo(request.getUserId(), request.getPassword(), request.getDescription());
+
+        Environment environment = account.getEnvironment();
+
+        String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
+
+        if(token == null || token.isBlank()) {
+            throw UnableLoginException.EXCEPTION;
+        }
 
         accountRepository.save(account);
+
+        return new UpdateAccountResponse(account.getId(), account.getUserId(), account.getPassword(), environment.getPlatform().getName().name(), environment.getName(), account.getDescription());
     }
 
     public void test() {
