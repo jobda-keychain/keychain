@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -69,9 +70,12 @@ public class EnvironmentService {
      * @author: syxxn
      **/
     public PlatformEnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
-        List<EnvironmentsDto> environments = environmentRepository.findAllByPlatformEnvironments(platformType);
+        List<Environment> environments = environmentRepository.findAllByPlatformEnvironments(platformType);
 
-        return new PlatformEnvironmentsResponse(environments);
+        return new PlatformEnvironmentsResponse(environments.stream()
+                .map(e -> new PlatformEnvironmentsResponse.EnvironmentsDto(
+                        e.getId(), e.getName(), e.getPlatform().getName()
+                )).collect(Collectors.toList()));
     }
 
     private Platform getPlatform(ServiceType platformType) {
