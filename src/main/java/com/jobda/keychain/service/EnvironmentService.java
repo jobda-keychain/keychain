@@ -52,6 +52,32 @@ public class EnvironmentService {
      **/
     @Transactional
     public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
+      Environment environment = environmentRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new DataNotFoundException("Environment is not found");
+                });
+
+        if (environment.getAccounts().size() != 0) {
+            throw new BadRequestException("Still have accounts in this environment");
+        }
+  
+      if (environmentRepository.existsByPlatformAndName(environment.getPlatform(), request.getName())) {
+            throw new AlreadyDataExistsException("Same name exists on the platform");
+        }
+
+        environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
+        environmentRepository.save(environment);
+    }
+  
+    /**
+     * 환경 삭제
+     * 환경에 속한 계정이 남아있는 경우 400 반환,
+     * 계정이 없으면 삭제 가능
+     *
+     * @author: syxxn
+     **/
+    @Transactional
+    public void deleteEnvironment(long id) {
         Environment environment = environmentRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new DataNotFoundException("Environment is not found");
@@ -60,16 +86,10 @@ public class EnvironmentService {
         if (environment.getAccounts().size() != 0) {
             throw new BadRequestException("Still have accounts in this environment");
         }
-
-        if (environmentRepository.existsByPlatformAndName(environment.getPlatform(), request.getName())) {
-            throw new AlreadyDataExistsException("Same name exists on the platform");
-        }
-
-        environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
-        environmentRepository.save(environment);
+        environmentRepository.delete(environment);
     }
-      
-     /** 
+  
+     /**
      * platform에 속해있는 environment 목록 전달
      *
      * @author: syxxn
