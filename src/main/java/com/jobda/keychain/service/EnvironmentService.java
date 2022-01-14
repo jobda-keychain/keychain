@@ -1,6 +1,8 @@
 package com.jobda.keychain.service;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
+import com.jobda.keychain.dto.response.EnvironmentsResponse;
+import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse.EnvironmentsDto;
 import com.jobda.keychain.entity.environment.Environment;
@@ -12,12 +14,15 @@ import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class EnvironmentService {
@@ -31,6 +36,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
+    @Transactional
     public void addEnvironment(AddEnvironmentRequest request) {
         Platform platform = getPlatform(request.getPlatform());
 
@@ -42,6 +48,44 @@ public class EnvironmentService {
         environmentRepository.save(environment);
     }
 
+    public EnvironmentsResponse getEnvironments(Pageable page) {
+        Page<Environment> environmentPage = environmentRepository.findAllByPlatformEnvironment(page);
+
+        return EnvironmentsResponse.builder()
+                .data(environmentPage.stream()
+                        .map(e -> new EnvironmentsResponse.EnvironmentDto(
+                                e.getId(), e.getName(), e.getServerDomain(), e.getClientDomain(), e.getPlatform().getName()
+                        )).collect(Collectors.toList())
+                ).totalPages(environmentPage.getTotalPages())
+                .build();
+    }
+
+    /**
+     * 환경 수정
+     * 환경에 속한 사람이 있는 경우 400
+     * 환경에 속한 사람이 없는 경우에는 name과 도메인 수정이 가능
+     *
+     * @author: syxxn
+     **/
+    @Transactional
+    public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
+      Environment environment = environmentRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new DataNotFoundException("Environment is not found");
+                });
+
+        if (environment.getAccounts().size() != 0) {
+            throw new BadRequestException("Still have accounts in this environment");
+        }
+  
+      if (environmentRepository.existsByPlatformAndName(environment.getPlatform(), request.getName())) {
+            throw new AlreadyDataExistsException("Same name exists on the platform");
+        }
+
+        environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
+        environmentRepository.save(environment);
+    }
+  
     /**
      * 환경 삭제
      * 환경에 속한 계정이 남아있는 경우 400 반환,
@@ -59,7 +103,6 @@ public class EnvironmentService {
         if (environment.getAccounts().size() != 0) {
             throw new BadRequestException("Still have accounts in this environment");
         }
-
         environmentRepository.delete(environment);
     }
   

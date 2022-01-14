@@ -15,10 +15,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @SpringBootTest(classes = KeychainApplication.class)
+@ActiveProfiles("test")
 class EnvironmentControllerTest {
 
     private MockMvc mvc;
@@ -54,8 +57,10 @@ class EnvironmentControllerTest {
                 .webAppContextSetup(context)
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
+
+        environmentRepository.save(Environment.createEnvironment("dv-5", "https://github.com", "https://github.com", platform));
+        environmentRepository.save(Environment.createEnvironment("dv-6", "https://github.com", "https://github.com", platform));
         Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
-        environmentRepository.save(Environment.createEnvironment("dv-10", "https://github.com", "https://github.com", platform));
         platform.getEnvironments().add(environment);
 
         environmentId_delete_200 = environmentRepository.save(Environment.createEnvironment("dv-9", "https://github.com", "https://github.com", platform)).getId();
@@ -118,7 +123,14 @@ class EnvironmentControllerTest {
         mvc.perform(delete("/environments/" + environmentId_delete_200)
         ).andDo(print()).andExpect(status().isNoContent());
     }
-
+  
+    @Test
+    void 환경_목록() throws Exception {
+        mvc.perform(get("/environments?size=2&page=0"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    
     @Test
     void 환경_삭제_400() throws Exception {
         mvc.perform(delete("/environments/" + environmentId_delete_400)

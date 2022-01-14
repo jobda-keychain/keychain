@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface EnvironmentRepositoryExtension {
     List<Environment> findAllByPlatformEnvironments(ServiceType platformType);
+    Page<Environment> findAllByPlatformEnvironment(Pageable page);
 }
