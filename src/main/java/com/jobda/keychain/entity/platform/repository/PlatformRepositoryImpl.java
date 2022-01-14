@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +21,6 @@ import static com.jobda.keychain.entity.account.QAccount.account;
 import static com.jobda.keychain.entity.environment.QEnvironment.environment;
 import static com.jobda.keychain.entity.platform.QPlatform.platform;
 
-@Repository
 public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements PlatformRepositoryExtension {
 
     private final JPAQueryFactory queryFactory;

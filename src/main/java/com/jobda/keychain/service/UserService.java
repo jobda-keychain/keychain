@@ -1,35 +1,26 @@
 package com.jobda.keychain.service;
 
 import com.jobda.keychain.AuthApiClient;
-import com.jobda.keychain.dto.request.LoginApiRequest;
-import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.entity.account.repository.AccountRepository;
-import com.jobda.keychain.exception.DataNotFoundException;
-import com.jobda.keychain.exception.UnableLoginException;
 import com.jobda.keychain.dto.request.CreateAccountRequest;
 import com.jobda.keychain.dto.request.LoginApiRequest;
 import com.jobda.keychain.dto.request.UpdateAccountRequest;
 import com.jobda.keychain.dto.response.DetailsResponse;
-import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.SelectUserDto;
 import com.jobda.keychain.dto.response.SelectUserResponse;
+import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
+import com.jobda.keychain.entity.account.Account;
+import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
-import com.jobda.keychain.dto.request.UpdateAccountRequest;
-import com.jobda.keychain.dto.request.CreateAccountRequest;
-import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
-
-import feign.FeignException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,15 +101,11 @@ public class UserService {
         return new UpdateAccountResponse(account.getId(), account.getUserId(), account.getPassword(), environment.getPlatform().getName().name(), environment.getName(), account.getDescription());
     }
 
-    public void test() {
-
-    }
-
     public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
         Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
         return new SelectUserResponse(selectUser.toList(), selectUser.getTotalPages());
     }
-  
+
     public DetailsResponse detailsUser(long id) {
         Account account = accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("User Not Found");
@@ -128,7 +115,7 @@ public class UserService {
         return new DetailsResponse(account.getId(), account.getUserId(), account.getPassword(), platform, environment, account.getDescription());
     }
 
-
+    @Transactional
     public void deleteUser(long id) {
         accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("userId Not Found");
@@ -143,11 +130,11 @@ public class UserService {
      * @author: sse
      **/
     public TokenResponse getToken(Long id) {
-
         Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("User is not found"));
 
         String token = callLoginApi(account.getUserId(), account.getPassword(), account.getEnvironment().getServerDomain());
 
         return new TokenResponse(token);
     }
+
 }
