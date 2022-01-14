@@ -4,6 +4,9 @@ import com.jobda.keychain.dto.response.DetailsResponse;
 import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
+import com.jobda.keychain.dto.request.CreateUserRequest;
+import com.jobda.keychain.dto.request.UpdateUserRequest;
+import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.dto.request.CreateAccountRequest;
 import com.jobda.keychain.dto.request.UpdateAccountRequest;
 import com.jobda.keychain.service.UserService;
@@ -45,19 +48,19 @@ public class UserController {
         return userService.selectUser();
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable long id) {
+        userService.deleteUser(id);
+    }
+  
     @GetMapping("/details/{id}")
     public DetailsResponse detailsUser(@PathVariable long id){
         return userService.detailsUser(id);
-    }
-    @DeleteMapping("/{idx}")
-    public String deleteUser(@PathVariable Integer idx) {
-        userService.deleteUser(idx);
-        return "success";
     }
 
     @PostMapping("/{id}")
     public TokenResponse loginAccount(@PathVariable Long id) {
         return userService.getToken(id);
     }
-
 }

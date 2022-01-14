@@ -1,7 +1,13 @@
 package com.jobda.keychain.service;
 
 import com.jobda.keychain.AuthApiClient;
+import com.jobda.keychain.dto.request.CreateUserRequest;
 import com.jobda.keychain.dto.request.LoginApiRequest;
+import com.jobda.keychain.dto.request.UpdateUserRequest;
+import com.jobda.keychain.entity.account.Account;
+import com.jobda.keychain.entity.account.repository.AccountRepository;
+import com.jobda.keychain.exception.DataNotFoundException;
+import com.jobda.keychain.exception.UnableLoginException;
 import com.jobda.keychain.dto.response.DetailsResponse;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.dto.response.TokenResponse;
@@ -120,9 +126,12 @@ public class UserService {
         //return accountRepository.findAll();
         return new ArrayList<>();
     }
+
     public void deleteUser(long id){
+        accountRepository.findById(id).orElseThrow(() -> {
+            throw new DataNotFoundException("userId Not Found");
+        });
         accountRepository.deleteById(id);
-        //계정이 존재하지 않는 경우에도 확인해야 할 듯
     }
 
     /**
