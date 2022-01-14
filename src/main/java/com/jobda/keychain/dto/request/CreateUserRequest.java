@@ -1,4 +1,4 @@
-package com.jobda.keychain.dto.request;
+package com.jobda.keychain.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

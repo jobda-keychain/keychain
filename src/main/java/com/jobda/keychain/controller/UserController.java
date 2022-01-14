@@ -1,29 +1,26 @@
 package com.jobda.keychain.controller;
 
-import com.jobda.keychain.dto.response.SelectUserResponse;
 import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.dto.request.CreateUserRequest;
-import com.jobda.keychain.dto.request.UpdateUserRequest;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.dto.request.CreateAccountRequest;
+import com.jobda.keychain.dto.request.UpdateAccountRequest;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("user")
+@RequestMapping("/accounts")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("")
-    public void createUser(@RequestBody CreateUserRequest request) {
+    @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public void createUser(@RequestBody @Valid CreateAccountRequest request) {
         userService.createUser(request);
     }
 
@@ -33,9 +30,10 @@ public class UserController {
     }
 
 
-    @PutMapping("/{userIdx}")
-    public void updateUser(@RequestBody UpdateUserRequest request, @PathVariable int userIdx) {
-        userService.updateUser(userIdx, request);
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{id}")
+    public UpdateAccountResponse updateUser(@RequestBody @Valid UpdateAccountRequest request, @PathVariable long id) {
+        return userService.updateUser(id, request);
     }
 
 
