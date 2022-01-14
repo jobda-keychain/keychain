@@ -1,6 +1,6 @@
 package com.jobda.keychain.entity.platform.repository;
 
-import com.jobda.keychain.dto.response.SelectUserResponse;
+import com.jobda.keychain.dto.response.SelectUserDto;
 import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.querydsl.core.types.Projections;
@@ -33,11 +33,11 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
-    public Page<SelectUserResponse.SelectUserDto> selectUser(Pageable pageable, ServiceType serviceType, List<Long> ids) {
-        JPAQuery<SelectUserResponse.SelectUserDto> query =
+    public Page<SelectUserDto> selectUser(Pageable pageable, ServiceType serviceType, List<Long> ids) {
+        JPAQuery<SelectUserDto> query =
                 queryFactory.select(
                                 Projections.fields(
-                                        SelectUserResponse.SelectUserDto.class,
+                                        SelectUserDto.class,
                                         account.id,
                                         account.userId,
                                         account.environment.platform.name.as("platform"),
@@ -48,15 +48,14 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
                         .from(platform)
                         .leftJoin(platform.environments, environment)
                         .leftJoin(environment.accounts, account)
-
                         .where(serviceTypeEq(serviceType))
                         .where(idsIn(ids)
                         );
 
-        JPQLQuery<SelectUserResponse.SelectUserDto> selectUserDtoJPQLQuery =
+        JPQLQuery<SelectUserDto> selectUserDtoJPQLQuery =
                 querydsl().applyPagination(pageable, query);
 
-        List<SelectUserResponse.SelectUserDto> list = selectUserDtoJPQLQuery.fetch();
+        List<SelectUserDto> list = selectUserDtoJPQLQuery.fetch();
         return new PageImpl<>(list, pageable, list.size());
     }
 
