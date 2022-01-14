@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class EnvironmentControllerTest {
 
-    private MockMvc mvc;
+    /*private MockMvc mvc;
 
     @Autowired
     private WebApplicationContext context;
@@ -150,6 +150,6 @@ class EnvironmentControllerTest {
     void 서비스에_대한_환경_목록_404() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBDA_CMS")
         ).andExpect(status().isNotFound());
-    }
+    }*/
 
 }

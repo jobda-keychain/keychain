@@ -1,17 +1,31 @@
 package com.jobda.keychain.service;
 
 import com.jobda.keychain.AuthApiClient;
+import com.jobda.keychain.dto.request.LoginApiRequest;
+import com.jobda.keychain.entity.account.Account;
+import com.jobda.keychain.entity.account.repository.AccountRepository;
+import com.jobda.keychain.exception.DataNotFoundException;
+import com.jobda.keychain.exception.UnableLoginException;
 import com.jobda.keychain.dto.request.CreateAccountRequest;
 import com.jobda.keychain.dto.request.LoginApiRequest;
 import com.jobda.keychain.dto.request.UpdateAccountRequest;
 import com.jobda.keychain.dto.response.DetailsResponse;
 import com.jobda.keychain.dto.response.TokenResponse;
+import com.jobda.keychain.dto.response.SelectUserDto;
+import com.jobda.keychain.dto.response.SelectUserResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
-import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.repository.PlatformRepository;
+import com.jobda.keychain.dto.request.UpdateAccountRequest;
+import com.jobda.keychain.dto.request.CreateAccountRequest;
+import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
+
+import feign.FeignException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 import feign.FeignException;
@@ -20,7 +34,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,7 +45,7 @@ public class UserService {
     private final AccountRepository accountRepository;
     private final EnvironmentRepository environmentRepository;
     private final AuthApiClient authApiClient;
-
+    private final PlatformRepository platformRepository;
 
     /**
      * 외부 로그인 API 호출 메서드
@@ -101,6 +114,11 @@ public class UserService {
 
     }
 
+    public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
+        Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
+        return new SelectUserResponse(selectUser.toList(), selectUser.getTotalPages());
+    }
+  
     public DetailsResponse detailsUser(long id) {
         Account account = accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("User Not Found");
@@ -110,11 +128,6 @@ public class UserService {
         return new DetailsResponse(account.getId(), account.getUserId(), account.getPassword(), platform, environment, account.getDescription());
     }
 
-    public List<Account> selectUser() {
-        //response dto를 만들어서 반환하는 것이 좋을 것 같음.
-        //return accountRepository.findAll();
-        return new ArrayList<>();
-    }
 
     public void deleteUser(long id) {
         accountRepository.findById(id).orElseThrow(() -> {
