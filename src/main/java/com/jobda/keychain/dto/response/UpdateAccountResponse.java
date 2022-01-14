@@ -9,10 +9,17 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class UpdateAccountResponse {
-    private Long id;
-    private String userId;
-    private String password;
-    private ServiceType platform;
-    private String environment;
-    private String description;
+
+    private final Long id;
+
+    private final String userId;
+
+    private final String password;
+
+    private final ServiceType platform;
+
+    private final String environment;
+
+    private final String description;
+
 }
