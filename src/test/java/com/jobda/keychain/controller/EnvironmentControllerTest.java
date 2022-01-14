@@ -3,6 +3,8 @@ package com.jobda.keychain.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jobda.keychain.KeychainApplication;
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
+import com.jobda.keychain.entity.account.Account;
+import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
@@ -19,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -39,14 +42,27 @@ class EnvironmentControllerTest {
     @Autowired
     private EnvironmentRepository environmentRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
+    long environmentId_delete_200;
+    long environmentId_delete_400;
+
     @BeforeEach
     void setUp() {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
-        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
-        platform.getEnvironments().add(environment);
+
+        environmentId_delete_200 = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform)).getId();
+        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-3", "https://github.com", "https://github.com", platform));
+
+        Account save = accountRepository.save(
+                Account.createAccount("asdf", "asdf", environment, "")
+        );
+        environment.getAccounts().add(save);
+        environmentId_delete_400 = environment.getId();
     }
 
     @Test
@@ -100,6 +116,17 @@ class EnvironmentControllerTest {
     }
 
     @Test
+    void 환경_삭제() throws Exception {
+        mvc.perform(delete("/environments/" + environmentId_delete_200)
+        ).andDo(print()).andExpect(status().isNoContent());
+    }
+
+    @Test
+    void 환경_삭제_400() throws Exception {
+        mvc.perform(delete("/environments/" + environmentId_delete_400)
+        ).andDo(print()).andExpect(status().isBadRequest());
+    }
+  
     void 서비스에_대한_환경_목록() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBDA")
         ).andExpect(status().isOk()).andDo(print());
