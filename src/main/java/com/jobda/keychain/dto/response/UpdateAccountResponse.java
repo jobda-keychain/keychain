@@ -6,10 +6,17 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class UpdateAccountResponse {
-    private Long id;
-    private String userId;
-    private String password;
-    private String platform;
-    private String environment;
-    private String description;
+
+    private final Long id;
+
+    private final String userId;
+
+    private final String password;
+
+    private final String platform;
+
+    private final String environment;
+
+    private final String description;
+
 }

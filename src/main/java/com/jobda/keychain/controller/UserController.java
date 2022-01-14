@@ -39,18 +39,11 @@ public class UserController {
         userService.createUser(request);
     }
 
-    @GetMapping("/test")
-    public String getTest() {
-        return "Test";
-    }
-
-
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{id}")
     public UpdateAccountResponse updateUser(@RequestBody @Valid UpdateAccountRequest request, @PathVariable long id) {
         return userService.updateUser(id, request);
     }
-
 
     @GetMapping
     public SelectUserResponse selectUser(@RequestParam(value = "size") int size,
@@ -77,4 +70,5 @@ public class UserController {
     public TokenResponse loginAccount(@PathVariable Long id) {
         return userService.getToken(id);
     }
+
 }

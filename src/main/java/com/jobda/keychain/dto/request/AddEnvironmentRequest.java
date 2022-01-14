@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class AddEnvironmentRequest {
 
     @Length(min = 2, max = 10)
