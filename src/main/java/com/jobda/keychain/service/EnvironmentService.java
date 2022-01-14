@@ -39,9 +39,7 @@ public class EnvironmentService {
     public void addEnvironment(AddEnvironmentRequest request) {
         Platform platform = getPlatform(request.getPlatform());
 
-        if (environmentRepository.existsByPlatformAndName(platform, request.getName())) {
-            throw new AlreadyDataExistsException("Same name exists on the platform");
-        }
+        existsSameName(platform, request.getName());
 
         Environment environment = Environment.createEnvironment(request.getName(), request.getServerDomain(), request.getClientDomain(), platform);
         environmentRepository.save(environment);
@@ -68,18 +66,9 @@ public class EnvironmentService {
      **/
     @Transactional
     public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
-        Environment environment = environmentRepository.findById(id)
-                .orElseThrow(() -> {
-                    throw new DataNotFoundException("Environment is not found");
-                });
-
-        if (environment.getAccounts().size() != 0) {
-            throw new BadRequestException("Still have accounts in this environment");
-        }
-
-        if (environmentRepository.existsByPlatformAndName(environment.getPlatform(), request.getName())) {
-            throw new AlreadyDataExistsException("Same name exists on the platform");
-        }
+        Environment environment = getEnvironment(id);
+        existsAccount(environment);
+        existsSameName(environment.getPlatform(), request.getName());
 
         environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
         environmentRepository.save(environment);
@@ -94,14 +83,9 @@ public class EnvironmentService {
      **/
     @Transactional
     public void deleteEnvironment(long id) {
-        Environment environment = environmentRepository.findById(id)
-                .orElseThrow(() -> {
-                    throw new DataNotFoundException("Environment is not found");
-                });
+        Environment environment = getEnvironment(id);
+        existsAccount(environment);
 
-        if (environment.getAccounts().size() != 0) {
-            throw new BadRequestException("Still have accounts in this environment");
-        }
         environmentRepository.delete(environment);
     }
   
@@ -125,6 +109,25 @@ public class EnvironmentService {
                 .orElseThrow(() -> {
                     throw new DataNotFoundException("Platform not found");
                 });
+    }
+
+    private Environment getEnvironment(long id) {
+        return environmentRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new DataNotFoundException("Environment is not found");
+                });
+    }
+
+    private void existsSameName(Platform platform, String name) {
+        if (environmentRepository.existsByPlatformAndName(platform, name)) {
+            throw new AlreadyDataExistsException("Same name exists on the platform");
+        }
+    }
+
+    private void existsAccount(Environment environment) {
+        if (environment.getAccounts().size() != 0) {
+            throw new BadRequestException("Still have accounts in this environment");
+        }
     }
 
 }
