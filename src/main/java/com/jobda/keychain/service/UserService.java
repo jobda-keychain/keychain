@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -102,17 +103,22 @@ public class UserService {
     }
 
     public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
-        Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
-        return new SelectUserResponse(selectUser.toList(), selectUser.getTotalPages());
+        Page<Account> selectUser = platformRepository.selectUser(pageable, platform, ids);
+        List<SelectUserDto> selectUserDtoList = selectUser.stream()
+                .map(SelectUserDto::of)
+                .collect(Collectors.toList());
+
+        return SelectUserResponse.builder()
+                .data(selectUserDtoList)
+                .totalPages(selectUser.getTotalPages())
+                .build();
     }
 
     public DetailsResponse detailsUser(long id) {
         Account account = accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("User Not Found");
         });
-        String environment = account.getEnvironment().getName();
-        ServiceType platform = account.getEnvironment().getPlatform().getName();
-        return new DetailsResponse(account.getId(), account.getUserId(), account.getPassword(), platform, environment, account.getDescription());
+        return DetailsResponse.of(account);
     }
 
     @Transactional
