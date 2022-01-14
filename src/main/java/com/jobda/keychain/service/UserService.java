@@ -1,7 +1,15 @@
 package com.jobda.keychain.service;
 
 import com.jobda.keychain.AuthApiClient;
+import com.jobda.keychain.dto.request.CreateUserRequest;
 import com.jobda.keychain.dto.request.LoginApiRequest;
+import com.jobda.keychain.dto.request.UpdateUserRequest;
+import com.jobda.keychain.entity.account.Account;
+import com.jobda.keychain.entity.account.repository.AccountRepository;
+import com.jobda.keychain.exception.DataNotFoundException;
+import com.jobda.keychain.exception.UnableLoginException;
+import com.jobda.keychain.dto.response.DetailsResponse;
+import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.SelectUserDto;
 import com.jobda.keychain.dto.response.SelectUserResponse;
@@ -11,6 +19,7 @@ import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
+import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 import com.jobda.keychain.dto.request.UpdateAccountRequest;
@@ -27,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -110,9 +120,21 @@ public class UserService {
         Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
         return new SelectUserResponse(selectUser.toList(), selectUser.getTotalPages());
     }
+  
+    public DetailsResponse detailsUser(long id) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> {
+            throw new DataNotFoundException("User Not Found");
+        });
+        String environment = account.getEnvironment().getName();
+        ServiceType platform = account.getEnvironment().getPlatform().getName();
+        return new DetailsResponse(account.getId(), account.getUserId(), account.getPassword(), platform, environment, account.getDescription());
+    }
+
     public void deleteUser(long id){
+        accountRepository.findById(id).orElseThrow(() -> {
+            throw new DataNotFoundException("userId Not Found");
+        });
         accountRepository.deleteById(id);
-        //계정이 존재하지 않는 경우에도 확인해야 할 듯
     }
 
     /**
