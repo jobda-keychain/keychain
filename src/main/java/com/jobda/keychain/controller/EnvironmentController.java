@@ -52,7 +52,7 @@ public class EnvironmentController {
     }
   
     @GetMapping("/search")
-    public PlatformEnvironmentsResponse getEnvironmentsOfService(@RequestParam ServiceType platform) {
+    public PlatformEnvironmentsResponse getEnvironmentsOfService(@RequestParam(required = false) ServiceType platform) {
         return environmentService.getEnvironmentsOfService(platform);
     }
 

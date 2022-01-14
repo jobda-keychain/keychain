@@ -57,13 +57,14 @@ class EnvironmentControllerTest {
                 .webAppContextSetup(context)
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
+
         environmentRepository.save(Environment.createEnvironment("dv-5", "https://github.com", "https://github.com", platform));
         environmentRepository.save(Environment.createEnvironment("dv-6", "https://github.com", "https://github.com", platform));
         Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
         platform.getEnvironments().add(environment);
 
         environmentId_delete_200 = environmentRepository.save(Environment.createEnvironment("dv-9", "https://github.com", "https://github.com", platform)).getId();
-       
+        
         Account save = accountRepository.save(
                 Account.createAccount("asdf", "asdf", environment, "")
         );
@@ -102,16 +103,6 @@ class EnvironmentControllerTest {
     }
 
     @Test
-    void 환경_추가_저장되어_있지_않은_플랫폼() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", ServiceType.JOBDA_CMS);
-
-        mvc.perform(post("/environments")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isNotFound());
-    }
-
-    @Test
     void 중복되는_환경() throws Exception {
         AddEnvironmentRequest request = new AddEnvironmentRequest("dv-2", "https://github.com", "https://github.com", ServiceType.JOBDA);
 
@@ -121,6 +112,18 @@ class EnvironmentControllerTest {
         ).andExpect(status().isConflict());
     }
 
+    @Test
+    void 서비스에_대한_환경_목록_서비스필터X() throws Exception {
+        mvc.perform(get("/environments/search")
+        ).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 환경_삭제() throws Exception {
+        mvc.perform(delete("/environments/" + environmentId_delete_200)
+        ).andDo(print()).andExpect(status().isNoContent());
+    }
+  
     @Test
     void 환경_목록() throws Exception {
         mvc.perform(get("/environments?size=2&page=0"))

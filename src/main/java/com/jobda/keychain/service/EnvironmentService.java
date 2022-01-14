@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -47,7 +48,7 @@ public class EnvironmentService {
     }
 
     public EnvironmentsResponse getEnvironments(Pageable page) {
-        Page<Environment> environmentPage = environmentRepository.findAllByPlatformEnvironment(page);
+        Page<Environment> environmentPage = environmentRepository.findAllBy(page);
 
         return EnvironmentsResponse.builder()
                 .data(environmentPage.stream()
@@ -103,19 +104,20 @@ public class EnvironmentService {
         }
         environmentRepository.delete(environment);
     }
-
-    /**
-     * platform에 속해있는 environment 목록 전달
+  
+     /**
+     * platform(null인 경우)에는 환경 목록 전달
+     * platform(null이 아닌 경우)에 속해있는 environment 목록 전달
      *
      * @author: syxxn
      **/
     public PlatformEnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
-        Platform platform = getPlatform(platformType);
+        List<Environment> environments = environmentRepository.findAllByPlatformType(platformType);
 
-        return new PlatformEnvironmentsResponse(platform.getEnvironments().stream()
-                .map(e -> new PlatformEnvironmentsResponse.EnvironmentDto(e.getId(), e.getName()))
-                .collect(Collectors.toList())
-        );
+        return new PlatformEnvironmentsResponse(environments.stream()
+                .map(e -> new PlatformEnvironmentsResponse.EnvironmentsDto(
+                        e.getId(), e.getName(), e.getPlatform().getName()
+                )).collect(Collectors.toList()));
     }
 
     private Platform getPlatform(ServiceType platformType) {
