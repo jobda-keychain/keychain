@@ -31,7 +31,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public void addEnvironment(AddEnvironmentRequest request) {
         Platform platform = getPlatform(request.getPlatform());
 
@@ -50,7 +50,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
         Environment environment = environmentRepository.findById(id)
                 .orElseThrow(() -> {
