@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -54,10 +55,13 @@ class EnvironmentControllerTest {
                 .webAppContextSetup(context)
                 .build();
         Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
+        environmentRepository.save(Environment.createEnvironment("dv-5", "https://github.com", "https://github.com", platform));
+        environmentRepository.save(Environment.createEnvironment("dv-6", "https://github.com", "https://github.com", platform));
+        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
+        platform.getEnvironments().add(environment);
 
-        environmentId_delete_200 = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform)).getId();
-        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-3", "https://github.com", "https://github.com", platform));
-
+        environmentId_delete_200 = environmentRepository.save(Environment.createEnvironment("dv-9", "https://github.com", "https://github.com", platform)).getId();
+       
         Account save = accountRepository.save(
                 Account.createAccount("asdf", "asdf", environment, "")
         );
@@ -115,6 +119,13 @@ class EnvironmentControllerTest {
         ).andExpect(status().isConflict());
     }
 
+    @Test
+    void 환경_목록() throws Exception {
+        mvc.perform(get("/environments?size=2&page=0"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    
     @Test
     void 서비스에_대한_환경_목록() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBDA")
