@@ -1,5 +1,6 @@
 package com.jobda.keychain.dto.response;
 
+import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.platform.ServiceType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +19,6 @@ public class EnvironmentsResponse {
     private final long totalPages;
 
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class EnvironmentDto {
 
         private long id;
@@ -31,6 +30,16 @@ public class EnvironmentsResponse {
         private String clientDomain;
 
         private ServiceType platform;
+
+        public static EnvironmentDto of(Environment environment) {
+            EnvironmentDto environmentDto = new EnvironmentDto();
+            environmentDto.id = environment.getId();
+            environmentDto.name = environment.getName();
+            environmentDto.serverDomain = environment.getServerDomain();
+            environmentDto.clientDomain = environment.getClientDomain();
+            environmentDto.platform = environment.getPlatform().getName();
+            return environmentDto;
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package com.jobda.keychain.dto.response;
 
+import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.platform.ServiceType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,17 +11,24 @@ import java.util.List;
 @AllArgsConstructor
 public class PlatformEnvironmentsResponse {
 
-    private final List<EnvironmentsDto> data;
+    private final List<EnvironmentDto> data;
 
     @Getter
-    @AllArgsConstructor
-    public static class EnvironmentsDto {
+    public static class EnvironmentDto {
 
-        private final Long id;
+        private Long id;
 
-        private final String name;
+        private String name;
 
-        private final ServiceType platform;
+        private ServiceType platform;
+
+        public static EnvironmentDto of(Environment environment) {
+            EnvironmentDto environmentDto = new EnvironmentDto();
+            environmentDto.id = environment.getId();
+            environmentDto.name = environment.getName();
+            environmentDto.platform = environment.getPlatform().getName();
+            return environmentDto;
+        }
 
     }
 
