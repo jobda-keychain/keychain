@@ -4,6 +4,7 @@ import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
+import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse.EnvironmentDto;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
@@ -48,12 +49,13 @@ public class EnvironmentService {
     public EnvironmentsResponse getEnvironments(Pageable page) {
         Page<Environment> environmentPage = environmentRepository.findAllBy(page);
 
+        List<EnvironmentsResponse.EnvironmentDto> environmentDtoList = environmentPage.stream()
+                .map(EnvironmentsResponse.EnvironmentDto::of)
+                .collect(Collectors.toList());
+
         return EnvironmentsResponse.builder()
-                .data(environmentPage.stream()
-                        .map(e -> new EnvironmentsResponse.EnvironmentDto(
-                                e.getId(), e.getName(), e.getServerDomain(), e.getClientDomain(), e.getPlatform().getName()
-                        )).collect(Collectors.toList())
-                ).totalPages(environmentPage.getTotalPages())
+                .data(environmentDtoList)
+                .totalPages(environmentPage.getTotalPages())
                 .build();
     }
 
@@ -87,8 +89,8 @@ public class EnvironmentService {
 
         environmentRepository.delete(environment);
     }
-  
-     /**
+
+    /**
      * platform(null인 경우)에는 환경 목록 전달
      * platform(null이 아닌 경우)에 속해있는 environment 목록 전달
      *
@@ -97,10 +99,11 @@ public class EnvironmentService {
     public PlatformEnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
         List<Environment> environments = environmentRepository.findAllByPlatformType(platformType);
 
-        return new PlatformEnvironmentsResponse(environments.stream()
-                .map(e -> new PlatformEnvironmentsResponse.EnvironmentsDto(
-                        e.getId(), e.getName(), e.getPlatform().getName()
-                )).collect(Collectors.toList()));
+        List<EnvironmentDto> environmentsDtoList = environments.stream()
+                .map(EnvironmentDto::of)
+                .collect(Collectors.toList());
+
+        return new PlatformEnvironmentsResponse(environmentsDtoList);
     }
 
     private Platform getPlatform(ServiceType platformType) {

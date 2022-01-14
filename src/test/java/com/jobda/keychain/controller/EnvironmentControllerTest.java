@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -55,14 +56,14 @@ class EnvironmentControllerTest {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
-        Platform platform = platformRepository.save(Platform.createPlatform(ServiceType.JOBDA));
+        Platform platform = platformRepository.findById(1L).orElse(null);
 
-        environmentRepository.save(Environment.createEnvironment("dv-5", "https://github.com", "https://github.com", platform));
-        environmentRepository.save(Environment.createEnvironment("dv-6", "https://github.com", "https://github.com", platform));
-        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-2", "https://github.com", "https://github.com", platform));
+        environmentRepository.save(Environment.createEnvironment("dv-15", "https://github.com", "https://github.com", platform));
+        environmentRepository.save(Environment.createEnvironment("dv-16", "https://github.com", "https://github.com", platform));
+        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-12", "https://github.com", "https://github.com", platform));
         platform.getEnvironments().add(environment);
 
-        environmentId_delete_200 = environmentRepository.save(Environment.createEnvironment("dv-9", "https://github.com", "https://github.com", platform)).getId();
+        environmentId_delete_200 = environmentRepository.save(Environment.createEnvironment("dv-19", "https://github.com", "https://github.com", platform)).getId();
         
         Account save = accountRepository.save(
                 Account.createAccount("asdf", "asdf", environment, "")
@@ -73,12 +74,12 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_200() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", ServiceType.JOBDA);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "https://github.com", "https://github.com", ServiceType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isCreated());
+        ).andDo(print()).andExpect(status().isCreated());
     }
 
     @Test
@@ -93,7 +94,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_존재하지_않는_플랫폼() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", null);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-8", "https://github.com", "https://github.com", null);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -103,7 +104,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 중복되는_환경() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-2", "https://github.com", "https://github.com", ServiceType.JOBDA);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", ServiceType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
