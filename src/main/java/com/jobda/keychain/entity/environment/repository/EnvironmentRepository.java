@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EnvironmentRepository extends CrudRepository<Environment, Long> {
+public interface EnvironmentRepository extends CrudRepository<Environment, Long>, EnvironmentRepositoryExtension {
     boolean existsByPlatformAndName(Platform platform, String name);
 }

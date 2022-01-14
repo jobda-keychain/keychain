@@ -19,6 +19,7 @@ public class CreateAccountRequest {
     @Length(min = 2, max = 20)
     private String password;
 
+    @NotNull
     @Length(max = 100)
     private String description;
 

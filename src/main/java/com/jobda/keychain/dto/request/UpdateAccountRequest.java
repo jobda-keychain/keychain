@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
@@ -17,6 +18,7 @@ public class UpdateAccountRequest {
     @Length(min = 2, max = 20)
     private String password;
 
+    @NotNull
     @Length(max = 100)
     private String description;
 }

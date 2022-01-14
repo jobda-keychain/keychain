@@ -4,6 +4,7 @@ import com.jobda.keychain.AuthApiClient;
 import com.jobda.keychain.dto.request.LoginApiRequest;
 import com.jobda.keychain.dto.response.DetailsResponse;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
+import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
@@ -122,5 +123,20 @@ public class UserService {
     public void deleteUser(long id){
         accountRepository.deleteById(id);
         //계정이 존재하지 않는 경우에도 확인해야 할 듯
+    }
+
+    /**
+    * account id를 매개변수로 받고
+    * 성공 시 TokenResponse 반환
+    *
+    * @author: sse
+    **/
+    public TokenResponse getToken(Long id) {
+
+        Account account = accountRepository.findById(id).orElseThrow(()-> new DataNotFoundException("User is not found"));
+
+        String token = callLoginApi(account.getUserId(), account.getPassword(), account.getEnvironment().getServerDomain());
+
+        return new TokenResponse(token);
     }
 }
