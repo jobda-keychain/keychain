@@ -2,6 +2,7 @@ package com.jobda.keychain.service;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
+import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
@@ -33,7 +34,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public void addEnvironment(AddEnvironmentRequest request) {
         Platform platform = getPlatform(request.getPlatform());
 
@@ -58,6 +59,32 @@ public class EnvironmentService {
     }
 
     /**
+     * 환경 수정
+     * 환경에 속한 사람이 있는 경우 400
+     * 환경에 속한 사람이 없는 경우에는 name과 도메인 수정이 가능
+     *
+     * @author: syxxn
+     **/
+    @Transactional
+    public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
+      Environment environment = environmentRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new DataNotFoundException("Environment is not found");
+                });
+
+        if (environment.getAccounts().size() != 0) {
+            throw new BadRequestException("Still have accounts in this environment");
+        }
+  
+      if (environmentRepository.existsByPlatformAndName(environment.getPlatform(), request.getName())) {
+            throw new AlreadyDataExistsException("Same name exists on the platform");
+        }
+
+        environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
+        environmentRepository.save(environment);
+    }
+  
+    /**
      * 환경 삭제
      * 환경에 속한 계정이 남아있는 경우 400 반환,
      * 계정이 없으면 삭제 가능
@@ -74,7 +101,6 @@ public class EnvironmentService {
         if (environment.getAccounts().size() != 0) {
             throw new BadRequestException("Still have accounts in this environment");
         }
-
         environmentRepository.delete(environment);
     }
   
