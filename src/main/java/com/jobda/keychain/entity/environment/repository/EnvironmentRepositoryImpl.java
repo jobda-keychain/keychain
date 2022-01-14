@@ -40,9 +40,7 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
                         environment.platform.name.as("platform")
                 )).from(environment)
                 .join(environment.platform, platform)
-                .on(platform.name.eq(environment.platform.name))
-                .offset(page.getOffset())
-                .limit(page.getPageSize()));
+                .on(platform.name.eq(environment.platform.name)));
         List<EnvironmentsResponse.EnvironmentDto> list = query.fetch();
 
         return new PageImpl<>(list, page, query.fetchCount());
