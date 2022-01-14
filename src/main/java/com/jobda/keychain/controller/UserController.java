@@ -1,5 +1,6 @@
 package com.jobda.keychain.controller;
 
+import com.jobda.keychain.dto.response.DetailsResponse;
 import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
@@ -44,6 +45,10 @@ public class UserController {
         return userService.selectUser();
     }
 
+    @GetMapping("/details/{id}")
+    public DetailsResponse detailsUser(@PathVariable long id){
+        return userService.detailsUser(id);
+    }
     @DeleteMapping("/{idx}")
     public String deleteUser(@PathVariable Integer idx) {
         userService.deleteUser(idx);
