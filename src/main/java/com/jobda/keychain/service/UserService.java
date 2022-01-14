@@ -101,10 +101,6 @@ public class UserService {
         return new UpdateAccountResponse(account.getId(), account.getUserId(), account.getPassword(), environment.getPlatform().getName().name(), environment.getName(), account.getDescription());
     }
 
-    public void test() {
-
-    }
-
     public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
         Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
         return new SelectUserResponse(selectUser.toList(), selectUser.getTotalPages());
@@ -119,7 +115,7 @@ public class UserService {
         return new DetailsResponse(account.getId(), account.getUserId(), account.getPassword(), platform, environment, account.getDescription());
     }
 
-
+    @Transactional
     public void deleteUser(long id) {
         accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("userId Not Found");
@@ -134,11 +130,11 @@ public class UserService {
      * @author: sse
      **/
     public TokenResponse getToken(Long id) {
-
         Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("User is not found"));
 
         String token = callLoginApi(account.getUserId(), account.getPassword(), account.getEnvironment().getServerDomain());
 
         return new TokenResponse(token);
     }
+
 }
