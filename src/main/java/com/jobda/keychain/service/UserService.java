@@ -2,6 +2,7 @@ package com.jobda.keychain.service;
 
 import com.jobda.keychain.AuthApiClient;
 import com.jobda.keychain.dto.request.LoginApiRequest;
+import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.SelectUserDto;
 import com.jobda.keychain.dto.response.SelectUserResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
@@ -24,7 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -83,6 +86,7 @@ public class UserService {
     @Transactional
     public UpdateAccountResponse updateUser(long id, UpdateAccountRequest request) {
         Account account = accountRepository.findById(id).orElseThrow(()-> new DataNotFoundException("User not found"));
+
         account.changeInfo(request.getUserId(), request.getPassword(), request.getDescription());
 
         Environment environment = account.getEnvironment();
@@ -106,9 +110,23 @@ public class UserService {
         Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
         return new SelectUserResponse(selectUser.toList(), selectUser.getTotalPages());
     }
-
-    public void deleteUser(long id) {
+    public void deleteUser(long id){
         accountRepository.deleteById(id);
         //계정이 존재하지 않는 경우에도 확인해야 할 듯
+    }
+
+    /**
+    * account id를 매개변수로 받고
+    * 성공 시 TokenResponse 반환
+    *
+    * @author: sse
+    **/
+    public TokenResponse getToken(Long id) {
+
+        Account account = accountRepository.findById(id).orElseThrow(()-> new DataNotFoundException("User is not found"));
+
+        String token = callLoginApi(account.getUserId(), account.getPassword(), account.getEnvironment().getServerDomain());
+
+        return new TokenResponse(token);
     }
 }

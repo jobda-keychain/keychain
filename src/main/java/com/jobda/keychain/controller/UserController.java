@@ -1,6 +1,6 @@
 package com.jobda.keychain.controller;
 
-import com.jobda.keychain.dto.response.SelectUserResponse;
+import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.dto.request.CreateAccountRequest;
@@ -56,6 +56,11 @@ public class UserController {
     public String deleteUser(@PathVariable Integer idx) {
         userService.deleteUser(idx);
         return "success";
+    }
+
+    @PostMapping("/{id}")
+    public TokenResponse loginAccount(@PathVariable Long id) {
+        return userService.getToken(id);
     }
 
 }
