@@ -1,9 +1,8 @@
 package com.jobda.keychain.entity.platform.repository;
 
-import com.jobda.keychain.dto.response.SelectUserDto;
+import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.ServiceType;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -31,18 +30,9 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
-    public Page<SelectUserDto> selectUser(Pageable pageable, ServiceType serviceType, List<Long> ids) {
-        JPAQuery<SelectUserDto> query =
-                queryFactory.select(
-                                Projections.fields(
-                                        SelectUserDto.class,
-                                        account.id,
-                                        account.userId,
-                                        account.environment.platform.name.as("platform"),
-                                        account.environment.name.as("environment"),
-                                        account.description
-                                )
-                        )
+    public Page<Account> selectUser(Pageable pageable, ServiceType serviceType, List<Long> ids) {
+        JPAQuery<Account> query =
+                queryFactory.select(account)
                         .from(platform)
                         .leftJoin(platform.environments, environment)
                         .leftJoin(environment.accounts, account)
@@ -50,10 +40,10 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
                         .where(idsIn(ids)
                         );
 
-        JPQLQuery<SelectUserDto> selectUserDtoJPQLQuery =
+        JPQLQuery<Account> selectUserDtoJPQLQuery =
                 querydsl().applyPagination(pageable, query);
 
-        List<SelectUserDto> list = selectUserDtoJPQLQuery.fetch();
+        List<Account> list = selectUserDtoJPQLQuery.fetch();
         return new PageImpl<>(list, pageable, list.size());
     }
 
