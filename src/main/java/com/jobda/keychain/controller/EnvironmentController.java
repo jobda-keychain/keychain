@@ -1,9 +1,13 @@
 package com.jobda.keychain.controller;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
+import com.jobda.keychain.dto.response.EnvironmentsResponse;
+import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
+import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.service.EnvironmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
@@ -31,6 +35,11 @@ public class EnvironmentController {
     @PostMapping
     public void addEnvironment(@RequestBody @Valid AddEnvironmentRequest request) {
         environmentService.addEnvironment(request);
+    }
+  
+    @GetMapping
+    public EnvironmentsResponse getEnvironments(Pageable page) {
+        return environmentService.getEnvironments(page);
     }
 
     @PutMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.jobda.keychain.service;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
+import com.jobda.keychain.dto.response.EnvironmentsResponse;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.entity.environment.Environment;
@@ -12,6 +13,8 @@ import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +44,18 @@ public class EnvironmentService {
 
         Environment environment = Environment.createEnvironment(request.getName(), request.getServerDomain(), request.getClientDomain(), platform);
         environmentRepository.save(environment);
+    }
+
+    public EnvironmentsResponse getEnvironments(Pageable page) {
+        Page<Environment> environmentPage = environmentRepository.findAllByPlatformEnvironment(page);
+
+        return EnvironmentsResponse.builder()
+                .data(environmentPage.stream()
+                        .map(e -> new EnvironmentsResponse.EnvironmentDto(
+                                e.getId(), e.getName(), e.getServerDomain(), e.getClientDomain(), e.getPlatform().getName()
+                        )).collect(Collectors.toList())
+                ).totalPages(environmentPage.getTotalPages())
+                .build();
     }
 
     /**
