@@ -1,8 +1,8 @@
 package com.jobda.keychain.service;
 
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
-import com.jobda.keychain.dto.response.EnvironmentsResponse;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
+import com.jobda.keychain.dto.response.EnvironmentsResponse;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
@@ -67,7 +67,7 @@ public class EnvironmentService {
      **/
     @Transactional
     public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
-      Environment environment = environmentRepository.findById(id)
+        Environment environment = environmentRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new DataNotFoundException("Environment is not found");
                 });
@@ -75,15 +75,15 @@ public class EnvironmentService {
         if (environment.getAccounts().size() != 0) {
             throw new BadRequestException("Still have accounts in this environment");
         }
-  
-      if (environmentRepository.existsByPlatformAndName(environment.getPlatform(), request.getName())) {
+
+        if (environmentRepository.existsByPlatformAndName(environment.getPlatform(), request.getName())) {
             throw new AlreadyDataExistsException("Same name exists on the platform");
         }
 
         environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
         environmentRepository.save(environment);
     }
-  
+
     /**
      * 환경 삭제
      * 환경에 속한 계정이 남아있는 경우 400 반환,
@@ -103,8 +103,8 @@ public class EnvironmentService {
         }
         environmentRepository.delete(environment);
     }
-  
-     /**
+
+    /**
      * platform에 속해있는 environment 목록 전달
      *
      * @author: syxxn
