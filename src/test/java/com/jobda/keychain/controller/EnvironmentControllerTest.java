@@ -127,6 +127,7 @@ class EnvironmentControllerTest {
         ).andDo(print()).andExpect(status().isBadRequest());
     }
   
+    @Test
     void 서비스에_대한_환경_목록() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBDA")
         ).andExpect(status().isOk()).andDo(print());
