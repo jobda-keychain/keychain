@@ -1,8 +1,6 @@
 package com.jobda.keychain.entity.environment.repository;
 
-import com.jobda.keychain.dto.response.EnvironmentsResponse;
 import com.jobda.keychain.entity.environment.Environment;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -29,19 +27,14 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public Page<EnvironmentsResponse.EnvironmentDto> findAllByPlatformEnvironment(Pageable page) {
-        JPQLQuery<EnvironmentsResponse.EnvironmentDto> query = querydsl().applyPagination(page,
+    public Page<Environment> findAllByPlatformEnvironment(Pageable page) {
+        JPQLQuery<Environment> query = querydsl().applyPagination(page,
                 queryFactory.select(
-                        Projections.fields(EnvironmentsResponse.EnvironmentDto.class,
-                        environment.id,
-                        environment.name,
-                        environment.serverDomain,
-                        environment.clientDomain,
-                        environment.platform.name.as("platform")
+                        environment
                 )).from(environment)
                 .join(environment.platform, platform)
-                .on(platform.name.eq(environment.platform.name)));
-        List<EnvironmentsResponse.EnvironmentDto> list = query.fetch();
+                .on(platform.name.eq(environment.platform.name));
+        List<Environment> list = query.fetch();
 
         return new PageImpl<>(list, page, query.fetchCount());
     }
