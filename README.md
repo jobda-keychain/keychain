@@ -11,7 +11,8 @@
 * JDK 11
 * Spring Boot 2.6.2
 * MySQL 8.0
-
+* SpringFox Swagger UI 3.0.0
+* Spring Cloud OpenFeign 3.1.0
 
 ## 목표
 ### 공통의 목표
