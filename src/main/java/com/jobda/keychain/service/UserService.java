@@ -2,6 +2,7 @@ package com.jobda.keychain.service;
 
 import com.jobda.keychain.AuthApiClient;
 import com.jobda.keychain.dto.request.CreateAccountRequest;
+import com.jobda.keychain.dto.request.LoginApiRequest;
 import com.jobda.keychain.dto.request.UpdateAccountRequest;
 import com.jobda.keychain.dto.response.DetailsResponse;
 import com.jobda.keychain.dto.response.SelectUserDto;
