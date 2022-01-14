@@ -71,7 +71,6 @@ public class EnvironmentService {
         existsSameName(environment.getPlatform(), request.getName());
 
         environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
-        environmentRepository.save(environment);
     }
 
     /**
