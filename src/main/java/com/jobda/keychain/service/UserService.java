@@ -15,8 +15,10 @@ import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
+
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
+
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -99,7 +101,15 @@ public class UserService {
 
         accountRepository.save(account);
 
-        return new UpdateAccountResponse(account.getId(), account.getUserId(), account.getPassword(), environment.getPlatform().getName().name(), environment.getName(), account.getDescription());
+        return UpdateAccountResponse.builder()
+                .id(account.getId())
+                .userId(account.getUserId())
+                .password(account.getPassword())
+                .platform(environment.getPlatform().getName())
+                .environment(environment.getName())
+                .description(account.getDescription())
+                .build();
+
     }
 
     public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
