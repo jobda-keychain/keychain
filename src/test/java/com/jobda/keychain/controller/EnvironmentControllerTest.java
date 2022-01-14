@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -34,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class EnvironmentControllerTest {
 
-    /*private MockMvc mvc;
+    private MockMvc mvc;
 
     @Autowired
     private WebApplicationContext context;
@@ -148,11 +147,5 @@ class EnvironmentControllerTest {
         mvc.perform(get("/environments/search?platform=JOBFLEX")
         ).andExpect(status().isBadRequest());
     }
-
-    @Test
-    void 서비스에_대한_환경_목록_404() throws Exception {
-        mvc.perform(get("/environments/search?platform=JOBDA_CMS")
-        ).andExpect(status().isNotFound());
-    }*/
 
 }

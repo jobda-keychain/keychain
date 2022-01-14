@@ -17,6 +17,5 @@ spring:
     open-in-view: false
   sql:
     init:
-      data-locations: classpath:data.sql
       schema-locations: classpath:table.sql
       mode: always
