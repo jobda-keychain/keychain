@@ -47,3 +47,6 @@ test {
 war {
     enabled = false
 }
+clean {
+    delete file('src/main/generated')
+}
