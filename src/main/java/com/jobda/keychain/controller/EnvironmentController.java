@@ -8,6 +8,8 @@ import com.jobda.keychain.service.EnvironmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +36,12 @@ public class EnvironmentController {
     @GetMapping
     public EnvironmentsResponse getEnvironments(Pageable page) {
         return environmentService.getEnvironments(page);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteEnvironment(@PathVariable long id) {
+        environmentService.deleteEnvironment(id);
     }
   
     @GetMapping("/search")
