@@ -107,7 +107,15 @@ public class UserService {
 
         accountRepository.save(account);
 
-        return new UpdateAccountResponse(account.getId(), account.getUserId(), account.getPassword(), environment.getPlatform().getName().name(), environment.getName(), account.getDescription());
+        return UpdateAccountResponse.builder()
+                .id(account.getId())
+                .userId(account.getUserId())
+                .password(account.getPassword())
+                .platform(environment.getPlatform().getName())
+                .environment(environment.getName())
+                .description(account.getDescription())
+                .build();
+
     }
 
     public void test() {
