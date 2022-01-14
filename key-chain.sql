@@ -34,3 +34,6 @@ CREATE TABLE account
         REFERENCES environment (id) ON DELETE CASCADE
 
 );
+
+insert into platform values(1, 'JOBDA');
+insert into platform values(2, 'JOBDA_CMS');
