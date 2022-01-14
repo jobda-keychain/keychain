@@ -8,6 +8,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface EnvironmentRepositoryExtension {
-    List<Environment> findAllByPlatformEnvironments(ServiceType platformType);
-    Page<Environment> findAllByPlatformEnvironment(Pageable page);
+    List<Environment> findAllByPlatformType(ServiceType platformType);
+    Page<Environment> findAllBy(Pageable page);
 }

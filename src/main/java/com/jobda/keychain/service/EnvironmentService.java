@@ -4,7 +4,6 @@ import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
-import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse.EnvironmentsDto;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
@@ -49,7 +48,7 @@ public class EnvironmentService {
     }
 
     public EnvironmentsResponse getEnvironments(Pageable page) {
-        Page<Environment> environmentPage = environmentRepository.findAllByPlatformEnvironment(page);
+        Page<Environment> environmentPage = environmentRepository.findAllBy(page);
 
         return EnvironmentsResponse.builder()
                 .data(environmentPage.stream()
@@ -113,7 +112,7 @@ public class EnvironmentService {
      * @author: syxxn
      **/
     public PlatformEnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
-        List<Environment> environments = environmentRepository.findAllByPlatformEnvironments(platformType);
+        List<Environment> environments = environmentRepository.findAllByPlatformType(platformType);
 
         return new PlatformEnvironmentsResponse(environments.stream()
                 .map(e -> new PlatformEnvironmentsResponse.EnvironmentsDto(
