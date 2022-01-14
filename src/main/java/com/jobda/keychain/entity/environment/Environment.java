@@ -55,4 +55,10 @@ public class Environment {
         return environment;
     }
 
+    public void update(String name, String serverDomain, String clientDomain) {
+        this.name = name;
+        this.serverDomain = serverDomain;
+        this.clientDomain = clientDomain;
+    }
+
 }
