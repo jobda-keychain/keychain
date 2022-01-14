@@ -1,10 +1,15 @@
 package com.jobda.keychain.controller;
 
+import com.jobda.keychain.dto.response.SelectUserResponse;
+import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.dto.request.CreateAccountRequest;
 import com.jobda.keychain.dto.request.UpdateAccountRequest;
+import com.jobda.keychain.entity.platform.ServiceType;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
