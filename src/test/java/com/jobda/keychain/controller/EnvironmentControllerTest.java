@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -56,7 +55,7 @@ class EnvironmentControllerTest {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
-        Platform platform = platformRepository.findById(1L).orElse(null);
+        Platform platform = platformRepository.findById(1L).orElse(platformRepository.save(Platform.createPlatform(ServiceType.JOBDA)));
 
         environmentRepository.save(Environment.createEnvironment("dv-15", "https://github.com", "https://github.com", platform));
         environmentRepository.save(Environment.createEnvironment("dv-16", "https://github.com", "https://github.com", platform));
@@ -104,7 +103,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 중복되는_환경() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", ServiceType.JOBDA);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-15", "https://github.com", "https://github.com", ServiceType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
