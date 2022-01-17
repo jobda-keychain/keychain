@@ -34,11 +34,10 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
         JPAQuery<Account> query =
                 queryFactory.select(account)
                         .from(platform)
-                        .leftJoin(platform.environments, environment)
-                        .leftJoin(environment.accounts, account)
+                        .join(platform.environments, environment)
+                        .join(environment.accounts, account)
                         .where(serviceTypeEq(serviceType))
-                        .where(idsIn(ids)
-                        );
+                        .where(idsIn(ids));
 
         JPQLQuery<Account> selectUserDtoJPQLQuery =
                 querydsl().applyPagination(pageable, query);
@@ -58,5 +57,4 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
     private BooleanExpression idsIn(List<Long> ids) {
         return ids != null ? environment.id.in(ids) : null;
     }
-
 }

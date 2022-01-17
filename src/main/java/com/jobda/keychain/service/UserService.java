@@ -134,7 +134,7 @@ public class UserService {
     @Transactional
     public void deleteUser(long id) {
         accountRepository.findById(id).orElseThrow(() -> {
-            throw new DataNotFoundException("userId Not Found");
+            throw new DataNotFoundException("User Not Found");
         });
         accountRepository.deleteById(id);
     }
