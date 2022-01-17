@@ -56,7 +56,7 @@ class EnvironmentControllerTest {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
-        Platform platform = platformRepository.findById(1L).orElse(null);
+        Platform platform = platformRepository.findById(1L).orElse(platformRepository.save(Platform.createPlatform(PlatformType.JOBDA)));
 
         environmentRepository.save(Environment.createEnvironment("dv-15", "https://github.com", "https://github.com", platform));
         environmentRepository.save(Environment.createEnvironment("dv-16", "https://github.com", "https://github.com", platform));

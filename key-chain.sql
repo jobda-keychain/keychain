@@ -42,13 +42,13 @@ commit;
 
 select * from platform;
 
---insert environment
-insert into environment values(1, 'dv', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 1);
-insert into environment values(2, 'st', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 1);
-insert into environment values(3, 'pr', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 1);
-insert into environment values(4, 'dv', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 2);
-insert into environment values(5, 'st', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 2);
-insert into environment values(6, 'pr', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 2);
+-- insert environment
+insert into environment(id, name, server_domain, client_domain, platform_id) values(1, 'dv', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 1);
+insert into environment(id, name, server_domain, client_domain, platform_id) values(2, 'st', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 1);
+insert into environment(id, name, server_domain, client_domain, platform_id) values(3, 'pr', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 1);
+insert into environment(id, name, server_domain, client_domain, platform_id) values(4, 'dv', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 2);
+insert into environment(id, name, server_domain, client_domain, platform_id) values(5, 'st', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 2);
+insert into environment(id, name, server_domain, client_domain, platform_id) values(6, 'pr', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 2);
 commit;
 
 select * from environment;
