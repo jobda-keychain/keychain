@@ -2,4 +2,4 @@ server:
   port: 8080
 
   profiles:
-    active: dev # 만약 application-prod.yml 파일을 로딩하고 싶다면, prod
+    active: local # 만약 application-prod.yml 파일을 로딩하고 싶다면, prod
