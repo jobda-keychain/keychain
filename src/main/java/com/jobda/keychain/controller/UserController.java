@@ -49,7 +49,7 @@ public class UserController {
 
 
     @ApiOperation(value = "계정 정보 수정", notes = "계정을 수정한다")
-    @ApiImplicitParam(name = "id", value = "계정의 id", required = true, dataType = "string", paramType = "path", defaultValue = "0")
+    @ApiImplicitParam(name = "id", value = "계정의 id", required = true, dataType = "number", paramType = "path", defaultValue = "0")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{id}")
     public UpdateAccountResponse updateUser(@RequestBody @Valid UpdateAccountRequest request, @PathVariable long id) {
@@ -78,6 +78,8 @@ public class UserController {
         return userService.detailsUser(id);
     }
 
+    @ApiOperation(value = "자동 로그인", notes = "해당 계정 정보로 토큰을 발급해 로그인한다")
+    @ApiImplicitParam(name = "id", value = "계정의 id", required = true, dataType = "number", paramType = "path", defaultValue = "0")
     @PostMapping("/{id}")
     public TokenResponse loginAccount(@PathVariable Long id) {
         return userService.getToken(id);
