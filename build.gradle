@@ -41,11 +41,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    //mysql
+    //db
+    implementation 'com.h2database:h2'
     implementation 'mysql:mysql-connector-java'
 
     //test
-    testImplementation 'com.h2database:h2'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
