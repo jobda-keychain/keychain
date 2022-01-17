@@ -1,6 +1,6 @@
 package com.jobda.keychain.dto.response;
 
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public class UpdateAccountResponse {
 
     private final String password;
 
-    private final ServiceType platform;
+    private final PlatformType platform;
 
     private final String environment;
 
