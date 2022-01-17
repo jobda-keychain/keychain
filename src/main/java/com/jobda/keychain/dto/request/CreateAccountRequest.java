@@ -1,15 +1,16 @@
 package com.jobda.keychain.dto.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateAccountRequest {
 
     @ApiModelProperty(value = "계정 아이디", dataType = "string", required = true, example = "string")
@@ -30,4 +31,5 @@ public class CreateAccountRequest {
     @ApiModelProperty(value = "환경의 id", dataType = "number", required = true, example = "1")
     @NotNull
     private Long environmentId;
+
 }

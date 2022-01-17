@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 
 @Configuration
 public class QuerydslConfig {
+
     @PersistenceContext
     private EntityManager entityManager;
   
@@ -16,4 +17,5 @@ public class QuerydslConfig {
     public JPAQueryFactory queryFactory(){
         return new JPAQueryFactory(entityManager);
     }
+
 }

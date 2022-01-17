@@ -1,14 +1,16 @@
 package com.jobda.keychain.dto.request;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UpdateAccountRequest {
 
     @ApiModelProperty(value = "계정 아이디", dataType = "string", required = true, example = "string")
@@ -25,4 +27,5 @@ public class UpdateAccountRequest {
     @NotNull
     @Length(max = 100)
     private String description;
+
 }
