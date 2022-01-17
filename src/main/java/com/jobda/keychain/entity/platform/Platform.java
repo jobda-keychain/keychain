@@ -26,7 +26,7 @@ public class Platform {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 9, nullable = false)
+    @Column(length = 9, nullable = false, unique = true)
     private PlatformType name;
 
     @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
