@@ -37,8 +37,3 @@ out/
 .vscode/
 
 /gradlew
-src/main/generated/com/jobda/keychain/entity/account/QAccount.java
-
-src/main/generated/com/jobda/keychain/entity/environment/QEnvironment.java
-
-src/main/generated/com/jobda/keychain/entity/platform/QPlatform.java
