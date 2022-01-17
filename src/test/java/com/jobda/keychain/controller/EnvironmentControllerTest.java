@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jobda.keychain.KeychainApplication;
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.entity.platform.PlatformType;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
-@RequiredArgsConstructor
 @SpringBootTest(classes = KeychainApplication.class)
 @ActiveProfiles("test")
 class EnvironmentControllerTest {
