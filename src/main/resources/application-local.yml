@@ -13,4 +13,3 @@ spring:
     database: h2
     hibernate:
       ddl-auto: create
-    open-in-view: false

@@ -9,5 +9,4 @@ spring:
       generate-ddl: false
       ddl-auto: none
       format_sql: true
-    open-in-view: false
     database: mysql
