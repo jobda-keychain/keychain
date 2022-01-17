@@ -1,7 +1,8 @@
 package com.jobda.keychain.dto.response;
 
+import com.jobda.keychain.entity.platform.PlatformType;
+import lombok.AllArgsConstructor;
 import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.entity.platform.ServiceType;
 import lombok.Getter;
 
 @Getter
@@ -11,7 +12,7 @@ public class SelectUserDto{
 
     private String userId;
 
-    private ServiceType platform;
+    private PlatformType platform;
 
     private String environment;
 

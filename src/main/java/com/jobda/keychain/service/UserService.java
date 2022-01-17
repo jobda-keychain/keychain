@@ -13,7 +13,7 @@ import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 
 import com.jobda.keychain.exception.DataNotFoundException;
@@ -112,7 +112,7 @@ public class UserService {
 
     }
 
-    public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
+    public SelectUserResponse selectUser(Pageable pageable, PlatformType platform, List<Long> ids) {
         Page<Account> selectUser = platformRepository.selectUser(pageable, platform, ids);
         List<SelectUserDto> selectUserDtoList = selectUser.stream()
                 .map(SelectUserDto::of)
@@ -128,6 +128,7 @@ public class UserService {
         Account account = accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("User Not Found");
         });
+      
         return DetailsResponse.of(account);
     }
 

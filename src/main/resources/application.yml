@@ -1,21 +1,9 @@
+server:
+  port: 8080
+
+  profiles:
+    active: local # 만약 application-prod.yml 파일을 로딩하고 싶다면, prod
+
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-    path: /h2-console
-    profiles:
-      active: local
   jpa:
-    hibernate:
-      ddl-auto: create
-      format_sql: true
     open-in-view: false
-  sql:
-    init:
-      schema-locations: classpath:table.sql
-      mode: always

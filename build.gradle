@@ -38,14 +38,14 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
     //lombok
-    compileOnly 'org.projectlombok:lombok'
+    implementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    //mysql
+    //db
+    implementation 'com.h2database:h2'
     implementation 'mysql:mysql-connector-java'
 
     //test
-    testImplementation 'com.h2database:h2'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
