@@ -1,13 +1,5 @@
-spring:
-  datasource:
-    url: jdbc:mysql://${DB_URL}?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=Asia/Seoul
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      generate-ddl: false
-      ddl-auto: none
-      format_sql: true
-    open-in-view: false
-    database: mysql
+server:
+  port: 8080
+
+  profiles:
+    active: dev # 만약 application-prod.yml 파일을 로딩하고 싶다면, prod
