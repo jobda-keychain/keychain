@@ -6,7 +6,7 @@ import com.jobda.keychain.dto.response.DetailsResponse;
 import com.jobda.keychain.dto.response.SelectUserResponse;
 import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -48,7 +48,7 @@ public class UserController {
     @GetMapping
     public SelectUserResponse selectUser(@RequestParam(value = "size") int size,
                                          @RequestParam(value = "page") int page,
-                                         @RequestParam(value = "platform", required = false) ServiceType platform,
+                                         @RequestParam(value = "platform", required = false) PlatformType platform,
                                          @RequestParam(value = "environment", required = false) List<Long> ids) {
 
         Pageable pageable = PageRequest.of(page, size);

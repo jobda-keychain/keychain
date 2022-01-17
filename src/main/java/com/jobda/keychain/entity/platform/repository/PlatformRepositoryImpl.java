@@ -2,7 +2,7 @@ package com.jobda.keychain.entity.platform.repository;
 
 import com.jobda.keychain.dto.response.SelectUserDto;
 import com.jobda.keychain.entity.platform.Platform;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
@@ -31,7 +31,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
-    public Page<SelectUserDto> selectUser(Pageable pageable, ServiceType serviceType, List<Long> ids) {
+    public Page<SelectUserDto> selectUser(Pageable pageable, PlatformType serviceType, List<Long> ids) {
         JPAQuery<SelectUserDto> query =
                 queryFactory.select(
                                 Projections.fields(
@@ -61,8 +61,8 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
         return Objects.requireNonNull(getQuerydsl());
     }
 
-    private BooleanExpression serviceTypeEq(ServiceType serviceType) {
-        return serviceType != null ? platform.name.eq(serviceType) : null;
+    private BooleanExpression serviceTypeEq(PlatformType platformType) {
+        return platformType != null ? platform.name.eq(platformType) : null;
     }
 
     private BooleanExpression idsIn(List<Long> ids) {

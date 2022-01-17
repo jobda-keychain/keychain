@@ -8,7 +8,7 @@ import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,7 +74,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_200() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "https://github.com", "https://github.com", ServiceType.JOBDA);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "https://github.com", "https://github.com", PlatformType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_NPE() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", null, ServiceType.JOBDA);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", null, PlatformType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +104,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 중복되는_환경() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", ServiceType.JOBDA);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", PlatformType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)

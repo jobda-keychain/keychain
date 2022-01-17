@@ -1,7 +1,7 @@
 package com.jobda.keychain.entity.environment.repository;
 
 import com.jobda.keychain.entity.environment.Environment;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -27,7 +27,7 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public List<Environment> findAllByPlatformType(ServiceType platformType) {
+    public List<Environment> findAllByPlatformType(PlatformType platformType) {
         return queryFactory.selectFrom(environment)
                 .join(environment.platform, platform)
                 .on(platform.eq(environment.platform))
@@ -50,7 +50,7 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
         return Objects.requireNonNull(getQuerydsl());
     }
 
-    private BooleanExpression platformTypeEq(ServiceType platformType) {
+    private BooleanExpression platformTypeEq(PlatformType platformType) {
         if (platformType == null) {
             return null;
         }

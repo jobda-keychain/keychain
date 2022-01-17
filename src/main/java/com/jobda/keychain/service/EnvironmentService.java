@@ -8,7 +8,7 @@ import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse.EnvironmentD
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.Platform;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.BadRequestException;
@@ -46,6 +46,11 @@ public class EnvironmentService {
         environmentRepository.save(environment);
     }
 
+    /**
+     * 환경 관리 페이지에서 보여주는 환경 목록
+     *
+     * @author: syxxn
+     **/
     public EnvironmentsResponse getEnvironments(Pageable page) {
         Page<Environment> environmentPage = environmentRepository.findAllBy(page);
 
@@ -96,7 +101,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
-    public PlatformEnvironmentsResponse getEnvironmentsOfService(ServiceType platformType) {
+    public PlatformEnvironmentsResponse getEnvironmentsOfService(PlatformType platformType) {
         List<Environment> environments = environmentRepository.findAllByPlatformType(platformType);
 
         List<EnvironmentDto> environmentsDtoList = environments.stream()
@@ -106,7 +111,7 @@ public class EnvironmentService {
         return new PlatformEnvironmentsResponse(environmentsDtoList);
     }
 
-    private Platform getPlatform(ServiceType platformType) {
+    private Platform getPlatform(PlatformType platformType) {
         return platformRepository.findByName(platformType)
                 .orElseThrow(() -> {
                     throw new DataNotFoundException("Platform not found");

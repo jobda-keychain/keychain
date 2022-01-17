@@ -1,6 +1,6 @@
 package com.jobda.keychain.dto.request;
 
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +28,6 @@ public class AddEnvironmentRequest {
     private String clientDomain;
 
     @NotNull
-    private ServiceType platform;
+    private PlatformType platform;
 
 }

@@ -3,7 +3,7 @@ package com.jobda.keychain.controller;
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.service.EnvironmentService;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +52,7 @@ public class EnvironmentController {
     }
   
     @GetMapping("/search")
-    public PlatformEnvironmentsResponse getEnvironmentsOfService(@RequestParam(required = false) ServiceType platform) {
+    public PlatformEnvironmentsResponse getEnvironmentsOfService(@RequestParam(required = false) PlatformType platform) {
         return environmentService.getEnvironmentsOfService(platform);
     }
 

@@ -13,7 +13,7 @@ import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
@@ -101,7 +101,7 @@ public class UserService {
         return new UpdateAccountResponse(account.getId(), account.getUserId(), account.getPassword(), environment.getPlatform().getName().name(), environment.getName(), account.getDescription());
     }
 
-    public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
+    public SelectUserResponse selectUser(Pageable pageable, PlatformType platform, List<Long> ids) {
         Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
         return new SelectUserResponse(selectUser.toList(), selectUser.getTotalPages());
     }
@@ -111,7 +111,7 @@ public class UserService {
             throw new DataNotFoundException("User Not Found");
         });
         String environment = account.getEnvironment().getName();
-        ServiceType platform = account.getEnvironment().getPlatform().getName();
+        PlatformType platform = account.getEnvironment().getPlatform().getName();
         return new DetailsResponse(account.getId(), account.getUserId(), account.getPassword(), platform, environment, account.getDescription());
     }
 

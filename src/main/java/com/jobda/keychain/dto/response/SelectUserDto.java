@@ -1,6 +1,6 @@
 package com.jobda.keychain.dto.response;
 
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ public class SelectUserDto{
 
     private final String userId;
 
-    private final ServiceType platform;
+    private final PlatformType platform;
 
     private final String environment;
 
