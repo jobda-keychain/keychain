@@ -49,6 +49,7 @@ public class EnvironmentController {
         return environmentService.getEnvironments(pageable);
     }
 
+
     @Operation(tags=  "환경", summary = "환경 수정", description = "환경에 계정이 속해있지 않다면 정보를 수정할 수 있다.(성공하면 204)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
