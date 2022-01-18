@@ -66,7 +66,9 @@ public class EnvironmentController {
     public void deleteEnvironment(@PathVariable long id) {
         environmentService.deleteEnvironment(id);
     }
-  
+
+    @ApiImplicitParam(name = "platform", value = "플랫폼", dataType = "string", paramType = "query", example = "JOBDA 또는 JOBDA_CMS")
+    @ApiOperation(value = "환경 이름 목록", notes = "환경 이름과 플랫폼만을 받기 위한 api, 플랫폼을 검색하지 않으면 전체를 가져온다.(성공하면 204)")
     @GetMapping("/search")
     public PlatformEnvironmentsResponse getEnvironmentsOfService(@RequestParam(required = false) PlatformType platform) {
         return environmentService.getEnvironmentsOfService(platform);
