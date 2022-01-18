@@ -18,13 +18,13 @@ public class SelectUserDto{
 
     private String description;
 
-    public static SelectUserDto of(Account account){
+    public static SelectUserDto of(SelectUserDto selectUserDtoData){
         SelectUserDto selectUserDto = new SelectUserDto();
-        selectUserDto.id = account.getId();
-        selectUserDto.userId = account.getUserId();
-        selectUserDto.platform = account.getEnvironment().getPlatform().getName();
-        selectUserDto.environment = account.getEnvironment().getName();
-        selectUserDto.description = account.getDescription();
+        selectUserDto.id = selectUserDtoData.getId();
+        selectUserDto.userId = selectUserDtoData.getUserId();
+        selectUserDto.platform = selectUserDtoData.getPlatform();
+        selectUserDto.environment = selectUserDtoData.getEnvironment();
+        selectUserDto.description = selectUserDtoData.getDescription();
         return selectUserDto;
     }
 }

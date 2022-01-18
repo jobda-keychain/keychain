@@ -11,7 +11,6 @@ import com.jobda.keychain.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -57,10 +56,10 @@ public class UserController {
     public SelectUserResponse selectUser(@RequestParam(value = "size") int size,
                                          @RequestParam(value = "page") int page,
                                          @RequestParam(value = "platform", required = false) PlatformType platform,
-                                         @RequestParam(value = "environment", required = false) List<Long> ids) {
+                                         @RequestParam(value = "environment", required = false) List<Long> environmentIds) {
 
         Pageable pageable = PageRequest.of(page, size);
-        return userService.selectUser(pageable, platform, ids);
+        return userService.selectUser(pageable, platform, environmentIds);
     }
 
     @DeleteMapping("/{id}")
