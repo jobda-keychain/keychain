@@ -49,10 +49,10 @@ public class UserController {
     public SelectUserResponse selectUser(@RequestParam(value = "size") int size,
                                          @RequestParam(value = "page") int page,
                                          @RequestParam(value = "platform", required = false) ServiceType platform,
-                                         @RequestParam(value = "environment", required = false) List<Long> ids) {
+                                         @RequestParam(value = "environment", required = false) List<Long> environmentIds) {
 
         Pageable pageable = PageRequest.of(page, size);
-        return userService.selectUser(pageable, platform, ids);
+        return userService.selectUser(pageable, platform, environmentIds);
     }
 
     @DeleteMapping("/{id}")
