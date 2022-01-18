@@ -7,6 +7,8 @@ import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.service.EnvironmentService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +40,12 @@ public class EnvironmentController {
     public void addEnvironment(@RequestBody @Valid AddEnvironmentRequest request) {
         environmentService.addEnvironment(request);
     }
-  
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "size", value = "한 번에 몇개를 가져올 것인지", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "page", value = "몇 번째 페이지에서 가져올 것인지", required = true, dataType = "int", paramType = "query", defaultValue = "0")
+    })
+    @ApiOperation(value = "환경 목록", notes = "환경 관리 페이지에서 환경의 정보를 불러온다.")
     @GetMapping
     public EnvironmentsResponse getEnvironments(Pageable page) {
         return environmentService.getEnvironments(page);
