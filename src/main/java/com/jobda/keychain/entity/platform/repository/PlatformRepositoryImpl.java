@@ -64,6 +64,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     private BooleanExpression environmentIdsIn(List<Long> environmentIds) {
-        return environmentIds != null ? environment.id.in(environmentIds) : null;
+        if(environmentIds != null && environmentIds.size() > 0) return environment.id.in(environmentIds);
+        return null;
     }
 }
