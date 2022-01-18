@@ -1,0 +1,6 @@
+package com.jobda.keychain.entity.log;
+
+public enum MethodType {
+    ADD_ACCOUNT, UPDATE_ACCOUNT, DELETE_ACCOUNT, DETAILS_ACCOUNT,
+    ADD_ENVIRONMENT, UPDATE_ENVIRONMENT, DELETE_ENVIRONMENT
+}
