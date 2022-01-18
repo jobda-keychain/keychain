@@ -52,7 +52,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
                 querydsl().applyPagination(pageable, query);
 
         List<SelectUserDto> list = selectUserDtoJPQLQuery.fetch();
-        return new PageImpl<>(list, pageable, list.size());
+        return new PageImpl<>(list, pageable, selectUserDtoJPQLQuery.fetchCount());
     }
 
     private Querydsl querydsl() {
