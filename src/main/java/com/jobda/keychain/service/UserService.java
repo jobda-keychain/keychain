@@ -113,7 +113,7 @@ public class UserService {
     }
 
     public SelectUserResponse selectUser(Pageable pageable, ServiceType platform, List<Long> ids) {
-        Page<Account> selectUser = platformRepository.selectUser(pageable, platform, ids);
+        Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, ids);
         List<SelectUserDto> selectUserDtoList = selectUser.stream()
                 .map(SelectUserDto::of)
                 .collect(Collectors.toList());
