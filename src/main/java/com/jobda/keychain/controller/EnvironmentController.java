@@ -58,7 +58,9 @@ public class EnvironmentController {
     public void updateEnvironment(@PathVariable long id, @RequestBody @Valid UpdateEnvironmentRequest request) {
         environmentService.updateEnvironment(id, request);
     }
-  
+
+    @ApiImplicitParam(name = "id", value = "환경의 PK", required = true, dataType = "long", paramType = "path")
+    @ApiOperation(value = "환경 삭제", notes = "환경에 계정이 속해있지 않다면 정보를 삭제할 수 있다.(성공하면 204)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteEnvironment(@PathVariable long id) {
