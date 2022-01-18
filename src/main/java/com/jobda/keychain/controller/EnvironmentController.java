@@ -6,6 +6,8 @@ import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.service.EnvironmentService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@Api(tags = "환경")
 @RequiredArgsConstructor
 @RequestMapping("/environments")
 @RestController
@@ -29,6 +32,7 @@ public class EnvironmentController {
 
     private final EnvironmentService environmentService;
 
+    @ApiOperation(value = "환경 추가", notes = "환경을 추가한다.")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void addEnvironment(@RequestBody @Valid AddEnvironmentRequest request) {
