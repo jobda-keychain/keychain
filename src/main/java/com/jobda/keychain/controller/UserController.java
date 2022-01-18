@@ -8,10 +8,6 @@ import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -61,10 +57,10 @@ public class UserController {
     public SelectUserResponse selectUser(@RequestParam(value = "size") int size,
                                          @RequestParam(value = "page") int page,
                                          @RequestParam(value = "platform", required = false) PlatformType platform,
-                                         @RequestParam(value = "environment", required = false) List<Long> ids) {
+                                         @RequestParam(value = "environment", required = false) List<Long> environmentIds) {
 
         Pageable pageable = PageRequest.of(page, size);
-        return userService.selectUser(pageable, platform, ids);
+        return userService.selectUser(pageable, platform, environmentIds);
     }
 
     @DeleteMapping("/{id}")
@@ -79,7 +75,6 @@ public class UserController {
     }
 
     @Operation(tags = "계정", summary = "자동 로그인", description = "해당 계정 정보로 토큰을 발급해 로그인한다")
-    @ApiImplicitParam(name = "id", value = "계정의 id", required = true, dataType = "number", paramType = "path", defaultValue = "0")
     @PostMapping("/{id}")
     public TokenResponse loginAccount(@Parameter(description = "계정의 id") @PathVariable Long id) {
         return userService.getToken(id);

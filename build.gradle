@@ -38,7 +38,7 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
     //lombok
-    implementation 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     //db
