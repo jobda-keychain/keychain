@@ -40,6 +40,7 @@ public class EnvironmentController {
         return environmentService.getEnvironments(page);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void updateEnvironment(@PathVariable long id, @RequestBody @Valid UpdateEnvironmentRequest request) {
         environmentService.updateEnvironment(id, request);
