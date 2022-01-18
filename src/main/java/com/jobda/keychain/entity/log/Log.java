@@ -32,7 +32,7 @@ public class Log {
     @Column(length = 18, nullable = false)
     private MethodType methodType;
 
-    @Column(length = 255, nullable = false)
+    @Column(nullable = false)
     private String clientIpAddress;
 
     public static Log createLog(MethodType methodType, String clientIpAddress) {
