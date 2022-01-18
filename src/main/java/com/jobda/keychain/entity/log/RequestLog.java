@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Log {
+public class RequestLog {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,17 +33,18 @@ public class Log {
     private MethodType methodType;
 
     @Column(nullable = false)
-    private String clientIpAddress;
+    private String requestUri;
 
     @Column(nullable = false)
-    private Integer statusCode;
+    private String clientIpAddress;
 
-    public static Log createLog(MethodType methodType, String clientIpAddress, Integer statusCode) {
-        Log log = new Log();
-        log.methodType = methodType;
-        log.clientIpAddress = clientIpAddress;
-        log.statusCode = statusCode;
-        return log;
+    public static RequestLog createLog(MethodType methodType, String requestUri, String clientIpAddress) {
+        RequestLog requestLog = new RequestLog();
+        requestLog.methodType = methodType;
+        requestLog.requestUri = requestUri;
+        requestLog.clientIpAddress = clientIpAddress;
+
+        return requestLog;
     }
 
 }
