@@ -35,6 +35,15 @@ CREATE TABLE account
 
 );
 
+CREATE TABLE log(
+    id             BIGINT       NOT NULL AUTO_INCREMENT,
+    requested_at   DATETIME     NOT NULL,
+    method_type    VARCHAR(18)  NOT NULL,
+    client_ip_address VARCHAR(255) NOT NULL,
+    status_code    INT          NOT NULL,
+    PRIMARY KEY (id)
+)
+
 -- insert platform
 insert into platform values(1, 'JOBDA');
 insert into platform values(2, 'JOBDA_CMS');
