@@ -35,10 +35,14 @@ public class Log {
     @Column(nullable = false)
     private String clientIpAddress;
 
-    public static Log createLog(MethodType methodType, String clientIpAddress) {
+    @Column(nullable = false)
+    private Integer statusCode;
+
+    public static Log createLog(MethodType methodType, String clientIpAddress, Integer statusCode) {
         Log log = new Log();
         log.methodType = methodType;
         log.clientIpAddress = clientIpAddress;
+        log.statusCode = statusCode;
         return log;
     }
 
