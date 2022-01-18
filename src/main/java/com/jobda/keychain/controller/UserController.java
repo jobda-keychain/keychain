@@ -12,6 +12,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
-@Api(tags = "계정")
+@Tag(name = "계정", description = "계정에 대한 API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/accounts")
@@ -38,18 +42,18 @@ public class UserController {
 
     private final UserService userService;
 
-    @ApiOperation(value = "계정 정보 추가", notes = "계정을 추가한다")
+    @Operation(tags=  "계정", summary = "계정 정보 추가", description = "계정을 추가하는 API")
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public void createUser(@RequestBody @Valid CreateAccountRequest request) {
         userService.createUser(request);
     }
 
-    @ApiOperation(value = "계정 정보 수정", notes = "계정을 수정한다")
-    @ApiImplicitParam(name = "id", value = "계정의 id", required = true, dataType = "number", paramType = "path", defaultValue = "0")
+    @Operation(tags = "계정", summary = "계정 정보 수정", description = "계정을 수정하는 API")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{id}")
-    public UpdateAccountResponse updateUser(@RequestBody @Valid UpdateAccountRequest request, @PathVariable long id) {
+    public UpdateAccountResponse updateUser(@RequestBody @Valid UpdateAccountRequest request,
+                                            @Parameter(description = "계정의 id") @PathVariable long id) {
         return userService.updateUser(id, request);
     }
 
@@ -74,10 +78,10 @@ public class UserController {
         return userService.detailsUser(id);
     }
 
-    @ApiOperation(value = "자동 로그인", notes = "해당 계정 정보로 토큰을 발급해 로그인한다")
+    @Operation(tags = "계정", summary = "자동 로그인", description = "해당 계정 정보로 토큰을 발급해 로그인한다")
     @ApiImplicitParam(name = "id", value = "계정의 id", required = true, dataType = "number", paramType = "path", defaultValue = "0")
     @PostMapping("/{id}")
-    public TokenResponse loginAccount(@PathVariable Long id) {
+    public TokenResponse loginAccount(@Parameter(description = "계정의 id") @PathVariable Long id) {
         return userService.getToken(id);
     }
 
