@@ -32,7 +32,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
-    public Page<SelectUserDto> selectUser(Pageable pageable, ServiceType serviceType, List<Long> ids) {
+    public Page<SelectUserDto> selectUser(Pageable pageable, ServiceType serviceType, List<Long> environmentIds) {
         JPAQuery<SelectUserDto> query =
                 queryFactory.select(Projections.fields(
                                         SelectUserDto.class,
@@ -47,7 +47,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
                         .join(platform.environments, environment)
                         .join(environment.accounts, account)
                         .where(serviceTypeEq(serviceType))
-                        .where(idsIn(ids));
+                        .where(environmentIdsIn(environmentIds));
 
         JPQLQuery<SelectUserDto> selectUserDtoJPQLQuery =
                 querydsl().applyPagination(pageable, query);
@@ -64,7 +64,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
         return serviceType != null ? platform.name.eq(serviceType) : null;
     }
 
-    private BooleanExpression idsIn(List<Long> ids) {
-        return ids != null ? environment.id.in(ids) : null;
+    private BooleanExpression environmentIdsIn(List<Long> environmentIds) {
+        return environmentIds != null ? environment.id.in(environmentIds) : null;
     }
 }
