@@ -34,7 +34,7 @@ public class EnvironmentController {
 
     private final EnvironmentService environmentService;
 
-    @ApiOperation(value = "환경 추가", notes = "환경을 추가한다.")
+    @ApiOperation(value = "환경 추가", notes = "환경을 추가한다.(성공하면 201)")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void addEnvironment(@RequestBody @Valid AddEnvironmentRequest request) {
@@ -45,12 +45,15 @@ public class EnvironmentController {
             @ApiImplicitParam(name = "size", value = "한 번에 몇개를 가져올 것인지", required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "page", value = "몇 번째 페이지에서 가져올 것인지", required = true, dataType = "int", paramType = "query", defaultValue = "0")
     })
-    @ApiOperation(value = "환경 목록", notes = "환경 관리 페이지에서 환경의 정보를 불러온다.")
+    @ApiOperation(value = "환경 목록", notes = "환경 관리 페이지에서 환경의 정보를 불러온다.(성공하면 200)")
     @GetMapping
     public EnvironmentsResponse getEnvironments(Pageable page) {
         return environmentService.getEnvironments(page);
     }
 
+    @ApiImplicitParam(name = "id", value = "환경의 PK", required = true, dataType = "long", paramType = "path")
+    @ApiOperation(value = "환경 수정", notes = "환경에 계정이 속해있지 않다면 정보를 수정할 수 있다.(성공하면 204)")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void updateEnvironment(@PathVariable long id, @RequestBody @Valid UpdateEnvironmentRequest request) {
         environmentService.updateEnvironment(id, request);
