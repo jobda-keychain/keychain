@@ -1,8 +1,9 @@
 package com.jobda.keychain.entity.platform.repository;
 
-import com.jobda.keychain.entity.account.Account;
+import com.jobda.keychain.dto.response.SelectUserDto;
 import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.PlatformType;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -28,21 +29,29 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
         super(Platform.class);
         this.queryFactory = queryFactory;
     }
-  
-    public Page<Account> selectUser(Pageable pageable, PlatformType serviceType, List<Long> ids) {
-        JPAQuery<Account> query =
-                queryFactory.select(account)
-                        .from(platform)
-                        .leftJoin(platform.environments, environment)
-                        .leftJoin(environment.accounts, account)
-                        .where(serviceTypeEq(serviceType))
-                        .where(idsIn(ids)
-                        );
 
-        JPQLQuery<Account> selectUserDtoJPQLQuery =
+    @Override
+    public Page<SelectUserDto> selectUser(Pageable pageable, PlatformType serviceType, List<Long> environmentIds) {
+        JPAQuery<SelectUserDto> query =
+                queryFactory.select(Projections.fields(
+                                        SelectUserDto.class,
+                                        account.id,
+                                        account.userId,
+                                        account.environment.platform.name.as("platform"),
+                                        account.environment.name.as("environment"),
+                                        account.description
+                                )
+                        )
+                        .from(platform)
+                        .join(platform.environments, environment)
+                        .join(environment.accounts, account)
+                        .where(serviceTypeEq(serviceType))
+                        .where(environmentIdsIn(environmentIds));
+
+        JPQLQuery<SelectUserDto> selectUserDtoJPQLQuery =
                 querydsl().applyPagination(pageable, query);
 
-        List<Account> list = selectUserDtoJPQLQuery.fetch();
+        List<SelectUserDto> list = selectUserDtoJPQLQuery.fetch();
         return new PageImpl<>(list, pageable, list.size());
     }
 
@@ -50,12 +59,11 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
         return Objects.requireNonNull(getQuerydsl());
     }
 
-    private BooleanExpression serviceTypeEq(PlatformType platformType) {
-        return platformType != null ? platform.name.eq(platformType) : null;
+    private BooleanExpression serviceTypeEq(PlatformType serviceType) {
+        return serviceType != null ? platform.name.eq(serviceType) : null;
     }
 
-    private BooleanExpression idsIn(List<Long> ids) {
-        return ids != null ? environment.id.in(ids) : null;
+    private BooleanExpression environmentIdsIn(List<Long> environmentIds) {
+        return environmentIds != null ? environment.id.in(environmentIds) : null;
     }
-
 }

@@ -1,6 +1,6 @@
 package com.jobda.keychain.dto.request;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,22 +13,22 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateAccountRequest {
 
-    @ApiModelProperty(value = "계정 아이디", dataType = "string", required = true, example = "string")
+    @Schema(description = "계정 아이디", minLength = 2, maxLength = 20)
     @NotBlank
     @Length(min = 2, max = 20)
     private String userId;
 
-    @ApiModelProperty(value = "계정 패스워드", dataType = "string", required = true, example = "string")
+    @Schema(description = "계정 패스워드", minLength = 2, maxLength = 20)
     @NotBlank
     @Length(min = 2, max = 20)
     private String password;
 
-    @ApiModelProperty(value = "계정 설명", dataType = "string", required = true, example = "string")
+    @Schema(description = "계정 설명", minLength = 0, maxLength = 100)
     @NotNull
     @Length(max = 100)
     private String description;
 
-    @ApiModelProperty(value = "환경의 id", dataType = "number", required = true, example = "1")
+    @Schema(description = "환경의 id")
     @NotNull
     private Long environmentId;
 

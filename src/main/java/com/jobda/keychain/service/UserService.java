@@ -125,8 +125,8 @@ public class UserService {
 
     }
 
-    public SelectUserResponse selectUser(Pageable pageable, PlatformType platform, List<Long> ids) {
-        Page<Account> selectUser = platformRepository.selectUser(pageable, platform, ids);
+    public SelectUserResponse selectUser(Pageable pageable, PlatformType platform, List<Long> environmentIds) {
+        Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, environmentIds);
         List<SelectUserDto> selectUserDtoList = selectUser.stream()
                 .map(SelectUserDto::of)
                 .collect(Collectors.toList());
@@ -141,14 +141,13 @@ public class UserService {
         Account account = accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("User Not Found");
         });
-      
         return DetailsResponse.of(account);
     }
 
     @Transactional
     public void deleteUser(long id) {
         accountRepository.findById(id).orElseThrow(() -> {
-            throw new DataNotFoundException("userId Not Found");
+            throw new DataNotFoundException("User Not Found");
         });
         accountRepository.deleteById(id);
     }
