@@ -3,6 +3,7 @@ package com.jobda.keychain.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jobda.keychain.KeychainApplication;
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
+import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.entity.platform.PlatformType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,6 +85,26 @@ class EnvironmentControllerTest {
     void 서비스에_대한_환경_목록_서비스필터X() throws Exception {
         mvc.perform(get("/environments/search")
         ).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 환경_수정() throws Exception {
+        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("pr-3", "https://www.midasit.com", "https://www.midasit.com");
+
+        mvc.perform(put("/environments/" + environmentId_delete_200)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andDo(print()).andExpect(status().isNoContent());
+    }
+
+    @Test
+    void 환경_수정_유저O() throws Exception {
+        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("pr-3", "https://www.midasit.com", "https://www.midasit.com");
+
+        mvc.perform(put("/environments/" + environmentId_delete_400)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @Test
