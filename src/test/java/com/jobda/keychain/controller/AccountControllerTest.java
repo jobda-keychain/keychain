@@ -130,8 +130,11 @@ public class AccountControllerTest {
      * [204]
      * - 계정 삭제
      *
-     * [400]
+     * [404]
      * - 계정 삭제 -> id가 존재하지 않는 경우
+     *
+     * [400]
+     * - 계정 삭제 -> id가 정수형이 아닐 경우
      *
      */
     @Test
@@ -145,6 +148,13 @@ public class AccountControllerTest {
     void 계정_삭제_404() throws Exception {
         mvc.perform(delete("/accounts/1000"))
                 .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    void 계정_삭제_400() throws Exception {
+        mvc.perform(delete("/accounts/abc"))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
