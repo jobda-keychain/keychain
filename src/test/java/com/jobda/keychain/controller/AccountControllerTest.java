@@ -78,14 +78,6 @@ public class AccountControllerTest {
                 .andDo(print());
     }
 
-    // 빈리스트 체크 코드 반영 전, 테스트 돌릴 시 body data 빈 배열
-//    @Test
-//    void 계정_조희_플랫폼_필터링_JOBDA_환경_빈리스트_필터링() throws Exception{
-//        mvc.perform(get("/accounts?size=15&page=0&platform=JOBDA&environment="))
-//                .andExpect(status().isOk())
-//                .andDo(print());
-//    }
-
     //status 400
     @Test
     void 계정_전체_조회_400() throws Exception {
