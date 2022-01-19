@@ -115,18 +115,41 @@ public class AccountControllerTest {
     }
 
     /*
-     * 계정 삭제
+     * 계정 상세 조회 및 계정 삭제
      *
-     * [204]
+     * [200]
+     * - 계정 상세 조회
      * - 계정 삭제
      *
      * [404]
-     * - 계정 삭제 -> id가 존재하지 않는 경우
+     * - id가 존재하지 않는 경우
      *
      * [400]
-     * - 계정 삭제 -> id가 정수형이 아닐 경우
+     * - id가 정수형이 아닐 경우
      *
      */
+
+    @Test
+    void 계정_상세_조회_200() throws Exception {
+        mvc.perform(get("/accounts/details/1"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void 계정_상세_조회_400() throws Exception {
+        mvc.perform(get("/accounts/details/abc"))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    void 계정_상세_조회_404() throws Exception {
+        mvc.perform(get("/accounts/details/1000"))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
     @Test
     void 계정_삭제_204() throws Exception {
         mvc.perform(delete("/accounts/1"))
