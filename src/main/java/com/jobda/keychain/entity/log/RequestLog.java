@@ -33,15 +33,11 @@ public class RequestLog {
     private MethodType methodType;
 
     @Column(nullable = false)
-    private String requestUri;
-
-    @Column(nullable = false)
     private String clientIpAddress;
 
-    public static RequestLog createLog(MethodType methodType, String requestUri, String clientIpAddress) {
+    public static RequestLog createLog(MethodType methodType, String clientIpAddress) {
         RequestLog requestLog = new RequestLog();
         requestLog.methodType = methodType;
-        requestLog.requestUri = requestUri;
         requestLog.clientIpAddress = clientIpAddress;
 
         return requestLog;

@@ -18,9 +18,8 @@ public class LogService {
     @Transactional
     public void saveRequestLog(HttpServletRequest request, MethodType methodType) {
         String clientAddress = request.getRemoteAddr();
-        String requestUri = request.getRequestURI();
 
-        RequestLog requestLog = RequestLog.createLog(methodType, requestUri, clientAddress);
+        RequestLog requestLog = RequestLog.createLog(methodType, clientAddress);
         requestLogRepository.save(requestLog);
     }
 
