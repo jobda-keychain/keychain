@@ -62,10 +62,6 @@ clean {
     delete file('src/main/generated')
 }
 
-jacoco {
-    toolVersion = "0.8.5"
-}
-
 jacocoTestReport {
     reports {
         xml.enabled true
