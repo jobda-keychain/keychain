@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class AddEnvironmentRequest {
 
     @Schema(description = "환경 이름", type = "string", minLength = 2, maxLength = 10, required = true, example = "dv-1")

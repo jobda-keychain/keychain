@@ -43,41 +43,52 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_200() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "https://github.com", "https://github.com", PlatformType.JOBDA);
-
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(request))
+                .content("{\n" +
+                        "\"name\" : \"pr-11\",\n" +
+                        "\"serverDomain\" : \"https://github.com\",\n" +
+                        "\"clientDomain\" : \"https://github.com\",\n" +
+                        "\"platform\" : \"JOBDA\"" +
+                        "\n}")
         ).andDo(print()).andExpect(status().isCreated());
     }
 
     @Test
     void 환경_추가_NPE() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", null, PlatformType.JOBDA);
-
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(request))
+                .content("{\n" +
+                        "\"name\" : \"pr-11\",\n" +
+                        "\"serverDomain\" : \"https://github.com\",\n" +
+                        "\"platform\" : \"JOBDA\"" +
+                        "\n}")
         ).andExpect(status().isBadRequest());
     }
 
     @Test
     void 환경_추가_존재하지_않는_플랫폼() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-8", "https://github.com", "https://github.com", null);
-
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(request))
+                .content("{\n" +
+                        "\"name\" : \"pr-11\",\n" +
+                        "\"serverDomain\" : \"https://github.com\",\n" +
+                        "\"clientDomain\" : \"https://github.com\",\n" +
+                        "\"platform\" : \"JOBFLEX\"" +
+                        "\n}")
         ).andExpect(status().isBadRequest());
     }
 
     @Test
     void 중복되는_환경() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", PlatformType.JOBDA);
-
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(request))
+                .content("{\n" +
+                        "\"name\" : \"dv-1\",\n" +
+                        "\"serverDomain\" : \"https://github.com\",\n" +
+                        "\"clientDomain\" : \"https://github.com\",\n" +
+                        "\"platform\" : \"JOBDA\"" +
+                        "\n}")
         ).andExpect(status().isConflict());
     }
 
