@@ -37,9 +37,8 @@ CREATE TABLE account
 
 CREATE TABLE request_log(
     id             BIGINT       NOT NULL AUTO_INCREMENT,
-    requested_at   DATETIME     NOT NULL,
+    created_at     DATETIME     NOT NULL,
     method_type    VARCHAR(18)  NOT NULL,
-    request_uri    VARCHAR(255) NOT NULL,
     client_ip_address VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 )
