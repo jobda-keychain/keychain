@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RequiredArgsConstructor
 @Service
 public class LogService {
@@ -16,8 +14,8 @@ public class LogService {
     private final RequestLogRepository requestLogRepository;
 
     @Transactional
-    public void saveRequestLog(HttpServletRequest request, MethodType methodType) {
-        String clientAddress = request.getRemoteAddr();
+    public void saveRequestLog(String clientIpAddress, MethodType methodType) {
+        String clientAddress = clientIpAddress;
 
         RequestLog requestLog = RequestLog.createLog(methodType, clientAddress);
         requestLogRepository.save(requestLog);
