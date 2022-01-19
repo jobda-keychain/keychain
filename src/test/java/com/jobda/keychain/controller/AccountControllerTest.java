@@ -45,8 +45,6 @@ public class AccountControllerTest {
      * - 플랫폼 조회 -> platformType에 없는 경우 (JOBDA, JODBA_CMS를 제외한 jobda같은 경우)
      * - 플랫폼 + 환경 조회 -> 정수형태가 아닌 경우 (환경 이름 등이 들어올 경우)
      *
-     * 예외 (가능하지만 제공하지 않는 기능)
-     * - 환경 조회 | 전체 조회 후 환경 조회 하지 않음. 환경 조회는 플랫폼 필터링과 함께만 가능함
      */
 
     // status 200
