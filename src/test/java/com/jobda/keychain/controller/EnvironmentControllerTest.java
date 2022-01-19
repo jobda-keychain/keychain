@@ -100,21 +100,25 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_수정() throws Exception {
-        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("pr-3", "https://www.midasit.com", "https://www.midasit.com");
-
         mvc.perform(put("/environments/" + environmentId_delete_200)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(request))
+                .content("{\n" +
+                        "\"name\" : \"pr-3\",\n" +
+                        "\"serverDomain\" : \"https://www.midasit.com\",\n" +
+                        "\"clientDomain\" : \"https://github.com\"\n" +
+                        "\n}")
         ).andDo(print()).andExpect(status().isNoContent());
     }
 
     @Test
     void 환경_수정_유저O() throws Exception {
-        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("pr-3", "https://www.midasit.com", "https://www.midasit.com");
-
         mvc.perform(put("/environments/" + environmentId_delete_400)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(request))
+                .content("{\n" +
+                        "\"name\" : \"pr-3\",\n" +
+                        "\"serverDomain\" : \"https://www.midasit.com\",\n" +
+                        "\"clientDomain\" : \"https://github.com\"\n" +
+                        "\n}")
         ).andDo(print()).andExpect(status().isBadRequest());
     }
 
