@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.6.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'jacoco'
 }
 
 group = 'com.jobda'
@@ -59,10 +60,6 @@ jar {
 }
 clean {
     delete file('src/main/generated')
-}
-
-plugins {
-    id 'jacoco'
 }
 
 jacoco {
