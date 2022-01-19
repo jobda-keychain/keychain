@@ -35,6 +35,3 @@ jobs:
 
     - name: codecov gradle
       run: ./gradlew jacocoTestReport
-
-    - name: codecov upload
-      run: bash <(curl -s https://codecov.io/bash)
