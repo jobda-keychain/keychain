@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: h2
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
@@ -20,3 +22,11 @@ spring:
       data-locations: classpath:data.sql
       schema-locations: classpath:table.sql
       mode: always
+---
+server:
+  port: 8080
+  profiles:
+    active: local # 만약 application-prod.yml 파일을 로딩하고 싶다면, prod
+spring:
+  jpa:
+    open-in-view: false

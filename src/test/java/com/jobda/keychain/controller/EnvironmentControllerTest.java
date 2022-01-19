@@ -3,13 +3,7 @@ package com.jobda.keychain.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jobda.keychain.KeychainApplication;
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
-import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.entity.account.repository.AccountRepository;
-import com.jobda.keychain.entity.environment.Environment;
-import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
-import com.jobda.keychain.entity.platform.Platform;
-import com.jobda.keychain.entity.platform.ServiceType;
-import com.jobda.keychain.entity.platform.repository.PlatformRepository;
+import com.jobda.keychain.entity.platform.PlatformType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,42 +30,19 @@ class EnvironmentControllerTest {
     @Autowired
     private WebApplicationContext context;
 
-    @Autowired
-    private PlatformRepository platformRepository;
-
-    @Autowired
-    private EnvironmentRepository environmentRepository;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    long environmentId_delete_200;
-    long environmentId_delete_400;
+    long environmentId_delete_200 = 4L;
+    long environmentId_delete_400 = 2L;
 
     @BeforeEach
     void setUp() {
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
-        Platform platform = platformRepository.findById(1L).orElse(null);
-
-        environmentRepository.save(Environment.createEnvironment("dv-15", "https://github.com", "https://github.com", platform));
-        environmentRepository.save(Environment.createEnvironment("dv-16", "https://github.com", "https://github.com", platform));
-        Environment environment = environmentRepository.save(Environment.createEnvironment("dv-12", "https://github.com", "https://github.com", platform));
-        platform.getEnvironments().add(environment);
-
-        environmentId_delete_200 = environmentRepository.save(Environment.createEnvironment("dv-19", "https://github.com", "https://github.com", platform)).getId();
-        
-        Account save = accountRepository.save(
-                Account.createAccount("asdf", "asdf", environment, "")
-        );
-        environment.getAccounts().add(save);
-        environmentId_delete_400 = environment.getId();
     }
 
     @Test
     void 환경_추가_200() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "https://github.com", "https://github.com", ServiceType.JOBDA);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "https://github.com", "https://github.com", PlatformType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -84,7 +52,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 환경_추가_NPE() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", null, ServiceType.JOBDA);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", null, PlatformType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +72,7 @@ class EnvironmentControllerTest {
 
     @Test
     void 중복되는_환경() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", ServiceType.JOBDA);
+        AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", "https://github.com", PlatformType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -123,30 +91,24 @@ class EnvironmentControllerTest {
         mvc.perform(delete("/environments/" + environmentId_delete_200)
         ).andDo(print()).andExpect(status().isNoContent());
     }
-  
+
     @Test
     void 환경_목록() throws Exception {
         mvc.perform(get("/environments?size=2&page=0"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-    
+
     @Test
     void 환경_삭제_400() throws Exception {
         mvc.perform(delete("/environments/" + environmentId_delete_400)
         ).andDo(print()).andExpect(status().isBadRequest());
     }
-  
+
     @Test
     void 서비스에_대한_환경_목록() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBDA")
         ).andExpect(status().isOk()).andDo(print());
-    }
-
-    @Test
-    void 서비스에_대한_환경_목록_400() throws Exception {
-        mvc.perform(get("/environments/search?platform=JOBFLEX")
-        ).andExpect(status().isBadRequest());
     }
 
 }

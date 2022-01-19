@@ -1,7 +1,7 @@
 package com.jobda.keychain.dto.response;
 
 import com.jobda.keychain.entity.account.Account;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,7 +14,7 @@ public class DetailsResponse {
 
     private String password;
 
-    private ServiceType platform;
+    private PlatformType platform;
 
     private String environment;
 

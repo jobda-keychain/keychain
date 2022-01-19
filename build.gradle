@@ -2,7 +2,6 @@ plugins {
     id 'org.springframework.boot' version '2.6.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
-    id 'war'
 }
 
 group = 'com.jobda'
@@ -41,11 +40,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    //mysql
+    //db
+    implementation 'com.h2database:h2'
     implementation 'mysql:mysql-connector-java'
 
     //test
-    implementation 'com.h2database:h2'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -55,7 +54,7 @@ test {
     useJUnitPlatform()
 }
 
-war {
+jar {
     enabled = false
 }
 clean {

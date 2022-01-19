@@ -26,13 +26,13 @@ public class Platform {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 9, nullable = false)
-    private ServiceType name;
+    @Column(length = 9, nullable = false, unique = true)
+    private PlatformType name;
 
     @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
     private List<Environment> environments = new ArrayList<>();
 
-    public static Platform createPlatform(ServiceType name) {
+    public static Platform createPlatform(PlatformType name) {
         Platform platform = new Platform();
         platform.name = name;
 

@@ -1,9 +1,8 @@
 package com.jobda.keychain.entity.platform.repository;
 
 import com.jobda.keychain.dto.response.SelectUserDto;
-import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.platform.Platform;
-import com.jobda.keychain.entity.platform.ServiceType;
+import com.jobda.keychain.entity.platform.PlatformType;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
@@ -32,7 +31,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
-    public Page<SelectUserDto> selectUser(Pageable pageable, ServiceType serviceType, List<Long> environmentIds) {
+    public Page<SelectUserDto> selectUser(Pageable pageable, PlatformType serviceType, List<Long> environmentIds) {
         JPAQuery<SelectUserDto> query =
                 queryFactory.select(Projections.fields(
                                         SelectUserDto.class,
@@ -53,18 +52,19 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
                 querydsl().applyPagination(pageable, query);
 
         List<SelectUserDto> list = selectUserDtoJPQLQuery.fetch();
-        return new PageImpl<>(list, pageable, list.size());
+        return new PageImpl<>(list, pageable, selectUserDtoJPQLQuery.fetchCount());
     }
 
     private Querydsl querydsl() {
         return Objects.requireNonNull(getQuerydsl());
     }
 
-    private BooleanExpression serviceTypeEq(ServiceType serviceType) {
+    private BooleanExpression serviceTypeEq(PlatformType serviceType) {
         return serviceType != null ? platform.name.eq(serviceType) : null;
     }
 
     private BooleanExpression environmentIdsIn(List<Long> environmentIds) {
-        return environmentIds != null ? environment.id.in(environmentIds) : null;
+        if(environmentIds == null || environmentIds.size() <= 0) return null;
+        return environment.id.in(environmentIds);
     }
 }
