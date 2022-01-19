@@ -52,6 +52,7 @@ public class UserController {
         return userService.updateUser(id, request);
     }
 
+    @Operation(tags = "계정", summary = "계정 정보 조회", description = "계정을 전체 조회하거나 필터링하여 조회하는 API")
     @GetMapping
     public SelectUserResponse selectUser(@RequestParam(value = "size") int size,
                                          @RequestParam(value = "page") int page,
@@ -62,12 +63,14 @@ public class UserController {
         return userService.selectUser(pageable, platform, environmentIds);
     }
 
+    @Operation(tags = "계정", summary = "계정 정보 삭제", description = "계정을 삭제하는 API")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
     }
 
+    @Operation(tags = "계정", summary = "계정 정보 상세 조회", description = "해당 계정의 상세 정보를 조회하는 API")
     @GetMapping("/details/{id}")
     public DetailsResponse detailsUser(@PathVariable long id) {
         return userService.detailsUser(id);
