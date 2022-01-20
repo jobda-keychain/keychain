@@ -36,11 +36,12 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public Page<Environment> findAllBy(Pageable page) {
+    public Page<Environment> findAllByPageableAndPlatformType(Pageable page, PlatformType platformType) {
         JPQLQuery<Environment> query = querydsl().applyPagination(page,
                 queryFactory.selectFrom(environment)
                         .join(environment.platform, platform)
-                        .on(platform.name.eq(environment.platform.name)));
+                        .on(platform.name.eq(environment.platform.name)))
+                        .where(platformTypeEq(platformType));
         List<Environment> list = query.fetch();
 
         return new PageImpl<>(list, page, query.fetchCount());
