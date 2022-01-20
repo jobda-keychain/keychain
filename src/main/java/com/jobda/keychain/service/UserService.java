@@ -16,11 +16,13 @@ import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 
+import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -113,6 +115,14 @@ public class UserService {
     }
 
     public SelectUserResponse selectUser(Pageable pageable, PlatformType platform, List<Long> environmentIds) {
+
+        if(environmentIds != null){
+            environmentIds.stream()
+                    .map(id ->
+                            environmentRepository.findById(id).orElseThrow(() -> new DataNotFoundException("environment not found")))
+                    .collect(Collectors.toList());
+        }
+
         Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, environmentIds);
         List<SelectUserDto> selectUserDtoList = selectUser.stream()
                 .map(SelectUserDto::of)
