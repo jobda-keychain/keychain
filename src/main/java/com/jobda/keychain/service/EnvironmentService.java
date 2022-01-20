@@ -76,9 +76,12 @@ public class EnvironmentService {
     public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
         Environment environment = getEnvironment(id);
         existsAccount(environment);
-        existsSameName(environment.getPlatform(), request.getName());
-
-        environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
+        Environment duplicateNameEnvironment = environmentRepository.findByPlatformAndName(environment.getPlatform(), request.getName()).orElse(null);
+        if (duplicateNameEnvironment == null || environment.getId().equals(duplicateNameEnvironment.getId())) {
+            environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
+        } else {
+            throw new AlreadyDataExistsException("Same name exists on the platform");
+        }
     }
 
     /**
