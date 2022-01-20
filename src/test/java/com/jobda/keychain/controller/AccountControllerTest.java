@@ -98,14 +98,6 @@ public class AccountControllerTest {
                 .andDo(print());
     }
 
-    //status 404 - 예외처리해야됨
-    @Test
-    void 계정_조희_환경만_필터링_404() throws Exception {
-        mvc.perform(get("/accounts?size=15&page=0&platform=JOBDA&environment=1000"))
-                .andExpect(status().isNotFound())
-                .andDo(print());
-    }
-
     //200 - 환경 조회
     @Test
     void 계정_조희_환경만_필터링_200() throws Exception {
