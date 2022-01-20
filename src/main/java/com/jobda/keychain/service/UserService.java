@@ -49,7 +49,7 @@ public class UserService {
      * @author: sse
      **/
     public String callLoginApi(String id, String password, String serverDomain) {
-        URI uri = URI.create(serverDomain + "/login");
+        URI uri = URI.create(serverDomain + AuthApiClient.loginPath);
         LoginApiRequest apiRequest = new LoginApiRequest(id, password);
 
         try {
@@ -83,8 +83,8 @@ public class UserService {
         accountRepository.save(account);
 
         if(environment.getPlatform().getName() == PlatformType.JOBDA) {
-            URI uri = URI.create(environment.getServerDomain()+"/users/default");
-            String email = authApiClient.getAccountInfo(uri, "Bearer " + token).getEmail();
+            URI uri = URI.create(environment.getServerDomain()+ AuthApiClient.getAccountInfoPath);
+            String email = authApiClient.getAccountInfo(uri, AuthApiClient.tokenType + token).getEmail();
             mailService.sendMail(email);
         }
     }

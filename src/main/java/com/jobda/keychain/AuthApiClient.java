@@ -14,6 +14,10 @@ import java.net.URI;
 @FeignClient(name = "jobda-auth-api", url = "place-holder")
 public interface AuthApiClient {
 
+    String loginPath = "/login";
+    String getAccountInfoPath = "/users/default";
+    String tokenType = "Bearer ";
+
     @PostMapping(headers = {HttpHeaders.ACCEPT + "=" + "*/*"})
     LoginApiResponse login(URI baseUrl, LoginApiRequest requestBody);
 
