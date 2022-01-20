@@ -31,24 +31,21 @@ CREATE TABLE account
     environment_id BIGINT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (environment_id)
-        REFERENCES environment (id) ON DELETE CASCADE
-
+        REFERENCES environment (id) ON DELETE CASCADE,
+    UNIQUE uq(user_id, environment_id)
 );
 
+CREATE TABLE log(
+                    id             BIGINT       NOT NULL AUTO_INCREMENT,
+                    created_at     DATETIME     NOT NULL,
+                    method_type    VARCHAR(18)  NOT NULL,
+                    client_ip_address VARCHAR(255) NOT NULL,
+                    PRIMARY KEY (id)
+)
+
 -- insert platform
-insert into platform values(1, 'JOBDA');
+    insert into platform values(1, 'JOBDA');
 insert into platform values(2, 'JOBDA_CMS');
 commit;
 
 select * from platform;
-
--- insert environment
-insert into environment(id, name, server_domain, client_domain, platform_id) values(1, 'dv', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 1);
-insert into environment(id, name, server_domain, client_domain, platform_id) values(2, 'st', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 1);
-insert into environment(id, name, server_domain, client_domain, platform_id) values(3, 'pr', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 1);
-insert into environment(id, name, server_domain, client_domain, platform_id) values(4, 'dv', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 2);
-insert into environment(id, name, server_domain, client_domain, platform_id) values(5, 'st', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 2);
-insert into environment(id, name, server_domain, client_domain, platform_id) values(6, 'pr', 'https://github.com/jobda-keychain/keychain', 'https://github.com/jobda-keychain/jobda-qa-util-web', 2);
-commit;
-
-select * from environment;

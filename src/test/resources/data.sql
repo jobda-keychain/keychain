@@ -7,6 +7,6 @@ INSERT INTO environment(name, server_domain, client_domain, platform_id) values(
 INSERT INTO environment(name, server_domain, client_domain, platform_id) values('dv', 'http://server.com', 'http://client.com', 2);
 
 INSERT INTO account(user_id, password, description, environment_id) values('khg0712', 'mid@sit', 'testtest', 1);
-INSERT INTO account(user_id, password, description, environment_id) values('test2', 'test2', 'testtest', 2);
-INSERT INTO account(user_id, password, description, environment_id) values('test3', 'test3', 'testtest', 1);
-INSERT INTO account(user_id, password, description, environment_id) values('test4', 'test4', 'testtest', 1);
+INSERT INTO account(user_id, password, description, environment_id) values('test2', 'test2', 'JOBDA, dv', 1);
+INSERT INTO account(user_id, password, description, environment_id) values('test3', 'test3', 'JOBDA, dv-1', 2);
+INSERT INTO account(user_id, password, description, environment_id) values('test4', 'test4', 'JOBDA, st', 3);
