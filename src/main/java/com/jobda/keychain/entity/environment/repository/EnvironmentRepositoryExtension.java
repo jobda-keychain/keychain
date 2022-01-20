@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface EnvironmentRepositoryExtension {
     List<Environment> findAllByPlatformType(PlatformType platformType);
-    Page<Environment> findAllBy(Pageable page);
+    Page<Environment> findAllByPageableAndPlatformType(Pageable page, PlatformType platformType);
 }

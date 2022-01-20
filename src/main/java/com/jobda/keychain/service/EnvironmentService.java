@@ -48,11 +48,12 @@ public class EnvironmentService {
 
     /**
      * 환경 관리 페이지에서 보여주는 환경 목록
+     * 탭으로 플랫폼을 이동할 수 있기 때문에 필터링 필요함.
      *
      * @author: syxxn
      **/
-    public EnvironmentsResponse getEnvironments(Pageable page) {
-        Page<Environment> environmentPage = environmentRepository.findAllBy(page);
+    public EnvironmentsResponse getEnvironments(Pageable page, PlatformType platformType) {
+        Page<Environment> environmentPage = environmentRepository.findAllByPageableAndPlatformType(page, platformType);
 
         List<EnvironmentsResponse.EnvironmentDto> environmentDtoList = environmentPage.stream()
                 .map(EnvironmentsResponse.EnvironmentDto::of)
