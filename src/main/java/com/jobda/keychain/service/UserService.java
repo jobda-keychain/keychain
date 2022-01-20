@@ -147,10 +147,11 @@ public class UserService {
      **/
     public TokenResponse getToken(Long id) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("User is not found"));
+        Environment environment = account.getEnvironment();
 
-        String token = callLoginApi(account.getUserId(), account.getPassword(), account.getEnvironment().getServerDomain());
+        String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
 
-        return new TokenResponse(token);
+        return new TokenResponse(token, environment.getClientDomain());
     }
 
 }
