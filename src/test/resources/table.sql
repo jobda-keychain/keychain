@@ -25,6 +25,6 @@ CREATE TABLE account
     environment_id VARCHAR(255) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (environment_id)
-        REFERENCES environment (id) ON DELETE CASCADE
-
+        REFERENCES environment (id) ON DELETE CASCADE,
+    UNIQUE uq(user_id, environment_id)
 );

@@ -1,7 +1,7 @@
 INSERT INTO platform(name) values('JOBDA');
 INSERT INTO platform(name) values('JOBDA_CMS');
 
-INSERT INTO environment(name, server_domain, client_domain, platform_id) values('dv', 'https://api-jobda-im.kr-dv-jainwon.com/login', 'http://client.com', 1);
+INSERT INTO environment(name, server_domain, client_domain, platform_id) values('dv', 'https://api-jobda-im.kr-dv-jainwon.com', 'http://client.com', 1);
 INSERT INTO environment(name, server_domain, client_domain, platform_id) values('dv-1', 'http://server.com', 'http://client.com', 1);
 INSERT INTO environment(name, server_domain, client_domain, platform_id) values('st', 'http://server.com', 'http://client.com', 1);
 INSERT INTO environment(name, server_domain, client_domain, platform_id) values('dv', 'http://server.com', 'http://client.com', 2);

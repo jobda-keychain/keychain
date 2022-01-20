@@ -48,40 +48,32 @@ class UserControllerTest {
 
     @Test
     void 계정추가_형식_검사_400() throws Exception {
+
+        CreateAccountRequest requestWithoutId = new CreateAccountRequest(null, "ssy0113", "", 1230L);
+        CreateAccountRequest requestWithoutPassword = new CreateAccountRequest("sasy0113", null, "", 1230L);
+        CreateAccountRequest requestWithoutDescription = new CreateAccountRequest("sasy0113", "ajefkf", null, 1230L);
+        CreateAccountRequest requestWithoutEnvironment = new CreateAccountRequest("sasy0113", "afkeofk", "", null);
+
+        ObjectMapper mapper = new ObjectMapper();
+
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "    \"password\": \"ssy0113\",\n" +
-                        "    \"environmentId\": 1230,\n" +
-                        "    \"description\": \"\"\n" +
-                        "}")
+                .content(mapper.writeValueAsString(requestWithoutId))
         ).andExpect(status().isBadRequest());
 
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "    \"userId\": \"sasy0113\",\n" +
-                        "    \"environmentId\": 1230,\n" +
-                        "    \"description\": \"\"\n" +
-                        "}")
+                .content(mapper.writeValueAsString(requestWithoutPassword))
         ).andExpect(status().isBadRequest());
 
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "    \"userId\": \"sasy0113\",\n" +
-                        "    \"password\": \"ssy0113\",\n" +
-                        "    \"description\": \"\"\n" +
-                        "}")
+                .content(mapper.writeValueAsString(requestWithoutDescription))
         ).andExpect(status().isBadRequest());
 
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "    \"userId\": \"sasy0113\",\n" +
-                        "    \"password\": \"ssy0113\",\n" +
-                        "    \"environmentId\": 1230,\n" +
-                        "}")
+                .content(mapper.writeValueAsString(requestWithoutEnvironment))
         ).andExpect(status().isBadRequest());
     }
 
@@ -124,48 +116,41 @@ class UserControllerTest {
 
     @Test
     void 계정수정_400() throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        UpdateAccountRequest requestWithoutId = new UpdateAccountRequest(null, "ssy0113", "aekof");
+        UpdateAccountRequest requestWithoutPassword = new UpdateAccountRequest("sasy0113", null, "");
+        UpdateAccountRequest requestWithoutDescription = new UpdateAccountRequest("sasy0113", "ssy0113", null);
+
         mvc.perform(put("/accounts/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "    \"userId\": \"sasy0113\",\n" +
-                        "    \"password\": \"ssy0113\",\n" +
-                        "}")
+                .content(mapper.writeValueAsString(requestWithoutId))
         ).andExpect(status().isBadRequest());
 
         mvc.perform(put("/accounts/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "    \"userId\": \"sasy0113\",\n" +
-                        "    \"description\": \"o\"\n" +
-                        "}")
+                .content(mapper.writeValueAsString(requestWithoutPassword))
         ).andExpect(status().isBadRequest());
 
         mvc.perform(put("/accounts/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "    \"password\": \"ssy0113\",\n" +
-                        "    \"description\": \"o\"\n" +
-                        "}")
+                .content(mapper.writeValueAsString(requestWithoutDescription))
         ).andExpect(status().isBadRequest());
+
+        UpdateAccountRequest requestLengthOverflow = new UpdateAccountRequest("sasy0113sasy0113sasy0113sasy0113", "ssy0113", "fadf");
+        UpdateAccountRequest requestLengthUnderflow = new UpdateAccountRequest("asdfasdf", "s", "fadf");
 
         // 아이디(또는 패스워드)가 20자 이상일 때
         mvc.perform(put("/accounts/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "    \"userId\": \"sasy0113sasy0113sasy0113sasy0113\",\n" +
-                        "    \"password\": \"ssy0113\",\n" +
-                        "    \"description\": \"o\"\n" +
-                        "}")
+                .content(mapper.writeValueAsString(requestLengthOverflow))
         ).andExpect(status().isBadRequest());
 
         // 아이디(또는 패스워드)가 2자 이하일 때
         mvc.perform(put("/accounts/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "    \"userId\": \"sasy0113\",\n" +
-                        "    \"password\": \"s\",\n" +
-                        "    \"description\": \"o\"\n" +
-                        "}")
+                .content(mapper.writeValueAsString(requestLengthUnderflow))
         ).andExpect(status().isBadRequest());
 
     }
