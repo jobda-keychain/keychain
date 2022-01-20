@@ -74,10 +74,10 @@ public class EnvironmentController {
         logService.saveRequestLog(servletRequest.getRemoteAddr(), MethodType.DELETE_ENVIRONMENT);
     }
 
-    @Operation(tags=  "환경", summary = "환경 삭제", description = "환경에 계정이 속해있지 않다면 정보를 삭제할 수 있다.(성공하면 204)")
+    @Operation(tags=  "환경", summary = "환경 검색을 위한 목록", description = "환경 이름 불러오기(성공하면 200)")
     @GetMapping("/search")
-    public PlatformEnvironmentsResponse getEnvironmentsOfService(@Parameter(description = "플랫폼(JOBDA, JOBDA_CMS)") @RequestParam(required = false) PlatformType platform) {
-        return environmentService.getEnvironmentsOfService(platform);
+    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform(@Parameter(description = "플랫폼(JOBDA, JOBDA_CMS)") @RequestParam(required = false) PlatformType platform) {
+        return environmentService.getEnvironmentListOfPlatform(platform);
     }
 
 }

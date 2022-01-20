@@ -101,7 +101,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
-    public PlatformEnvironmentsResponse getEnvironmentsOfService(PlatformType platformType) {
+    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform(PlatformType platformType) {
         List<Environment> environments = environmentRepository.findAllByPlatformType(platformType);
 
         List<EnvironmentDto> environmentsDtoList = environments.stream()
