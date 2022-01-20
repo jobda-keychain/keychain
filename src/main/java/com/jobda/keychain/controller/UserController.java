@@ -47,7 +47,7 @@ public class UserController {
     public void createUser(HttpServletRequest servletRequest,
                            @RequestBody @Valid CreateAccountRequest request) {
         userService.createUser(request);
-        logService.saveRequestLog(servletRequest.getRemoteAddr(), MethodType.ADD_ACCOUNT);
+        logService.saveRequestLog(LogService.getClientIp(servletRequest), MethodType.ADD_ACCOUNT);
     }
 
     @Operation(tags = "계정", summary = "계정 정보 수정", description = "계정을 수정하는 API")
@@ -57,7 +57,7 @@ public class UserController {
                                             @RequestBody @Valid UpdateAccountRequest request,
                                             @Parameter(description = "계정의 id") @PathVariable long id) {
         UpdateAccountResponse result = userService.updateUser(id, request);
-        logService.saveRequestLog(servletRequest.getRemoteAddr(), MethodType.UPDATE_ACCOUNT);
+        logService.saveRequestLog(LogService.getClientIp(servletRequest), MethodType.UPDATE_ACCOUNT);
         return result;
     }
 
@@ -78,7 +78,7 @@ public class UserController {
     public void deleteUser(HttpServletRequest servletRequest,
                            @PathVariable long id) {
         userService.deleteUser(id);
-        logService.saveRequestLog(servletRequest.getRemoteAddr(), MethodType.DELETE_ACCOUNT);
+        logService.saveRequestLog(LogService.getClientIp(servletRequest), MethodType.DELETE_ACCOUNT);
     }
 
     @Operation(tags = "계정", summary = "계정 정보 상세 조회", description = "해당 계정의 상세 정보를 조회하는 API")
@@ -86,7 +86,7 @@ public class UserController {
     public DetailsResponse detailsUser(HttpServletRequest servletRequest,
                                        @PathVariable long id) {
         DetailsResponse result = userService.detailsUser(id);
-        logService.saveRequestLog(servletRequest.getRemoteAddr(), MethodType.DETAILS_ACCOUNT);
+        logService.saveRequestLog(LogService.getClientIp(servletRequest), MethodType.DETAILS_ACCOUNT);
         return result;
     }
 

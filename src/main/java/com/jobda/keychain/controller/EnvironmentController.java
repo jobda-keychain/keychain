@@ -43,7 +43,7 @@ public class EnvironmentController {
     @PostMapping
     public void addEnvironment(HttpServletRequest servletRequest, @RequestBody @Valid AddEnvironmentRequest request) {
         environmentService.addEnvironment(request);
-        logService.saveRequestLog(servletRequest.getRemoteAddr(), MethodType.ADD_ENVIRONMENT);
+        logService.saveRequestLog(LogService.getClientIp(servletRequest), MethodType.ADD_ENVIRONMENT);
     }
 
     @Operation(tags=  "환경", summary = "환경 목록", description = "환경 관리 페이지에서 환경의 정보를 불러온다.(성공하면 200)")
@@ -62,7 +62,7 @@ public class EnvironmentController {
                                   @Parameter(description = "환경의 PK") @PathVariable long id,
                                   @RequestBody @Valid UpdateEnvironmentRequest request) {
         environmentService.updateEnvironment(id, request);
-        logService.saveRequestLog(servletRequest.getRemoteAddr(), MethodType.UPDATE_ENVIRONMENT);
+        logService.saveRequestLog(LogService.getClientIp(servletRequest), MethodType.UPDATE_ENVIRONMENT);
     }
 
     @Operation(tags=  "환경", summary = "환경 삭제", description = "환경에 계정이 속해있지 않다면 정보를 삭제할 수 있다.(성공하면 204)")
@@ -71,7 +71,7 @@ public class EnvironmentController {
     public void deleteEnvironment(HttpServletRequest servletRequest,
                                   @Parameter(description = "환경의 PK") @PathVariable long id) {
         environmentService.deleteEnvironment(id);
-        logService.saveRequestLog(servletRequest.getRemoteAddr(), MethodType.DELETE_ENVIRONMENT);
+        logService.saveRequestLog(LogService.getClientIp(servletRequest), MethodType.DELETE_ENVIRONMENT);
     }
 
     @Operation(tags=  "환경", summary = "환경 검색을 위한 목록", description = "환경 이름 불러오기(성공하면 200)")
