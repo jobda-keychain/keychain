@@ -199,5 +199,17 @@ class UserControllerTest {
 
     }
 
+    @Test
+    void 계정_자동_로그인_200() throws Exception {
+        mvc.perform(post("/accounts/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void 계정_자동_로그인_404() throws Exception {
+        mvc.perform(post("/accounts/100").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
 
 }
