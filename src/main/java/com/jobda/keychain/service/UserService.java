@@ -40,7 +40,6 @@ public class UserService {
     private final EnvironmentRepository environmentRepository;
     private final AuthApiClient authApiClient;
     private final PlatformRepository platformRepository;
-    private final MailService mailService;
 
     /**
      * 외부 로그인 API 호출 메서드
@@ -49,7 +48,7 @@ public class UserService {
      * @author: sse
      **/
     public String callLoginApi(String id, String password, String serverDomain) {
-        URI uri = URI.create(serverDomain + AuthApiClient.loginPath);
+        URI uri = URI.create(serverDomain);
         LoginApiRequest apiRequest = new LoginApiRequest(id, password);
 
         try {
@@ -60,12 +59,6 @@ public class UserService {
         }
     }
 
-    /**
-    * 계정 정보 생성 메서드
-    * 계정 생성 성공 시, 해당 계정에 등록된 이메일을 조회하여 메일을 전송한다.
-    *
-    * @author: sse
-    **/
     @Transactional
     public void createUser(CreateAccountRequest request) {
         Environment environment = environmentRepository.findById(request.getEnvironmentId()).orElseThrow(() -> {
@@ -81,12 +74,6 @@ public class UserService {
         }
 
         accountRepository.save(account);
-
-        if(environment.getPlatform().getName() == PlatformType.JOBDA) {
-            URI uri = URI.create(environment.getServerDomain()+ AuthApiClient.getAccountInfoPath);
-            String email = authApiClient.getAccountInfo(uri, AuthApiClient.tokenType + token).getEmail();
-            mailService.sendMail(email);
-        }
     }
 
     /**

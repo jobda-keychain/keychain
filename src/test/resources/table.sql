@@ -11,8 +11,6 @@ CREATE TABLE environment
     server_domain VARCHAR(255) NOT NULL,
     client_domain VARCHAR(255) NOT NULL,
     platform_id  VARCHAR(255) NOT NULL,
-    created_at DATETIME NOT NULL,
-    last_modified_at DATETIME NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (platform_id)
         REFERENCES platform (id) ON DELETE CASCADE
@@ -25,8 +23,6 @@ CREATE TABLE account
     password       VARCHAR(20)  NOT NULL,
     description    VARCHAR(100) NOT NULL,
     environment_id VARCHAR(255) NOT NULL,
-    created_at DATETIME NOT NULL,
-    last_modified_at DATETIME NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (environment_id)
         REFERENCES environment (id) ON DELETE CASCADE
