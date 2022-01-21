@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -69,6 +70,7 @@ public class EnvironmentService {
      * 환경 수정
      * 환경에 속한 사람이 있는 경우 400
      * 환경에 속한 사람이 없는 경우에는 name과 도메인 수정이 가능
+     * 동일한 플랫폼에 중복된 이름의 환경이 있는지 확인 -> 동일한 환경이면 수정, 다른 환경이면 409
      *
      * @author: syxxn
      **/
@@ -76,8 +78,10 @@ public class EnvironmentService {
     public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
         Environment environment = getEnvironment(id);
         existsAccount(environment);
-        existsSameName(environment.getPlatform(), request.getName());
-
+        Optional<Environment> duplicateNameEnvironment = environmentRepository.findByPlatformAndName(environment.getPlatform(), request.getName());
+        if (duplicateNameEnvironment.isPresent() && !environment.getId().equals(duplicateNameEnvironment.get().getId())) {
+            throw new AlreadyDataExistsException("Same name exists on the platform");
+        }
         environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
     }
 

@@ -98,6 +98,26 @@ class EnvironmentControllerTest {
     }
 
     @Test
+    void 환경_수정_변경된게_없을_때() throws Exception {
+        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("dv", "https://www.midasit.com", "https://www.midasit.com");
+
+        mvc.perform(put("/environments/" + environmentId_delete_200)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andDo(print()).andExpect(status().isNoContent());
+    }
+
+    @Test
+    void 환경_수정_겹치는_게_있을_때() throws Exception {
+        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("dv", "https://www.midasit.com", "https://www.midasit.com");
+
+        mvc.perform(put("/environments/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andDo(print()).andExpect(status().isConflict());
+    }
+
+    @Test
     void 환경_수정_유저O() throws Exception {
         UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("pr-3", "https://www.midasit.com", "https://www.midasit.com");
 
