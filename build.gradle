@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.6.2'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'jacoco'
 }
 
 group = 'com.jobda'
@@ -23,6 +24,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.0'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 
     //querydsl
     implementation 'com.querydsl:querydsl-jpa'
@@ -57,6 +59,25 @@ test {
 jar {
     enabled = false
 }
+
 clean {
     delete file('src/main/generated')
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, include: ['**/controller/**', '**/service/**'])
+                }))
+    }
 }
