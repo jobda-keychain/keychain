@@ -169,19 +169,12 @@ class UserControllerTest {
     @Test
     void 계정수정_409() throws Exception {
 //        todo 409는 나중에 해야할 거 같아요. 원인을 모르겠어요...
-//        mvc.perform(put("/accounts/1")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(
-//                        new ObjectMapper().writeValueAsString( new UpdateAccountRequest("sasy0113", "ssy0113", "d"))
-//                )
-//        );
-//
-//        mvc.perform(get("/accounts?page=0&size=10")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                ).andDo(it-> {
-//            System.out.println(it.getResponse().getContentAsString());
-//        });
-
+        mvc.perform(put("/accounts/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                        new ObjectMapper().writeValueAsString(new UpdateAccountRequest("sasy0113", "ssy0113", "d"))
+                )
+        ).andExpect(status().isConflict());
     }
 
     @Test

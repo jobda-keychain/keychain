@@ -104,6 +104,9 @@ public class UserService {
 
         account.changeInfo(request.getUserId(), request.getPassword(), request.getDescription());
 
+        if (accountRepository.findByUserIdAndEnvironment(account.getUserId(), account.getEnvironment()).size() != 1)
+            throw new DataNotFoundException("Same Account is already exists");
+
         Environment environment = account.getEnvironment();
 
         String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
@@ -111,8 +114,6 @@ public class UserService {
         if (token == null || token.isBlank()) {
             throw UnableLoginException.EXCEPTION;
         }
-
-        accountRepository.save(account);
 
         return UpdateAccountResponse.builder()
                 .id(account.getId())
