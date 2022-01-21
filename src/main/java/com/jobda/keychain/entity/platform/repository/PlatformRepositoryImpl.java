@@ -53,7 +53,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
                 querydsl().applyPagination(pageable, query);
 
         List<SelectUserDto> list = selectUserDtoJPQLQuery.fetch();
-        return new PageImpl<>(list, pageable, list.size());
+        return new PageImpl<>(list, pageable, selectUserDtoJPQLQuery.fetchCount());
     }
 
     private Querydsl querydsl() {
@@ -65,6 +65,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     private BooleanExpression environmentIdsIn(List<Long> environmentIds) {
-        return environmentIds != null ? environment.id.in(environmentIds) : null;
+        if(environmentIds == null || environmentIds.size() <= 0) return null;
+        return environment.id.in(environmentIds);
     }
 }
