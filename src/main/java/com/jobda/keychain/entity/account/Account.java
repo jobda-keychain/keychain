@@ -1,5 +1,6 @@
 package com.jobda.keychain.entity.account;
 
+import com.jobda.keychain.entity.BaseLastModifiedAtEntity;
 import com.jobda.keychain.entity.environment.Environment;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +21,7 @@ import javax.persistence.UniqueConstraint;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "environment_id"}))
-public class Account {
+public class Account extends BaseLastModifiedAtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +46,6 @@ public class Account {
         account.password = password;
         account.environment = environment;
         account.description = description;
-
         return account;
     }
 
