@@ -1,10 +1,13 @@
 package com.jobda.keychain.utils;
 
+import lombok.experimental.UtilityClass;
+
 import javax.servlet.http.HttpServletRequest;
 
+@UtilityClass
 public class LogUtil {
 
-    public static String getClientIp(HttpServletRequest request) {
+    public String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
 
         boolean b = ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip);
