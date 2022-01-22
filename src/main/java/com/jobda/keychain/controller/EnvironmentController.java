@@ -4,10 +4,8 @@ import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
-import com.jobda.keychain.entity.log.MethodType;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.service.EnvironmentService;
-import com.jobda.keychain.service.LogService;
 import com.jobda.keychain.utils.LogUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,16 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -37,14 +26,12 @@ import javax.validation.Valid;
 public class EnvironmentController {
 
     private final EnvironmentService environmentService;
-    private final LogService logService;
 
     @Operation(tags=  "환경", summary = "환경 추가", description = "환경을 추가한다.(성공하면 201)")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void addEnvironment(HttpServletRequest servletRequest, @RequestBody @Valid AddEnvironmentRequest request) {
-        environmentService.addEnvironment(request);
-        logService.saveRequestLog(LogUtil.getClientIp(servletRequest), MethodType.ADD_ENVIRONMENT);
+        environmentService.addEnvironment(LogUtil.getClientIp(servletRequest), request);
     }
 
     @Operation(tags=  "환경", summary = "환경 목록", description = "환경 관리 페이지에서 환경의 정보를 불러온다.(성공하면 200)")
@@ -62,8 +49,7 @@ public class EnvironmentController {
     public void updateEnvironment(HttpServletRequest servletRequest,
                                   @Parameter(description = "환경의 PK") @PathVariable long id,
                                   @RequestBody @Valid UpdateEnvironmentRequest request) {
-        environmentService.updateEnvironment(id, request);
-        logService.saveRequestLog(LogUtil.getClientIp(servletRequest), MethodType.UPDATE_ENVIRONMENT);
+        environmentService.updateEnvironment(LogUtil.getClientIp(servletRequest), id, request);
     }
 
     @Operation(tags=  "환경", summary = "환경 삭제", description = "환경에 계정이 속해있지 않다면 정보를 삭제할 수 있다.(성공하면 204)")
@@ -71,8 +57,7 @@ public class EnvironmentController {
     @DeleteMapping("/{id}")
     public void deleteEnvironment(HttpServletRequest servletRequest,
                                   @Parameter(description = "환경의 PK") @PathVariable long id) {
-        environmentService.deleteEnvironment(id);
-        logService.saveRequestLog(LogUtil.getClientIp(servletRequest), MethodType.DELETE_ENVIRONMENT);
+        environmentService.deleteEnvironment(LogUtil.getClientIp(servletRequest), id);
     }
 
     @Operation(tags=  "환경", summary = "환경 검색을 위한 목록", description = "환경 이름 불러오기(성공하면 200)")
