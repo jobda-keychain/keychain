@@ -114,26 +114,26 @@ public class EnvironmentService {
     private Platform getPlatform(PlatformType platformType) {
         return platformRepository.findByName(platformType)
                 .orElseThrow(() -> {
-                    throw new DataNotFoundException("Platform not found");
+                    throw new DataNotFoundException("platform not found");
                 });
     }
 
     private Environment getEnvironment(long id) {
         return environmentRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new DataNotFoundException("Environment is not found");
+                    throw new DataNotFoundException("environment not found");
                 });
     }
 
     private void existsSameName(Platform platform, String name) {
         if (environmentRepository.existsByPlatformAndName(platform, name)) {
-            throw new AlreadyDataExistsException("Same name exists on the platform");
+            throw new AlreadyDataExistsException("same name exists on the platform");
         }
     }
 
     private void existsAccount(Environment environment) {
         if (environment.getAccounts().size() != 0) {
-            throw new BadRequestException("Still have accounts in this environment");
+            throw new BadRequestException("still have accounts in this environment");
         }
     }
 

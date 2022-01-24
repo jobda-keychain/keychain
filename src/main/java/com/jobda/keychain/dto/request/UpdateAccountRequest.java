@@ -16,7 +16,7 @@ public class UpdateAccountRequest {
     @Schema(description = "계정 아이디", minLength = 2, maxLength = 20)
     @NotBlank
     @Length(min = 2, max = 20)
-    private String userId;
+    private String accountId;
 
     @Schema(description = "계정 패스워드", minLength = 2, maxLength = 20)
     @NotBlank

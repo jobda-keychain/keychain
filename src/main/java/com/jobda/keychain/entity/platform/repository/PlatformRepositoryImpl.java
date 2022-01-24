@@ -1,6 +1,6 @@
 package com.jobda.keychain.entity.platform.repository;
 
-import com.jobda.keychain.dto.response.SelectUserDto;
+import com.jobda.keychain.dto.response.SelectAccountDto;
 import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.querydsl.core.types.Projections;
@@ -31,12 +31,12 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
-    public Page<SelectUserDto> selectUser(Pageable pageable, PlatformType serviceType, List<Long> environmentIds) {
-        JPAQuery<SelectUserDto> query =
+    public Page<SelectAccountDto> selectAccount(Pageable pageable, PlatformType serviceType, List<Long> environmentIds) {
+        JPAQuery<SelectAccountDto> query =
                 queryFactory.select(Projections.fields(
-                                        SelectUserDto.class,
+                                        SelectAccountDto.class,
                                         account.id,
-                                        account.userId,
+                                        account.accountId,
                                         account.environment.platform.name.as("platform"),
                                         account.environment.name.as("environment"),
                                         account.description
@@ -49,10 +49,10 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
                         .where(environmentIdsIn(environmentIds))
                         .orderBy(account.createdAt.desc());
 
-        JPQLQuery<SelectUserDto> selectUserDtoJPQLQuery =
+        JPQLQuery<SelectAccountDto> selectUserDtoJPQLQuery =
                 querydsl().applyPagination(pageable, query);
 
-        List<SelectUserDto> list = selectUserDtoJPQLQuery.fetch();
+        List<SelectAccountDto> list = selectUserDtoJPQLQuery.fetch();
         return new PageImpl<>(list, pageable, selectUserDtoJPQLQuery.fetchCount());
     }
 

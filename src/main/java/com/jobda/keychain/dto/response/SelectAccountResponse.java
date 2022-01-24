@@ -8,9 +8,9 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class SelectUserResponse {
+public class SelectAccountResponse {
 
-    private final List<SelectUserDto> data;
+    private final List<SelectAccountDto> data;
     private final int totalPages;
 
 }

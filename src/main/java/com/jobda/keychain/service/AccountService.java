@@ -5,8 +5,8 @@ import com.jobda.keychain.dto.request.CreateAccountRequest;
 import com.jobda.keychain.dto.request.LoginApiRequest;
 import com.jobda.keychain.dto.request.UpdateAccountRequest;
 import com.jobda.keychain.dto.response.DetailsResponse;
-import com.jobda.keychain.dto.response.SelectUserDto;
-import com.jobda.keychain.dto.response.SelectUserResponse;
+import com.jobda.keychain.dto.response.SelectAccountDto;
+import com.jobda.keychain.dto.response.SelectAccountResponse;
 import com.jobda.keychain.dto.response.TokenResponse;
 import com.jobda.keychain.dto.response.UpdateAccountResponse;
 import com.jobda.keychain.entity.account.Account;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class UserService {
+public class AccountService {
 
     private final AccountRepository accountRepository;
     private final EnvironmentRepository environmentRepository;
@@ -67,14 +67,14 @@ public class UserService {
     * @author: sse
     **/
     @Transactional
-    public void createUser(CreateAccountRequest request) {
+    public void createAccount(CreateAccountRequest request) {
         Environment environment = environmentRepository.findById(request.getEnvironmentId()).orElseThrow(() -> {
-            throw new DataNotFoundException("Environment Not Found");
+            throw new DataNotFoundException("environment not found");
         });
 
-        Account account = Account.createAccount(request.getUserId(), request.getPassword(), environment, request.getDescription());
+        Account account = Account.createAccount(request.getAccountId(), request.getPassword(), environment, request.getDescription());
 
-        String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
+        String token = callLoginApi(account.getAccountId(), account.getPassword(), environment.getServerDomain());
 
         if (token == null || token.isBlank()) {
             throw UnableLoginException.EXCEPTION;
@@ -99,14 +99,14 @@ public class UserService {
      * @author: sse
      **/
     @Transactional
-    public UpdateAccountResponse updateUser(long id, UpdateAccountRequest request) {
-        Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("User not found"));
+    public UpdateAccountResponse updateAccount(long id, UpdateAccountRequest request) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("account not found"));
 
-        account.changeInfo(request.getUserId(), request.getPassword(), request.getDescription());
+        account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
 
         Environment environment = account.getEnvironment();
 
-        String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
+        String token = callLoginApi(account.getAccountId(), account.getPassword(), environment.getServerDomain());
 
         if (token == null || token.isBlank()) {
             throw UnableLoginException.EXCEPTION;
@@ -116,7 +116,7 @@ public class UserService {
 
         return UpdateAccountResponse.builder()
                 .id(account.getId())
-                .userId(account.getUserId())
+                .accountId(account.getAccountId())
                 .password(account.getPassword())
                 .platform(environment.getPlatform().getName())
                 .environment(environment.getName())
@@ -125,29 +125,29 @@ public class UserService {
 
     }
 
-    public SelectUserResponse selectUser(Pageable pageable, PlatformType platform, List<Long> environmentIds) {
-        Page<SelectUserDto> selectUser = platformRepository.selectUser(pageable, platform, environmentIds);
-        List<SelectUserDto> selectUserDtoList = selectUser.stream()
-                .map(SelectUserDto::of)
+    public SelectAccountResponse selectAccount(Pageable pageable, PlatformType platform, List<Long> environmentIds) {
+        Page<SelectAccountDto> selectAccount = platformRepository.selectAccount(pageable, platform, environmentIds);
+        List<SelectAccountDto> selectAccountDtoList = selectAccount.stream()
+                .map(SelectAccountDto::of)
                 .collect(Collectors.toList());
 
-        return SelectUserResponse.builder()
-                .data(selectUserDtoList)
-                .totalPages(selectUser.getTotalPages())
+        return SelectAccountResponse.builder()
+                .data(selectAccountDtoList)
+                .totalPages(selectAccount.getTotalPages())
                 .build();
     }
 
-    public DetailsResponse detailsUser(long id) {
+    public DetailsResponse detailsAccount(long id) {
         Account account = accountRepository.findById(id).orElseThrow(() -> {
-            throw new DataNotFoundException("User Not Found");
+            throw new DataNotFoundException("account not found");
         });
         return DetailsResponse.of(account);
     }
 
     @Transactional
-    public void deleteUser(long id) {
+    public void deleteAccount(long id) {
         accountRepository.findById(id).orElseThrow(() -> {
-            throw new DataNotFoundException("User Not Found");
+            throw new DataNotFoundException("account not found");
         });
         accountRepository.deleteById(id);
     }
@@ -159,10 +159,10 @@ public class UserService {
      * @author: sse
      **/
     public TokenResponse getToken(Long id) {
-        Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("User is not found"));
+        Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("account not found"));
         Environment environment = account.getEnvironment();
 
-        String token = callLoginApi(account.getUserId(), account.getPassword(), environment.getServerDomain());
+        String token = callLoginApi(account.getAccountId(), account.getPassword(), environment.getServerDomain());
 
         return new TokenResponse(token, environment.getClientDomain());
     }
