@@ -17,6 +17,7 @@ import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class EnvironmentService {
     private final PlatformRepository platformRepository;
     private final EnvironmentRepository environmentRepository;
 
-    private final LogEventHandler logEventHandler;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * platform에 동일한 환경 이름이 존재한다면 409
@@ -49,7 +50,7 @@ public class EnvironmentService {
 
         Environment environment = Environment.createEnvironment(request.getName(), request.getServerDomain(), request.getClientDomain(), platform);
         environmentRepository.save(environment);
-        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.ADD_ENVIRONMENT));
+        eventPublisher.publishEvent(new LogEvent(clientIpAddress, MethodType.ADD_ENVIRONMENT));
     }
 
     /**
@@ -84,7 +85,7 @@ public class EnvironmentService {
         existsSameName(environment.getPlatform(), request.getName());
 
         environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
-        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.UPDATE_ENVIRONMENT));
+        eventPublisher.publishEvent(new LogEvent(clientIpAddress, MethodType.UPDATE_ENVIRONMENT));
     }
 
     /**
@@ -100,7 +101,7 @@ public class EnvironmentService {
         existsAccount(environment);
 
         environmentRepository.delete(environment);
-        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.DELETE_ENVIRONMENT));
+        eventPublisher.publishEvent(new LogEvent(clientIpAddress, MethodType.DELETE_ENVIRONMENT));
     }
 
     /**
