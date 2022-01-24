@@ -16,14 +16,12 @@ import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.log.MethodType;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
-
 import com.jobda.keychain.event.LogEvent;
-import com.jobda.keychain.event.handler.LogEventHandler;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
-
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -45,7 +42,7 @@ public class AccountService {
     private final PlatformRepository platformRepository;
     private final MailService mailService;
 
-    private final LogEventHandler logEventHandler;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * 외부 로그인 API 호출 메서드
@@ -86,7 +83,7 @@ public class AccountService {
         }
 
         accountRepository.save(account);
-        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.ADD_ACCOUNT));
+        eventPublisher.publishEvent(new LogEvent(clientIpAddress, MethodType.ADD_ACCOUNT));
 
         if(environment.getPlatform().getName() == PlatformType.JOBDA) {
             URI uri = URI.create(environment.getServerDomain()+ AuthApiClient.getAccountInfoPath);
@@ -129,7 +126,8 @@ public class AccountService {
                 .environment(environment.getName())
                 .description(account.getDescription())
                 .build();
-        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.UPDATE_ACCOUNT));
+
+        eventPublisher.publishEvent(new LogEvent(clientIpAddress, MethodType.UPDATE_ACCOUNT));
         return response;
     }
 
@@ -150,7 +148,7 @@ public class AccountService {
             throw new DataNotFoundException("account not found");
         });
         DetailsResponse response = DetailsResponse.of(account);
-        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.DETAILS_ACCOUNT));
+        eventPublisher.publishEvent(new LogEvent(clientIpAddress, MethodType.DETAILS_ACCOUNT));
         return response;
     }
 
@@ -160,7 +158,7 @@ public class AccountService {
             throw new DataNotFoundException("account not found");
         });
         accountRepository.deleteById(id);
-        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.DELETE_ACCOUNT));
+        eventPublisher.publishEvent(new LogEvent(clientIpAddress, MethodType.DELETE_ACCOUNT));
     }
 
     /**
