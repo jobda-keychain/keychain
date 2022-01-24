@@ -1,8 +1,8 @@
 server:
   port: 8080
-  profiles:
-    active: local # 만약 application-prod.yml 파일을 로딩하고 싶다면, prod
 spring:
+  profiles:
+    default: h2 # mysql : prod
   jpa:
     open-in-view: false
   mail:
