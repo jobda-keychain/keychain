@@ -111,7 +111,7 @@ class EnvironmentControllerTest {
     void 환경_수정_겹치는_게_있을_때() throws Exception {
         UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("dv", "https://www.midasit.com", "https://www.midasit.com");
 
-        mvc.perform(put("/environments/5")
+        mvc.perform(put("/environments/6")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
         ).andDo(print()).andExpect(status().isConflict());

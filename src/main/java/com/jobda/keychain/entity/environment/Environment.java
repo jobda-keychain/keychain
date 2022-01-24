@@ -1,5 +1,6 @@
 package com.jobda.keychain.entity.environment;
 
+import com.jobda.keychain.entity.BaseLastModifiedAtEntity;
 import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.platform.Platform;
 import lombok.AccessLevel;
@@ -25,7 +26,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "platform_id"}))
-public class Environment {
+public class Environment extends BaseLastModifiedAtEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
