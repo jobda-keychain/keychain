@@ -46,8 +46,7 @@ public class PlatformRepositoryImpl extends QuerydslRepositorySupport implements
                         .join(platform.environments, environment)
                         .join(environment.accounts, account)
                         .where(serviceTypeEq(serviceType))
-                        .where(environmentIdsIn(environmentIds))
-                        .orderBy(account.createdAt.desc());
+                        .where(environmentIdsIn(environmentIds));
 
         JPQLQuery<SelectAccountDto> selectUserDtoJPQLQuery =
                 querydsl().applyPagination(pageable, query);

@@ -37,9 +37,10 @@ public class EnvironmentController {
     @Operation(tags=  "환경", summary = "환경 목록", description = "환경 관리 페이지에서 환경의 정보를 불러온다.(성공하면 200)")
     @GetMapping
     public EnvironmentsResponse getEnvironments(@Parameter(description = "가지고 오고 싶은 요소의 개수") @RequestParam(value = "size") int size,
-                                                @Parameter(description = "몇 번째 페이지부터 갖고올지(0부터 시작)") @RequestParam(value = "page") int page) {
+                                                @Parameter(description = "몇 번째 페이지부터 갖고올지(0부터 시작)") @RequestParam(value = "page") int page,
+                                                @Parameter(description = "플랫폼 타입(JOBDA, JOBDA_CMS)") @RequestParam(value = "platform", required = false) PlatformType platformType) {
         Pageable pageable = PageRequest.of(page, size);
-        return environmentService.getEnvironments(pageable);
+        return environmentService.getEnvironments(pageable, platformType);
     }
 
 

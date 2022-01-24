@@ -19,18 +19,3 @@ spring:
       data-locations: classpath:data.sql
       schema-locations: classpath:table.sql
       mode: always
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username:
-    password:
-    properties:
-      mail:
-        smtp:
-          auth: true
-          protocol: smtp
-          starttls:
-            enable: true
-          ssl:
-            trust: smtp.gmail.com
-            protocols: TLSv1.2
