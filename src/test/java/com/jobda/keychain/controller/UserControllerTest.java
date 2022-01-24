@@ -38,7 +38,7 @@ class UserControllerTest {
     @Test
     void 계정추가_201() throws Exception {
 
-        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 1L);
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 6L);
 
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -89,12 +89,7 @@ class UserControllerTest {
 
     @Test
     void 계정추가_중복_409() throws Exception {
-        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 1L);
-
-        mvc.perform(post("/accounts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(createAccountRequest))
-        );
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 5L);
 
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +103,7 @@ class UserControllerTest {
     void 계정수정_201() throws Exception {
         UpdateAccountRequest updateAccountRequest = new UpdateAccountRequest("sasy0113", "ssy0113", "o");
 
-        mvc.perform(put("/accounts/1")
+        mvc.perform(put("/accounts/5")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(updateAccountRequest))
         ).andExpect(status().isCreated());
@@ -168,8 +163,7 @@ class UserControllerTest {
 
     @Test
     void 계정수정_409() throws Exception {
-//        todo 409는 나중에 해야할 거 같아요. 원인을 모르겠어요...
-        mvc.perform(put("/accounts/2")
+        mvc.perform(put("/accounts/6")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                         new ObjectMapper().writeValueAsString(new UpdateAccountRequest("sasy0113", "ssy0113", "d"))
@@ -179,7 +173,7 @@ class UserControllerTest {
 
     @Test
     void 계정_자동_로그인_200() throws Exception {
-        mvc.perform(post("/accounts/1").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(post("/accounts/5").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
