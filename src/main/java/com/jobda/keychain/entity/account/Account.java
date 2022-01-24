@@ -20,15 +20,15 @@ import javax.persistence.UniqueConstraint;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "environment_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"account_id", "environment_id"}))
 public class Account extends BaseLastModifiedAtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", length = 20, nullable = false)
-    private String userId;
+    @Column(name = "account_id", length = 20, nullable = false)
+    private String accountId;
 
     @Column(length = 20, nullable = false)
     private String password;
@@ -40,17 +40,17 @@ public class Account extends BaseLastModifiedAtEntity {
     @JoinColumn(name = "environment_id", nullable = false)
     private Environment environment;
 
-    public static Account createAccount(String userId, String password, Environment environment, String description) {
+    public static Account createAccount(String accountId, String password, Environment environment, String description) {
         Account account = new Account();
-        account.userId = userId;
+        account.accountId = accountId;
         account.password = password;
         account.environment = environment;
         account.description = description;
         return account;
     }
 
-    public void changeInfo(String userId, String password, String description) {
-        this.userId = userId;
+    public void changeInfo(String accountId, String password, String description) {
+        this.accountId = accountId;
         this.password = password;
         this.description = description;
     }

@@ -12,7 +12,7 @@ public class UpdateAccountResponse {
 
     private final Long id;
 
-    private final String userId;
+    private final String accountId;
 
     private final String password;
 

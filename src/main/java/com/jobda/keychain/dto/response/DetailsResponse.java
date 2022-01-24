@@ -9,7 +9,7 @@ public class DetailsResponse {
 
     private Long id;
 
-    private String userId;
+    private String accountId;
 
     private String password;
 
@@ -22,7 +22,7 @@ public class DetailsResponse {
     public static DetailsResponse of(Account account) {
         DetailsResponse detailsResponse = new DetailsResponse();
         detailsResponse.id = account.getId();
-        detailsResponse.userId = account.getUserId();
+        detailsResponse.accountId = account.getAccountId();
         detailsResponse.password = account.getPassword();
         detailsResponse.platform = account.getEnvironment().getPlatform().getName();
         detailsResponse.environment = DetailsAccountEnvironmentDto.of(account.getEnvironment());

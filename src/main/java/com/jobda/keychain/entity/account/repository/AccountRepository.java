@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface AccountRepository extends CrudRepository<Account, Long> {
-    List<Account> findByUserIdAndEnvironment(String userId, Environment environment);
+    List<Account> findByAccountIdAndEnvironment(String accountId, Environment environment);
 }
