@@ -13,9 +13,12 @@ import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
+import com.jobda.keychain.entity.log.MethodType;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 
+import com.jobda.keychain.event.LogEvent;
+import com.jobda.keychain.event.handler.LogEventHandler;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 
@@ -42,6 +45,8 @@ public class UserService {
     private final PlatformRepository platformRepository;
     private final MailService mailService;
 
+    private final LogEventHandler logEventHandler;
+
     /**
      * 외부 로그인 API 호출 메서드
      * 성공 시 Token 발급, 실패 시 UnableLoginException 발생
@@ -67,7 +72,7 @@ public class UserService {
     * @author: sse
     **/
     @Transactional
-    public void createUser(CreateAccountRequest request) {
+    public void createUser(String clientIpAddress, CreateAccountRequest request) {
         Environment environment = environmentRepository.findById(request.getEnvironmentId()).orElseThrow(() -> {
             throw new DataNotFoundException("Environment Not Found");
         });
@@ -81,6 +86,7 @@ public class UserService {
         }
 
         accountRepository.save(account);
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.ADD_ACCOUNT));
 
         if(environment.getPlatform().getName() == PlatformType.JOBDA) {
             URI uri = URI.create(environment.getServerDomain()+ AuthApiClient.getAccountInfoPath);
@@ -99,7 +105,7 @@ public class UserService {
      * @author: sse
      **/
     @Transactional
-    public UpdateAccountResponse updateUser(long id, UpdateAccountRequest request) {
+    public UpdateAccountResponse updateUser(String clientIpAddress, long id, UpdateAccountRequest request) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("User not found"));
 
         account.changeInfo(request.getUserId(), request.getPassword(), request.getDescription());
@@ -115,7 +121,7 @@ public class UserService {
             throw UnableLoginException.EXCEPTION;
         }
 
-        return UpdateAccountResponse.builder()
+        UpdateAccountResponse response = UpdateAccountResponse.builder()
                 .id(account.getId())
                 .userId(account.getUserId())
                 .password(account.getPassword())
@@ -123,7 +129,8 @@ public class UserService {
                 .environment(environment.getName())
                 .description(account.getDescription())
                 .build();
-
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.UPDATE_ACCOUNT));
+        return response;
     }
 
     public SelectUserResponse selectUser(Pageable pageable, PlatformType platform, List<Long> environmentIds) {
@@ -138,19 +145,22 @@ public class UserService {
                 .build();
     }
 
-    public DetailsResponse detailsUser(long id) {
+    public DetailsResponse detailsUser(String clientIpAddress, long id) {
         Account account = accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("User Not Found");
         });
-        return DetailsResponse.of(account);
+        DetailsResponse response = DetailsResponse.of(account);
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.DETAILS_ACCOUNT));
+        return response;
     }
 
     @Transactional
-    public void deleteUser(long id) {
+    public void deleteUser(String clientIpAddress, long id) {
         accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("User Not Found");
         });
         accountRepository.deleteById(id);
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.DELETE_ACCOUNT));
     }
 
     /**

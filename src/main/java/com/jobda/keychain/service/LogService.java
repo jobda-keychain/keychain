@@ -1,7 +1,7 @@
 package com.jobda.keychain.service;
 
-import com.jobda.keychain.entity.log.RequestLog;
 import com.jobda.keychain.entity.log.MethodType;
+import com.jobda.keychain.entity.log.RequestLog;
 import com.jobda.keychain.entity.log.repository.RequestLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,8 @@ public class LogService {
     private final RequestLogRepository requestLogRepository;
 
     @Transactional
-    public void saveRequestLog(String clientIpAddress, MethodType methodType) {
-        String clientAddress = clientIpAddress;
-
-        RequestLog requestLog = RequestLog.createLog(methodType, clientAddress);
+    public void saveRequestLog(MethodType methodType, String clientIpAddress) {
+        RequestLog requestLog = RequestLog.createLog(methodType, clientIpAddress);
         requestLogRepository.save(requestLog);
     }
 

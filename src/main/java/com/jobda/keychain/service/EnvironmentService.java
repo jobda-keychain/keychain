@@ -7,9 +7,12 @@ import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse.EnvironmentDto;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
+import com.jobda.keychain.entity.log.MethodType;
 import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
+import com.jobda.keychain.event.LogEvent;
+import com.jobda.keychain.event.handler.LogEventHandler;
 import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
@@ -30,6 +33,8 @@ public class EnvironmentService {
     private final PlatformRepository platformRepository;
     private final EnvironmentRepository environmentRepository;
 
+    private final LogEventHandler logEventHandler;
+
     /**
      * platform에 동일한 환경 이름이 존재한다면 409
      * environment에 platform이 속해있다.
@@ -37,13 +42,14 @@ public class EnvironmentService {
      * @author: syxxn
      **/
     @Transactional
-    public void addEnvironment(AddEnvironmentRequest request) {
+    public void addEnvironment(String clientIpAddress, AddEnvironmentRequest request) {
         Platform platform = getPlatform(request.getPlatform());
 
         existsSameName(platform, request.getName());
 
         Environment environment = Environment.createEnvironment(request.getName(), request.getServerDomain(), request.getClientDomain(), platform);
         environmentRepository.save(environment);
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.ADD_ENVIRONMENT));
     }
 
     /**
@@ -72,12 +78,13 @@ public class EnvironmentService {
      * @author: syxxn
      **/
     @Transactional
-    public void updateEnvironment(long id, UpdateEnvironmentRequest request) {
+    public void updateEnvironment(String clientIpAddress, long id, UpdateEnvironmentRequest request) {
         Environment environment = getEnvironment(id);
         existsAccount(environment);
         existsSameName(environment.getPlatform(), request.getName());
 
         environment.update(request.getName(), request.getServerDomain(), request.getClientDomain());
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.UPDATE_ENVIRONMENT));
     }
 
     /**
@@ -88,11 +95,12 @@ public class EnvironmentService {
      * @author: syxxn
      **/
     @Transactional
-    public void deleteEnvironment(long id) {
+    public void deleteEnvironment(String clientIpAddress, long id) {
         Environment environment = getEnvironment(id);
         existsAccount(environment);
 
         environmentRepository.delete(environment);
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.DELETE_ENVIRONMENT));
     }
 
     /**
@@ -101,7 +109,7 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
-    public PlatformEnvironmentsResponse getEnvironmentsOfService(PlatformType platformType) {
+    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform(PlatformType platformType) {
         List<Environment> environments = environmentRepository.findAllByPlatformType(platformType);
 
         List<EnvironmentDto> environmentsDtoList = environments.stream()
