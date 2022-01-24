@@ -106,11 +106,11 @@ public class AccountService {
      **/
     @Transactional
     public UpdateAccountResponse updateAccount(String clientIpAddress, long id, UpdateAccountRequest request) {
-        Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("User not found"));
+        Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("account not found"));
 
         account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
 
-        if (accountRepository.findByUserIdAndEnvironment(account.getUserId(), account.getEnvironment()).size() != 1)
+        if (accountRepository.findByAccountIdAndEnvironment(account.getAccountId(), account.getEnvironment()).size() != 1)
             throw new DataNotFoundException("Same Account is already exists");
 
         Environment environment = account.getEnvironment();

@@ -33,8 +33,8 @@ public class AccountController {
     @Operation(tags=  "계정", summary = "계정 정보 추가", description = "계정을 추가하는 API")
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void createUser(HttpServletRequest servletRequest,
-                           @RequestBody @Valid CreateAccountRequest request) {
+    public void createAccount(HttpServletRequest servletRequest,
+                              @RequestBody @Valid CreateAccountRequest request) {
         accountService.createAccount(LogUtil.getClientIp(servletRequest), request);
     }
 

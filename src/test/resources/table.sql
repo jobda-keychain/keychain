@@ -30,7 +30,7 @@ CREATE TABLE account
     PRIMARY KEY (id),
     FOREIGN KEY (environment_id)
         REFERENCES environment (id) ON DELETE CASCADE,
-    UNIQUE uq(user_id, environment_id)
+    UNIQUE uq(account_id, environment_id)
 );
 
 CREATE TABLE log(
