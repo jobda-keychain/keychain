@@ -13,9 +13,12 @@ import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.account.repository.AccountRepository;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
+import com.jobda.keychain.entity.log.MethodType;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 
+import com.jobda.keychain.event.LogEvent;
+import com.jobda.keychain.event.handler.LogEventHandler;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 
@@ -42,6 +45,8 @@ public class AccountService {
     private final PlatformRepository platformRepository;
     private final MailService mailService;
 
+    private final LogEventHandler logEventHandler;
+
     /**
      * 외부 로그인 API 호출 메서드
      * 성공 시 Token 발급, 실패 시 UnableLoginException 발생
@@ -67,7 +72,7 @@ public class AccountService {
     * @author: sse
     **/
     @Transactional
-    public void createAccount(CreateAccountRequest request) {
+    public void createAccount(String clientIpAddress, CreateAccountRequest request) {
         Environment environment = environmentRepository.findById(request.getEnvironmentId()).orElseThrow(() -> {
             throw new DataNotFoundException("environment not found");
         });
@@ -81,6 +86,7 @@ public class AccountService {
         }
 
         accountRepository.save(account);
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.ADD_ACCOUNT));
 
         if(environment.getPlatform().getName() == PlatformType.JOBDA) {
             URI uri = URI.create(environment.getServerDomain()+ AuthApiClient.getAccountInfoPath);
@@ -99,8 +105,8 @@ public class AccountService {
      * @author: sse
      **/
     @Transactional
-    public UpdateAccountResponse updateAccount(long id, UpdateAccountRequest request) {
-        Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("account not found"));
+    public UpdateAccountResponse updateAccount(String clientIpAddress, long id, UpdateAccountRequest request) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("User not found"));
 
         account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
 
@@ -114,7 +120,7 @@ public class AccountService {
 
         accountRepository.save(account);
 
-        return UpdateAccountResponse.builder()
+        UpdateAccountResponse response = UpdateAccountResponse.builder()
                 .id(account.getId())
                 .accountId(account.getAccountId())
                 .password(account.getPassword())
@@ -122,7 +128,8 @@ public class AccountService {
                 .environment(environment.getName())
                 .description(account.getDescription())
                 .build();
-
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.UPDATE_ACCOUNT));
+        return response;
     }
 
     public SelectAccountResponse selectAccount(Pageable pageable, PlatformType platform, List<Long> environmentIds) {
@@ -137,19 +144,22 @@ public class AccountService {
                 .build();
     }
 
-    public DetailsResponse detailsAccount(long id) {
+    public DetailsResponse detailsAccount(String clientIpAddress, long id) {
         Account account = accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("account not found");
         });
-        return DetailsResponse.of(account);
+        DetailsResponse response = DetailsResponse.of(account);
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.DETAILS_ACCOUNT));
+        return response;
     }
 
     @Transactional
-    public void deleteAccount(long id) {
+    public void deleteAccount(String clientIpAddress, long id) {
         accountRepository.findById(id).orElseThrow(() -> {
             throw new DataNotFoundException("account not found");
         });
         accountRepository.deleteById(id);
+        logEventHandler.saveRequestLog(new LogEvent(clientIpAddress, MethodType.DELETE_ACCOUNT));
     }
 
     /**
