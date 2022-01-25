@@ -43,4 +43,4 @@ jobs:
         aws-region: ap-northeast-2
 
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 --acl private ./springboor-with-githubaction.zip s3://springboot-with-githubaction/
+      run: aws s3 cp --region ap-northeast-2 --acl private ./jobda-keychain.zip s3://jobda-keychain/
