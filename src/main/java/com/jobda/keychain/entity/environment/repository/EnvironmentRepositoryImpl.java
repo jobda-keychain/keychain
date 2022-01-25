@@ -51,7 +51,8 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
                 queryFactory.selectFrom(environment)
                         .join(environment.platform, platform)
                         .on(platform.name.eq(environment.platform.name)))
-                        .where(platformTypeEq(platformType));
+                        .where(platformTypeEq(platformType))
+                        .orderBy(environment.createdAt.desc());
         List<Environment> list = query.fetch();
 
         return new PageImpl<>(list, page, query.fetchCount());
