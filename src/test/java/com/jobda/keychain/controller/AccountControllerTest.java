@@ -170,7 +170,7 @@ public class AccountControllerTest {
     @Test
     void 계정추가_201() throws Exception {
 
-        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 6L);
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 5L);
 
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)

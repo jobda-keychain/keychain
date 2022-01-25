@@ -52,6 +52,16 @@ class EnvironmentControllerTest {
     }
 
     @Test
+    void 환경_추가_400_없는_플랫폼() throws Exception {
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "https://github.com", "https://github.com", PlatformType.JOBDA_CMS);
+
+        mvc.perform(post("/environments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andDo(print()).andExpect(status().isNotFound());
+    }
+
+    @Test
     void 환경_추가_NPE() throws Exception {
         AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", null, PlatformType.JOBDA);
 
@@ -89,6 +99,16 @@ class EnvironmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
         ).andDo(print()).andExpect(status().isNoContent());
+    }
+
+    @Test
+    void 환경_수정_존재하지않는환경() throws Exception {
+        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("dv", "https://www.midasit.com", "https://www.midasit.com");
+
+        mvc.perform(put("/environments/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andExpect(status().isNotFound());
     }
 
     @Test
