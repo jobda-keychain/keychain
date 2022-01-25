@@ -17,6 +17,7 @@ import com.jobda.keychain.entity.log.MethodType;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import com.jobda.keychain.event.LogEvent;
+import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 import feign.FeignException;
@@ -108,7 +109,7 @@ public class AccountService {
         account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
 
         if (accountRepository.findByAccountIdAndEnvironment(account.getAccountId(), account.getEnvironment()).size() != 1)
-            throw new DataNotFoundException("Same Account is already exists");
+            throw new AlreadyDataExistsException("Same Account is already exists");
 
         Environment environment = account.getEnvironment();
 

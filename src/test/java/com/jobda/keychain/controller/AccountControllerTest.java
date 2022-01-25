@@ -179,6 +179,17 @@ public class AccountControllerTest {
     }
 
     @Test
+    void 계정추가_401() throws Exception {
+
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest("123", "123", "", 1L);
+
+        mvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(createAccountRequest))
+        ).andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void 계정추가_형식_검사_400() throws Exception {
 
         CreateAccountRequest requestWithoutId = new CreateAccountRequest(null, "ssy0113", "", 1230L);
@@ -290,6 +301,17 @@ public class AccountControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(accountRequest))
         ).andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void 계정수정_401() throws Exception {
+        UpdateAccountRequest accountRequest = new UpdateAccountRequest("testest", "ssy0113", "");
+
+        mvc.perform(put("/accounts/6")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(accountRequest))
+        ).andExpect(status().isUnauthorized());
 
     }
 
