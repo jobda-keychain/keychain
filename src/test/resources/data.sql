@@ -1,5 +1,4 @@
 INSERT INTO platform(name) values('JOBDA');
-INSERT INTO platform(name) values('JOBDA_CMS');
 
 INSERT INTO environment(name, server_domain, client_domain, created_at, last_modified_at, platform_id) values('dv', 'http://server.com', 'http://client.com', current_date(), current_date(), 1);
 INSERT INTO environment(name, server_domain, client_domain, created_at, last_modified_at, platform_id) values('dv-1', 'http://server.com', 'http://client.com', current_date(), current_date(), 1);

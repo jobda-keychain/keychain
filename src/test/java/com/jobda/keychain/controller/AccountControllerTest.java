@@ -221,7 +221,7 @@ public class AccountControllerTest {
 
     @Test
     void 계정추가_중복_409() throws Exception {
-        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 5L);
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 4L);
 
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
