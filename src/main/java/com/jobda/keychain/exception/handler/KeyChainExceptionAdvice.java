@@ -18,24 +18,34 @@ public class KeyChainExceptionAdvice {
         return new ResponseEntity<>(new ErrorResponse(e.getStatus(), e.getMessage()), HttpStatus.valueOf(e.getStatus()));
     }
 
-    @ExceptionHandler({ValidationException.class, MethodArgumentNotValidException.class})
-    protected ResponseEntity<ErrorResponse> handleValidationException() {
-        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Validation exception"), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(ValidationException.class)
+    protected ResponseEntity<ErrorResponse> handleValidationException(final ValidationException e) {
+        System.out.println(e.getCause().getMessage());
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        System.out.println(e.getCause().getMessage());
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NullPointerException.class)
-    protected ResponseEntity<ErrorResponse> handleNullPointerException() {
-        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Null pointer exception"), HttpStatus.BAD_REQUEST);
+    protected ResponseEntity<ErrorResponse> handleNullPointerException(final NullPointerException e) {
+        System.out.println("helo " + e.getCause().getMessage());
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException() {
-        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Method argument type is mismatch"), HttpStatus.BAD_REQUEST);
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException e) {
+        System.out.println(e.getCause().getMessage());
+        return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    protected ResponseEntity<ErrorResponse> handleConflictException() {
-        return new ResponseEntity<>(new ErrorResponse(409, "Data is already exists"), HttpStatus.CONFLICT);
+    protected ResponseEntity<ErrorResponse> handleConflictException(final DataIntegrityViolationException e) {
+        System.out.println(e.getCause().getMessage());
+        return new ResponseEntity<>(new ErrorResponse(409, e.getLocalizedMessage()), HttpStatus.CONFLICT);
     }
 
 }

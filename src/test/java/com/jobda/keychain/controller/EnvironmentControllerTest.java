@@ -68,7 +68,7 @@ class EnvironmentControllerTest {
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest()).andDo(print());
     }
 
     @Test
