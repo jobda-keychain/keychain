@@ -68,7 +68,7 @@ class EnvironmentControllerTest {
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest()).andDo(print());
     }
 
     @Test
@@ -79,12 +79,6 @@ class EnvironmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
         ).andExpect(status().isConflict());
-    }
-
-    @Test
-    void 서비스에_대한_환경_목록_서비스필터X() throws Exception {
-        mvc.perform(get("/environments/search")
-        ).andExpect(status().isOk()).andDo(print());
     }
 
     @Test
@@ -147,9 +141,21 @@ class EnvironmentControllerTest {
     }
 
     @Test
-    void 서비스에_대한_환경_목록() throws Exception {
+    void 환경_이름과_플랫폼_목록() throws Exception {
+        mvc.perform(get("/environments/names")
+        ).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록_JOBDA() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBDA")
         ).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록_JOBDA_CMS() throws Exception {
+        mvc.perform(get("/environments/search?platform=JOBDA_CMS")
+        ).andExpect(status().isOk());
     }
 
 }

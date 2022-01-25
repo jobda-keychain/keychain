@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import java.util.List;
 import java.util.Objects;
 
+import static com.jobda.keychain.entity.account.QAccount.account;
 import static com.jobda.keychain.entity.environment.QEnvironment.environment;
 import static com.jobda.keychain.entity.platform.QPlatform.platform;
 
@@ -27,11 +28,20 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
+    public List<Environment> findAll() {
+        return queryFactory.selectFrom(environment)
+                .join(environment.platform, platform)
+                .on(platform.eq(environment.platform))
+                .fetch();
+    }
+
+    @Override
     public List<Environment> findAllByPlatformType(PlatformType platformType) {
         return queryFactory.selectFrom(environment)
                 .join(environment.platform, platform)
                 .on(platform.eq(environment.platform))
-                .where(platformTypeEq(platformType))
+                .where(platformTypeEq(platformType)
+                .and(accountsNotNull()))
                 .fetch();
     }
 
@@ -41,7 +51,8 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
                 queryFactory.selectFrom(environment)
                         .join(environment.platform, platform)
                         .on(platform.name.eq(environment.platform.name)))
-                        .where(platformTypeEq(platformType));
+                        .where(platformTypeEq(platformType))
+                        .orderBy(environment.createdAt.desc());
         List<Environment> list = query.fetch();
 
         return new PageImpl<>(list, page, query.fetchCount());
@@ -56,6 +67,10 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
             return null;
         }
         return platform.name.eq(platformType);
+    }
+
+    private BooleanExpression accountsNotNull() {
+        return environment.accounts.isNotEmpty();
     }
 
 }
