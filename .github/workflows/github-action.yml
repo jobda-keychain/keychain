@@ -38,7 +38,11 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          
+
+      # Build
+      - name: Build with Gradle
+        run: ./gradlew clean build
+        
       - name : Wake zip file
         run : zip -r ./$GITHUB_SHA.zip
         shell : bash
