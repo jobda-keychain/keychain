@@ -17,12 +17,11 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '11'
-        distribution: 'temurin'
-        cache: maven
+        distribution: 'adopt'
 
     # Build
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: ./gradlew build
       
     # 디렉토리 생성
     - name: Make Directory for deliver
