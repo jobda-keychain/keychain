@@ -1,16 +1,10 @@
 version: 0.0
 os: linux
-
 files:
   - source: /
-    destination: /home/ubuntu/app/deploy
-permissions:
-  - object: /home/ubuntu/app/deploy
-    owner: ubuntu
-    group: ubuntu
-    mode: 755
+  destination: /home/ubuntu/app/deploy
 hooks:
   AfterInstall:
-    - location: deploy.sh
-      timeout: 60
-      runas: root
+  - location: deploy.sh
+  timeout: 60
+  runas: root
