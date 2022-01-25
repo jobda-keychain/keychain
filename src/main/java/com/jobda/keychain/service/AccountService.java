@@ -106,10 +106,11 @@ public class AccountService {
     public UpdateAccountResponse updateAccount(String clientIpAddress, long id, UpdateAccountRequest request) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("account not found"));
 
-        account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
-
-        if (accountRepository.findByAccountIdAndEnvironment(account.getAccountId(), account.getEnvironment()).size() != 1)
+        if (accountRepository.findByAccountIdAndEnvironment(request.getAccountId(), account.getEnvironment()).size() > 0) {
             throw new AlreadyDataExistsException("Same Account is already exists");
+        }
+
+        account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
 
         Environment environment = account.getEnvironment();
 
