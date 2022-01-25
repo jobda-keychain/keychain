@@ -2,9 +2,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ release_3.0.0 ]
+    branches: [ develop ]
   pull_request:
-    branches: [ release_3.0.0 ]
+    branches: [ develop ]
 
 jobs:
   build:
@@ -19,8 +19,10 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+        
+    # Build
+    - name: Build with Gradle
+      run: ./gradlew clean build
       
       # 디렉토리 생성
     - name: Make Directory
@@ -36,10 +38,9 @@ jobs:
 
     # Deploy
     - name: Deploy
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
 
     - name: Upload to S3
