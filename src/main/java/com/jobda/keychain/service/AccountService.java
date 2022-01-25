@@ -17,6 +17,7 @@ import com.jobda.keychain.entity.log.MethodType;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import com.jobda.keychain.event.LogEvent;
+import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 import feign.FeignException;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -105,10 +107,13 @@ public class AccountService {
     public UpdateAccountResponse updateAccount(String clientIpAddress, long id, UpdateAccountRequest request) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("account not found"));
 
-        account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
+        Optional<Account> duplicateNameAccount = accountRepository.findByAccountIdAndEnvironment(request.getAccountId(), account.getEnvironment());
 
-        if (accountRepository.findByAccountIdAndEnvironment(account.getAccountId(), account.getEnvironment()).size() != 1)
-            throw new DataNotFoundException("Same Account is already exists");
+        if (duplicateNameAccount.isPresent() && !account.getId().equals(duplicateNameAccount.get().getId())) {
+            throw new AlreadyDataExistsException("Same Account is already exists");
+        }
+
+        account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
 
         Environment environment = account.getEnvironment();
 
