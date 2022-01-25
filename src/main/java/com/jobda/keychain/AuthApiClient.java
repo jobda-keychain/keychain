@@ -24,4 +24,7 @@ public interface AuthApiClient {
     @GetMapping(headers = {HttpHeaders.ACCEPT + "=" + "*/*"})
     JobdaAccountInfoResponse getAccountInfo(URI baseUrl, @RequestHeader("authorization") String token);
 
+    @GetMapping(headers = {HttpHeaders.ACCEPT + "=" + "*/*"})
+    void checkDomain(URI baseUrl);
+
 }

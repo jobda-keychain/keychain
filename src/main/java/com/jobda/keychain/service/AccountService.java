@@ -45,19 +45,36 @@ public class AccountService {
     private final ApplicationEventPublisher eventPublisher;
 
     /**
+    * 계정을 추가, 수정 하거나 로그인할 때,
+    * 서버 도메인이 유효한지 검사한다.
+    *
+    * @author: sse
+    **/
+    public void checkDomain(String serverDomain) {
+        URI uri = URI.create(serverDomain);
+
+        try {
+            authApiClient.checkDomain(uri);
+        } catch (FeignException e) {
+            throw UnableLoginException.EXCEPTION;
+        }
+    }
+
+    /**
      * 외부 로그인 API 호출 메서드
      * 성공 시 Token 발급, 실패 시 UnableLoginException 발생
      *
      * @author: sse
      **/
     public String callLoginApi(String id, String password, String serverDomain) {
+        checkDomain(serverDomain);
+
         URI uri = URI.create(serverDomain + AuthApiClient.loginPath);
         LoginApiRequest apiRequest = new LoginApiRequest(id, password);
 
         try {
             return authApiClient.login(uri, apiRequest).getAccessToken();
         } catch (FeignException e) {
-            // todo   예외 처리에 대한 기획 미정
             throw UnableLoginException.EXCEPTION;
         }
     }
