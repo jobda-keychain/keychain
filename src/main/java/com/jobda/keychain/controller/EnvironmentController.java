@@ -61,10 +61,10 @@ public class EnvironmentController {
         environmentService.deleteEnvironment(LogUtil.getClientIp(servletRequest), id);
     }
 
-    @Operation(tags=  "환경", summary = "환경 검색을 위한 목록", description = "환경 이름 불러오기(성공하면 200)")
-    @GetMapping("/search")
-    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform(@Parameter(description = "플랫폼(JOBDA, JOBDA_CMS)") @RequestParam(required = false) PlatformType platform) {
-        return environmentService.getEnvironmentListOfPlatform(platform);
+    @Operation(tags=  "환경", summary = "계정 추가할 때 사용하는 환경 이름 목록", description = "환경 이름과 플랫폼 정보 불러오기(성공하면 200)")
+    @GetMapping("/names")
+    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform() {
+        return environmentService.getEnvironmentListOfPlatform();
     }
 
 }

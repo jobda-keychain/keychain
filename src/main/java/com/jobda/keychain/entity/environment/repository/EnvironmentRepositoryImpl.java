@@ -27,6 +27,14 @@ public class EnvironmentRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
+    public List<Environment> findAll() {
+        return queryFactory.selectFrom(environment)
+                .join(environment.platform, platform)
+                .on(platform.eq(environment.platform))
+                .fetch();
+    }
+
+    @Override
     public List<Environment> findAllByPlatformType(PlatformType platformType) {
         return queryFactory.selectFrom(environment)
                 .join(environment.platform, platform)

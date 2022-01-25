@@ -110,13 +110,12 @@ public class EnvironmentService {
     }
 
     /**
-     * platform(null인 경우)에는 환경 목록 전달
-     * platform(null이 아닌 경우)에 속해있는 environment 목록 전달
+     * 환경 이름과 플랫폼 정보를 반환한다. (전체 리스트 반환)
      *
      * @author: syxxn
      **/
-    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform(PlatformType platformType) {
-        List<Environment> environments = environmentRepository.findAllByPlatformType(platformType);
+    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform() {
+        List<Environment> environments = environmentRepository.findAll();
 
         List<EnvironmentDto> environmentsDtoList = environments.stream()
                 .map(EnvironmentDto::of)
