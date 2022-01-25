@@ -48,4 +48,4 @@ jobs:
           aws s3 cp \
           --region ap-northeast-2 \
           --acl private \ 
-	        ./jobda-keychain.zip s3://jobda-keychain/
+	  ./jobda-keychain.zip s3://jobda-keychain/
