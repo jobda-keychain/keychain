@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -106,7 +107,9 @@ public class AccountService {
     public UpdateAccountResponse updateAccount(String clientIpAddress, long id, UpdateAccountRequest request) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("account not found"));
 
-        if (accountRepository.findByAccountIdAndEnvironment(request.getAccountId(), account.getEnvironment()).size() > 0) {
+        Optional<Account> duplicateNameAccount = accountRepository.findByAccountIdAndEnvironment(request.getAccountId(), account.getEnvironment());
+
+        if (duplicateNameAccount.isPresent() && !account.getId().equals(duplicateNameAccount.get().getId())) {
             throw new AlreadyDataExistsException("Same Account is already exists");
         }
 

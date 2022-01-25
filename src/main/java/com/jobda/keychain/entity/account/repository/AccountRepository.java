@@ -4,8 +4,8 @@ import com.jobda.keychain.entity.account.Account;
 import com.jobda.keychain.entity.environment.Environment;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface AccountRepository extends CrudRepository<Account, Long> {
-    List<Account> findByAccountIdAndEnvironment(String accountId, Environment environment);
+    Optional<Account> findByAccountIdAndEnvironment(String accountId, Environment environment);
 }
