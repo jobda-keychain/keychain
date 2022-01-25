@@ -7,7 +7,7 @@
    * [API 명세서](https://www.notion.so/API-c08082e3d3664036900cc3b15f84cd82)
    * [도메인](https://www.notion.so/f18d17c60ab74d54b0cc728132eed614?v=1997112ad89f40a1b4106a5aebe1dbd8)
 
-* [Swagger](http://15.165.83.189:8080/swagger-ui/index.html#/%EA%B3%84%EC%A0%95)
+* [Swagger](https://jobda-keychain.link/swagger-ui/index.html#)
 * [![codecov](https://codecov.io/gh/jobda-keychain/keychain/branch/release_3.0.0/graph/badge.svg?token=Q8U1HI0QV0)](https://codecov.io/gh/jobda-keychain/keychain)
 
 ## 기술스택
