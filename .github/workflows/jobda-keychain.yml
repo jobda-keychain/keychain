@@ -44,8 +44,4 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: |
-          aws s3 cp \
-          --region ap-northeast-2 \
-          --acl private \ 
-	  ./jobda-keychain.zip s3://jobda-keychain/
+      run: aws s3 cp --region ap-northeast-2 --acl private ./jobda-keychain.zip s3://jobda-keychain/
