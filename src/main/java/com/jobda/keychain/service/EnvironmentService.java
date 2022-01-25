@@ -3,8 +3,10 @@ package com.jobda.keychain.service;
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
+import com.jobda.keychain.dto.response.EnvironmentNamesResponse;
+import com.jobda.keychain.dto.response.EnvironmentNamesResponse.EnvironmentNameDto;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
-import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse.EnvironmentDto;
+import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse.PlatformEnvironmentDto;
 import com.jobda.keychain.entity.environment.Environment;
 import com.jobda.keychain.entity.environment.repository.EnvironmentRepository;
 import com.jobda.keychain.entity.log.MethodType;
@@ -12,7 +14,6 @@ import com.jobda.keychain.entity.platform.Platform;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import com.jobda.keychain.event.LogEvent;
-import com.jobda.keychain.event.handler.LogEventHandler;
 import com.jobda.keychain.exception.AlreadyDataExistsException;
 import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
@@ -114,11 +115,26 @@ public class EnvironmentService {
      *
      * @author: syxxn
      **/
-    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform() {
+    public EnvironmentNamesResponse getEnvironmentList() {
         List<Environment> environments = environmentRepository.findAll();
 
-        List<EnvironmentDto> environmentsDtoList = environments.stream()
-                .map(EnvironmentDto::of)
+        List<EnvironmentNameDto> environmentsDtoList = environments.stream()
+                .map(EnvironmentNameDto::of)
+                .collect(Collectors.toList());
+
+        return new EnvironmentNamesResponse(environmentsDtoList);
+    }
+
+    /**
+     * 플랫폼에 해당하고, 속한 유저가 있는 환경 목록만 가져온다.
+     *
+     * @author: syxxn
+     **/
+    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform(PlatformType platform) {
+        List<Environment> environments = environmentRepository.findAllByPlatformType(platform);
+
+        List<PlatformEnvironmentDto> environmentsDtoList = environments.stream()
+                .map(PlatformEnvironmentDto::of)
                 .collect(Collectors.toList());
 
         return new PlatformEnvironmentsResponse(environmentsDtoList);

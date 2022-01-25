@@ -3,6 +3,7 @@ package com.jobda.keychain.controller;
 import com.jobda.keychain.dto.request.AddEnvironmentRequest;
 import com.jobda.keychain.dto.request.UpdateEnvironmentRequest;
 import com.jobda.keychain.dto.response.EnvironmentsResponse;
+import com.jobda.keychain.dto.response.EnvironmentNamesResponse;
 import com.jobda.keychain.dto.response.PlatformEnvironmentsResponse;
 import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.service.EnvironmentService;
@@ -63,8 +64,14 @@ public class EnvironmentController {
 
     @Operation(tags=  "환경", summary = "계정 추가할 때 사용하는 환경 이름 목록", description = "환경 이름과 플랫폼 정보 불러오기(성공하면 200)")
     @GetMapping("/names")
-    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform() {
-        return environmentService.getEnvironmentListOfPlatform();
+    public EnvironmentNamesResponse getEnvironmentList() {
+        return environmentService.getEnvironmentList();
+    }
+
+    @Operation(tags=  "환경", summary = "계정이 존재하는 환경 목록", description = "환경 이름 불러오기(성공하면 200)")
+    @GetMapping("/search")
+    public PlatformEnvironmentsResponse getEnvironmentListOfPlatform(@Parameter(description = "플랫폼(JOBDA, JOBDA_CMS)") @RequestParam PlatformType platform) {
+        return environmentService.getEnvironmentListOfPlatform(platform);
     }
 
 }
