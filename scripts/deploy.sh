@@ -8,7 +8,7 @@ CURRENT_PID=$ ps ax | grep java | awk '{print $1}'
 
 echo "현재 구동 중인 app pid : $CURRENT_PID"
 
-if [ -z "$CURRENT_PID" ]; then
+if [ "$CURRENT_PID" ]; then
   echo "현재 구동 중인 app이 없으므로 종료하지 않습니다."
 else
   echo "> kill -9 $CURRENT_PID"
@@ -28,4 +28,4 @@ chmod +x $JAR_NAME
 
 echo "> $JAR_NAME 실행"
 
-nohup java -jar $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
+nohup java -jar $REPOSITORY/$JAR_NAME &
