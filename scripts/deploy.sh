@@ -4,15 +4,15 @@ REPOSITORY=/home/ubuntu/app
 
 echo "> 현재 구동 중인 app pid : "
 
-CURRENT_PID=$(pgrep -fl action | grep java | awk '{print $1}')
+CURRENT_PID=$(netstat -tnlp|grep 8080)
 
 echo "현재 구동 중인 app pid : $CURRENT_PID"
 
 if [ -z "$CURRENT_PID" ]; then
   echo "현재 구동 중인 app이 없으므로 종료하지 않습니다."
 else
-  echo "> kill -15 $CURRENT_PID"
-  kill -15 $CURRENT_PID
+  echo "> kill -9 $CURRENT_PID"
+  kill -9 $CURRENT_PID
   sleep 5
 fi
 
