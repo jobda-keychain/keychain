@@ -77,7 +77,8 @@ public class AccountService {
             throw new DataNotFoundException("environment not found");
         });
 
-        Account account = Account.createAccount(request.getAccountId(), request.getPassword(), environment, request.getDescription().trim());
+        String description = request.getDescription().trim();
+        Account account = Account.createAccount(request.getAccountId(), request.getPassword(), environment, description);
 
         String token = callLoginApi(account.getAccountId(), account.getPassword(), environment.getServerDomain());
 
@@ -114,7 +115,8 @@ public class AccountService {
             throw new AlreadyDataExistsException("Same Account is already exists");
         }
 
-        account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription().trim());
+        String description = request.getDescription().trim();
+        account.changeInfo(request.getAccountId(), request.getPassword(), description);
 
         Environment environment = account.getEnvironment();
 
