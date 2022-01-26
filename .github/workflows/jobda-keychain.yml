@@ -35,6 +35,10 @@ jobs:
     - name: Copy appspec.yml
       run: cp appspec.yml ./deploy
       
+    # script files 복사
+    - name: Copy script
+      run: cp ./scripts/*.sh ./deploy
+
     # 파일 압축
     - name: Make zip file
       run: zip -r -qq -j ./jobda-keychain.zip ./deploy
