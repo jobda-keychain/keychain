@@ -18,6 +18,7 @@ import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import com.jobda.keychain.event.LogEvent;
 import com.jobda.keychain.exception.AlreadyDataExistsException;
+import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 import feign.FeignException;
@@ -76,7 +77,10 @@ public class AccountService {
             throw new DataNotFoundException("environment not found");
         });
 
-        Account account = Account.createAccount(request.getAccountId(), request.getPassword(), environment, request.getDescription());
+        blankHandling(request.getAccountId(), request.getPassword());
+        String description = request.getDescription().trim();
+
+        Account account = Account.createAccount(request.getAccountId(), request.getPassword(), environment, description);
 
         String token = callLoginApi(account.getAccountId(), account.getPassword(), environment.getServerDomain());
 
@@ -107,13 +111,16 @@ public class AccountService {
     public UpdateAccountResponse updateAccount(String clientIpAddress, long id, UpdateAccountRequest request) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new DataNotFoundException("account not found"));
 
+        blankHandling(request.getAccountId(), request.getPassword());
+        String description = request.getDescription().trim();
+
         Optional<Account> duplicateNameAccount = accountRepository.findByAccountIdAndEnvironment(request.getAccountId(), account.getEnvironment());
 
         if (duplicateNameAccount.isPresent() && !account.getId().equals(duplicateNameAccount.get().getId())) {
             throw new AlreadyDataExistsException("Same Account is already exists");
         }
 
-        account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
+        account.changeInfo(request.getAccountId(), request.getPassword(), description);
 
         Environment environment = account.getEnvironment();
 
@@ -179,6 +186,12 @@ public class AccountService {
         String token = callLoginApi(account.getAccountId(), account.getPassword(), environment.getServerDomain());
 
         return new TokenResponse(token, environment.getClientDomain());
+    }
+
+    private void blankHandling(String accountId, String password) {
+        if (accountId.split(" ").length > 1 || password.split(" ").length > 1) {
+            throw new BadRequestException("Spaces are not allowed.");
+        }
     }
 
 }
