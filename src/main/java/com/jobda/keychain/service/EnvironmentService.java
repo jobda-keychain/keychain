@@ -48,6 +48,8 @@ public class EnvironmentService {
     public void addEnvironment(String clientIpAddress, AddEnvironmentRequest request) {
         Platform platform = getPlatform(request.getPlatform());
 
+        existsSameName(platform, request.getName());
+
         Environment environment = Environment.createEnvironment(request.getName(), request.getServerDomain(), request.getClientDomain(), platform);
         environmentRepository.save(environment);
         eventPublisher.publishEvent(new LogEvent(clientIpAddress, MethodType.ADD_ENVIRONMENT));
@@ -83,6 +85,7 @@ public class EnvironmentService {
     @Transactional
     public void updateEnvironment(String clientIpAddress, long id, UpdateEnvironmentRequest request) {
         Environment environment = getEnvironment(id);
+
         existsAccount(environment);
         Optional<Environment> duplicateNameEnvironment = environmentRepository.findByPlatformAndName(environment.getPlatform(), request.getName());
         if (duplicateNameEnvironment.isPresent() && !environment.getId().equals(duplicateNameEnvironment.get().getId())) {
@@ -138,12 +141,6 @@ public class EnvironmentService {
         return new PlatformEnvironmentsResponse(environmentsDtoList);
     }
 
-    private void blankHandling(String name, String serverDomain, String clientDomain) {
-        if (name.split(" ").length > 1 || serverDomain.split(" ").length > 1 || clientDomain.split(" ").length > 1) {
-            throw new BadRequestException("Spaces are not allowed.");
-        }
-    }
-
     private Platform getPlatform(PlatformType platformType) {
         return platformRepository.findByName(platformType)
                 .orElseThrow(() -> {
@@ -156,6 +153,12 @@ public class EnvironmentService {
                 .orElseThrow(() -> {
                     throw new DataNotFoundException("environment not found");
                 });
+    }
+
+    private void existsSameName(Platform platform, String name) {
+        if (environmentRepository.existsByPlatformAndName(platform, name)) {
+            throw new AlreadyDataExistsException("same name exists on the platform");
+        }
     }
 
     private void existsAccount(Environment environment) {
