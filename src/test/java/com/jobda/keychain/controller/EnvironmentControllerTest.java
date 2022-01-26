@@ -52,13 +52,23 @@ class EnvironmentControllerTest {
     }
 
     @Test
-    void 환경_추가_공백_400() throws Exception {
-        AddEnvironmentRequest request = new AddEnvironmentRequest("pr- 11", "https:// github.com", "https://gith ub.com", PlatformType.JOBDA);
+    void 환경_추가_도메인_오류_400() throws Exception {
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "asdf", "https://github.com", PlatformType.JOBDA);
 
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isBadRequest());
+        ).andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 환경_추가_공백_400() throws Exception {
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr- 11", "https://github.com", "https://github.com", PlatformType.JOBDA);
+
+        mvc.perform(post("/environments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andExpect(status().isBadRequest()).andDo(print());
     }
 
     @Test
