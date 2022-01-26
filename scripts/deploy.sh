@@ -4,7 +4,7 @@ REPOSITORY=/home/ubuntu/app
 
 echo "> 현재 구동 중인 app pid : "
 
-CURRENT_PID=$(netstat -tnlp|grep 8080)
+CURRENT_PID=$ ps ax | grep java | awk '{print $1}'
 
 echo "현재 구동 중인 app pid : $CURRENT_PID"
 
