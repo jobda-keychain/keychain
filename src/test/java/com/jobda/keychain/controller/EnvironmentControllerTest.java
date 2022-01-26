@@ -31,7 +31,7 @@ class EnvironmentControllerTest {
     @Autowired
     private WebApplicationContext context;
 
-    long environmentId_delete_200 = 4L;
+    long environmentId_delete_200 = 5L;
     long environmentId_delete_400 = 2L;
 
     @BeforeEach
@@ -52,6 +52,36 @@ class EnvironmentControllerTest {
     }
 
     @Test
+    void 환경_추가_도메인_오류_400() throws Exception {
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "asdf", "https://github.com", PlatformType.JOBDA);
+
+        mvc.perform(post("/environments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 환경_추가_공백_400() throws Exception {
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr- 11", "https://github.com", "https://github.com", PlatformType.JOBDA);
+
+        mvc.perform(post("/environments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andExpect(status().isBadRequest()).andDo(print());
+    }
+
+    @Test
+    void 환경_추가_400_없는_플랫폼() throws Exception {
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "https://github.com", "https://github.com", PlatformType.JOBDA_CMS);
+
+        mvc.perform(post("/environments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andDo(print()).andExpect(status().isNotFound());
+    }
+
+    @Test
     void 환경_추가_NPE() throws Exception {
         AddEnvironmentRequest request = new AddEnvironmentRequest("dv-1", "https://github.com", null, PlatformType.JOBDA);
 
@@ -68,7 +98,7 @@ class EnvironmentControllerTest {
         mvc.perform(post("/environments")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest()).andDo(print());
     }
 
     @Test
@@ -82,12 +112,6 @@ class EnvironmentControllerTest {
     }
 
     @Test
-    void 서비스에_대한_환경_목록_서비스필터X() throws Exception {
-        mvc.perform(get("/environments/search")
-        ).andExpect(status().isOk()).andDo(print());
-    }
-
-    @Test
     void 환경_수정() throws Exception {
         UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("pr-3", "https://www.midasit.com", "https://www.midasit.com");
 
@@ -98,8 +122,28 @@ class EnvironmentControllerTest {
     }
 
     @Test
-    void 환경_수정_변경된게_없을_때() throws Exception {
+    void 환경_수정_공백_400() throws Exception {
+        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("pr -3", "https://www.midasi t.com", "https://www.midas it.com");
+
+        mvc.perform(put("/environments/" + environmentId_delete_200)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 환경_수정_존재하지않는환경() throws Exception {
         UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("dv", "https://www.midasit.com", "https://www.midasit.com");
+
+        mvc.perform(put("/environments/100")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void 환경_수정_이름이_변경되지_않았을때() throws Exception {
+        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("dv-3", "https://www.midasit.com", "https://www.midasit.com");
 
         mvc.perform(put("/environments/" + environmentId_delete_200)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +155,7 @@ class EnvironmentControllerTest {
     void 환경_수정_겹치는_게_있을_때() throws Exception {
         UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("dv", "https://www.midasit.com", "https://www.midasit.com");
 
-        mvc.perform(put("/environments/5")
+        mvc.perform(put("/environments/" + environmentId_delete_200)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
         ).andDo(print()).andExpect(status().isConflict());
@@ -147,9 +191,21 @@ class EnvironmentControllerTest {
     }
 
     @Test
-    void 서비스에_대한_환경_목록() throws Exception {
+    void 환경_이름과_플랫폼_목록() throws Exception {
+        mvc.perform(get("/environments/names")
+        ).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록_JOBDA() throws Exception {
         mvc.perform(get("/environments/search?platform=JOBDA")
         ).andExpect(status().isOk()).andDo(print());
+    }
+
+    @Test
+    void 서비스에_대한_환경_목록_JOBDA_CMS() throws Exception {
+        mvc.perform(get("/environments/search?platform=JOBDA_CMS")
+        ).andExpect(status().isOk());
     }
 
 }

@@ -1,11 +1,14 @@
 # keychain
-* 요구사항
-    * https://clickim.notion.site/27e686a1d9b94d5d9424cc8e263a3ef0
+* [요구사항](https://clickim.notion.site/27e686a1d9b94d5d9424cc8e263a3ef0)
   
-* 노션
-   * 기획: https://fine-ceramic-519.notion.site/29e7e86c338a4c16808fab9846406971 
-   * 일정: https://fine-ceramic-519.notion.site/dc4308b2aaad4814b085e8d6d34867eb
-   * API 명세서: https://fine-ceramic-519.notion.site/API-4260a4ae1fc748fe8ea1b2adb9113e71
+* [노션](https://www.notion.so/8f70d699c33e478491e885effa38c460)
+   * [기획](https://www.notion.so/327b466c5a9144a3b5145c3bf26511f2)
+   * [일정](https://www.notion.so/b59f6070ca7b4ddcb39a9a8d7e675bad)
+   * [API 명세서](https://www.notion.so/API-c08082e3d3664036900cc3b15f84cd82)
+   * [도메인](https://www.notion.so/f18d17c60ab74d54b0cc728132eed614?v=1997112ad89f40a1b4106a5aebe1dbd8)
+
+* [Swagger](https://jobda-keychain.link/swagger-ui/index.html#)
+* [![codecov](https://codecov.io/gh/jobda-keychain/keychain/branch/release_3.0.0/graph/badge.svg?token=Q8U1HI0QV0)](https://codecov.io/gh/jobda-keychain/keychain)
 
 ## 기술스택
 * JDK 11
