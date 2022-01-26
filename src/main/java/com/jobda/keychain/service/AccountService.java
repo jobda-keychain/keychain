@@ -18,6 +18,7 @@ import com.jobda.keychain.entity.platform.PlatformType;
 import com.jobda.keychain.entity.platform.repository.PlatformRepository;
 import com.jobda.keychain.event.LogEvent;
 import com.jobda.keychain.exception.AlreadyDataExistsException;
+import com.jobda.keychain.exception.BadRequestException;
 import com.jobda.keychain.exception.DataNotFoundException;
 import com.jobda.keychain.exception.UnableLoginException;
 import feign.FeignException;
@@ -76,7 +77,8 @@ public class AccountService {
             throw new DataNotFoundException("environment not found");
         });
 
-        Account account = Account.createAccount(request.getAccountId(), request.getPassword(), environment, request.getDescription());
+        String description = request.getDescription().trim();
+        Account account = Account.createAccount(request.getAccountId(), request.getPassword(), environment, description);
 
         String token = callLoginApi(account.getAccountId(), account.getPassword(), environment.getServerDomain());
 
@@ -113,7 +115,8 @@ public class AccountService {
             throw new AlreadyDataExistsException("Same Account is already exists");
         }
 
-        account.changeInfo(request.getAccountId(), request.getPassword(), request.getDescription());
+        String description = request.getDescription().trim();
+        account.changeInfo(request.getAccountId(), request.getPassword(), description);
 
         Environment environment = account.getEnvironment();
 

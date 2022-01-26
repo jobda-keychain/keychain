@@ -52,6 +52,26 @@ class EnvironmentControllerTest {
     }
 
     @Test
+    void 환경_추가_도메인_오류_400() throws Exception {
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "asdf", "https://github.com", PlatformType.JOBDA);
+
+        mvc.perform(post("/environments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 환경_추가_공백_400() throws Exception {
+        AddEnvironmentRequest request = new AddEnvironmentRequest("pr- 11", "https://github.com", "https://github.com", PlatformType.JOBDA);
+
+        mvc.perform(post("/environments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andExpect(status().isBadRequest()).andDo(print());
+    }
+
+    @Test
     void 환경_추가_400_없는_플랫폼() throws Exception {
         AddEnvironmentRequest request = new AddEnvironmentRequest("pr-11", "https://github.com", "https://github.com", PlatformType.JOBDA_CMS);
 
@@ -99,6 +119,16 @@ class EnvironmentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(request))
         ).andDo(print()).andExpect(status().isNoContent());
+    }
+
+    @Test
+    void 환경_수정_공백_400() throws Exception {
+        UpdateEnvironmentRequest request = new UpdateEnvironmentRequest("pr -3", "https://www.midasi t.com", "https://www.midas it.com");
+
+        mvc.perform(put("/environments/" + environmentId_delete_200)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(request))
+        ).andExpect(status().isBadRequest());
     }
 
     @Test

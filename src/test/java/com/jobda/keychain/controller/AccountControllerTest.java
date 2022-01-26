@@ -179,6 +179,17 @@ public class AccountControllerTest {
     }
 
     @Test
+    void 계정추가_공백_400() throws Exception {
+
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest("  sasy 0113", "ssy0113", "", 5L);
+
+        mvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(createAccountRequest))
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
     void 계정추가_401() throws Exception {
 
         CreateAccountRequest createAccountRequest = new CreateAccountRequest("123", "123", "", 1L);
@@ -250,6 +261,16 @@ public class AccountControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(updateAccountRequest))
         ).andExpect(status().isCreated());
+    }
+
+    @Test
+    void 계정수정_공백_400() throws Exception {
+        UpdateAccountRequest updateAccountRequest = new UpdateAccountRequest("sasy0113", "ssy 0113", "o");
+
+        mvc.perform(put("/accounts/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(updateAccountRequest))
+        ).andExpect(status().isBadRequest());
     }
 
     @Test

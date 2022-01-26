@@ -85,6 +85,7 @@ public class EnvironmentService {
     @Transactional
     public void updateEnvironment(String clientIpAddress, long id, UpdateEnvironmentRequest request) {
         Environment environment = getEnvironment(id);
+
         existsAccount(environment);
         Optional<Environment> duplicateNameEnvironment = environmentRepository.findByPlatformAndName(environment.getPlatform(), request.getName());
         if (duplicateNameEnvironment.isPresent() && !environment.getId().equals(duplicateNameEnvironment.get().getId())) {
