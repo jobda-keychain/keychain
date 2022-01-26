@@ -48,6 +48,7 @@ public class EnvironmentService {
     public void addEnvironment(String clientIpAddress, AddEnvironmentRequest request) {
         Platform platform = getPlatform(request.getPlatform());
 
+        blankHandling(request.getName(), request.getServerDomain(), request.getClientDomain());
         existsSameName(platform, request.getName());
 
         Environment environment = Environment.createEnvironment(request.getName(), request.getServerDomain(), request.getClientDomain(), platform);
@@ -85,6 +86,8 @@ public class EnvironmentService {
     @Transactional
     public void updateEnvironment(String clientIpAddress, long id, UpdateEnvironmentRequest request) {
         Environment environment = getEnvironment(id);
+
+        blankHandling(request.getName(), request.getServerDomain(), request.getClientDomain());
         existsAccount(environment);
         Optional<Environment> duplicateNameEnvironment = environmentRepository.findByPlatformAndName(environment.getPlatform(), request.getName());
         if (duplicateNameEnvironment.isPresent() && !environment.getId().equals(duplicateNameEnvironment.get().getId())) {
@@ -138,6 +141,12 @@ public class EnvironmentService {
                 .collect(Collectors.toList());
 
         return new PlatformEnvironmentsResponse(environmentsDtoList);
+    }
+
+    private void blankHandling(String name, String serverDomain, String clientDomain) {
+        if (name.split(" ").length > 1 || serverDomain.split(" ").length > 1 || clientDomain.split(" ").length > 1) {
+            throw new BadRequestException("Spaces are not allowed.");
+        }
     }
 
     private Platform getPlatform(PlatformType platformType) {
