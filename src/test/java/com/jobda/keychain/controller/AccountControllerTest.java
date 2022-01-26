@@ -170,12 +170,23 @@ public class AccountControllerTest {
     @Test
     void 계정추가_201() throws Exception {
 
-        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 6L);
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 5L);
 
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(createAccountRequest))
         ).andExpect(status().isCreated());
+    }
+
+    @Test
+    void 계정추가_401() throws Exception {
+
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest("123", "123", "", 1L);
+
+        mvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(createAccountRequest))
+        ).andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -221,7 +232,7 @@ public class AccountControllerTest {
 
     @Test
     void 계정추가_중복_409() throws Exception {
-        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 5L);
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest("sasy0113", "ssy0113", "", 4L);
 
         mvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -290,6 +301,17 @@ public class AccountControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(accountRequest))
         ).andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void 계정수정_401() throws Exception {
+        UpdateAccountRequest accountRequest = new UpdateAccountRequest("testest", "ssy0113", "");
+
+        mvc.perform(put("/accounts/6")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(accountRequest))
+        ).andExpect(status().isUnauthorized());
 
     }
 
