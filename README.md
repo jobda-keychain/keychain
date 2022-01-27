@@ -3,9 +3,10 @@
   
 * [노션](https://universal-cymbal-c05.notion.site/8f70d699c33e478491e885effa38c460)
    * [기획](https://universal-cymbal-c05.notion.site/327b466c5a9144a3b5145c3bf26511f2)
-   * [일정](https://www.notion.so/b59f6070ca7b4ddcb39a9a8d7e675bad)
-   * [API 명세서](https://www.notion.so/API-c08082e3d3664036900cc3b15f84cd82)
-   * [도메인](https://www.notion.so/f18d17c60ab74d54b0cc728132eed614?v=1997112ad89f40a1b4106a5aebe1dbd8)
+   * [일정](https://universal-cymbal-c05.notion.site/b59f6070ca7b4ddcb39a9a8d7e675bad)
+   * [API 명세서](https://universal-cymbal-c05.notion.site/API-c08082e3d3664036900cc3b15f84cd82)
+   * [도메인](https://universal-cymbal-c05.notion.site/f18d17c60ab74d54b0cc728132eed614?v=1997112ad89f40a1b4106a5aebe1dbd8)
+   * [회고](https://universal-cymbal-c05.notion.site/01-04-01-28-76472207e9af488b80f0b0103f510b18)
 
 * [Swagger](https://jobda-keychain.link/swagger-ui/index.html#)
 * [![codecov](https://codecov.io/gh/jobda-keychain/keychain/branch/release_3.0.0/graph/badge.svg?token=Q8U1HI0QV0)](https://codecov.io/gh/jobda-keychain/keychain)
